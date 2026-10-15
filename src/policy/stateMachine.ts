@@ -112,3 +112,42 @@ export function executeTransition(
     transitionEvent,
   };
 }
+
+/**
+ * Stateful Policy State Machine wrapper
+ */
+export class PolicyStateMachine {
+  private currentState: PolicyState;
+  private history: StateTransitionEvent[] = [];
+
+  constructor(initialState: PolicyState = 'UNPROCESSED') {
+    this.currentState = initialState;
+  }
+
+  public getState(): PolicyState {
+    return this.currentState;
+  }
+
+  public getHistory(): readonly StateTransitionEvent[] {
+    return [...this.history];
+  }
+
+  public transition(targetState: PolicyState, actor: string, reason: string): PolicyState {
+    const res = executeTransition(this.currentState, targetState, { actor, reason });
+    this.currentState = res.newState;
+    this.history.push(res.transitionEvent);
+    return this.currentState;
+  }
+
+  public evaluate(verdict: { compositeStatus: VerdictStatus } | VerdictStatus, actor = 'policy-engine'): PolicyState {
+    const status = typeof verdict === 'string' ? verdict : verdict.compositeStatus;
+    this.transition('EVALUATING', actor, 'Initiating claim evaluation');
+    const target = stateFromDeterministicVerdict(status);
+    return this.transition(target, actor, `Deterministic policy evaluation produced ${status}`);
+  }
+
+  public publish(actor: string, reason: string): PolicyState {
+    return this.transition('PUBLISHED', actor, reason);
+  }
+}
+

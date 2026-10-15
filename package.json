@@ -4,11 +4,13 @@
   "description": "ClaimCheck — Deterministic evidence-backed pre-publication claim checker for retail media",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/contracts/*.test.js tests/evidence/*.test.js tests/policy/*.test.js tests/audit/*.test.js",
+    "test": "node --test tests/contracts/*.test.js tests/evidence/*.test.js tests/policy/*.test.js tests/audit/*.test.js tests/regression/*.test.js",
     "test:contracts": "node --test tests/contracts/*.test.js",
     "test:evidence": "node --test tests/evidence/*.test.js",
     "test:policy": "node --test tests/policy/*.test.js",
-    "test:audit": "node --test tests/audit/*.test.js"
+    "test:audit": "node --test tests/audit/*.test.js",
+    "test:regression": "node --test tests/regression/*.test.js",
+    "benchmark": "node scripts/benchmark.js"
   },
   "keywords": [
     "retail-media",

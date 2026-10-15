@@ -2,7 +2,9 @@
 
 > **A deterministic, evidence-backed pre-publication verification gate for factual claims in retail advertising copy.**
 
-[![Tests](https://img.shields.io/badge/tests-61%20passed-success.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-85%20passed-success.svg)](#testing)
+[![Latency](https://img.shields.io/badge/p95%20latency-29.4%20µs-brightgreen.svg)](#performance--benchmarks)
+[![Throughput](https://img.shields.io/badge/throughput-53k%2B%20ops%2Fsec-blue.svg)](#performance--benchmarks)
 [![Node.js](https://img.shields.io/badge/node.js-v24%2B-blue.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Hackathon](https://img.shields.io/badge/AMD%20Developer%20Hackathon-ACT%20III-orange.svg)](https://lablab.ai/ai-hackathons/amd-developer-hackathon-act-iii)
@@ -19,7 +21,7 @@ Retail media networks and merchants face strict regulatory enforcement (such as 
 - **Fulfillment & Shipping**: Unsubstantiated "Next-Day" or "Free Shipping" promises where carrier cutoffs or minimum spend thresholds are not met.
 - **Product Attributes**: Technical or material assertions contradicting approved manufacturer specifications.
 
-**The Solution:** Rather than relying on non-deterministic generative models to self-police, ClaimCheck enforces a strict architectural separation:
+**The Architectural Solution:** Rather than relying on non-deterministic generative models to self-police, ClaimCheck enforces a strict architectural separation:
 1. **Generative Model (served on AMD infrastructure)** generates or extracts candidate claims.
 2. **Deterministic Policy Engine** compares claims against authoritative, timestamped evidence.
 3. **The AI model NEVER approves claims** — only corroborated, fresh evidence can grant publication approval.
@@ -28,58 +30,68 @@ Retail media networks and merchants face strict regulatory enforcement (such as 
 
 ## 🏗️ Architecture & Verification Flow
 
-```
-                   ┌──────────────────────────────────────────────┐
-                   │  Open LLM on AMD (vLLM / Instinct / ROCm)   │
-                   │    - Generates creative ad copy              │
-                   │    - Extracts normalized claim spans         │
-                   └──────────────────────┬───────────────────────┘
-                                          │ Claim Extraction (Strict v1.0.0)
-                                          ▼
-                   ┌──────────────────────────────────────────────┐
-                   │    Authoritative Evidence Snapshot Feeds    │
-                   │    - Catalog Master (24h TTL)                │
-                   │    - Promotion Engine (1h TTL / Expire)      │
-                   │    - Inventory Feeds (15m TTL)               │
-                   │    - Carrier Shipping Policies (12h TTL)     │
-                   └──────────────────────┬───────────────────────┘
-                                          │ Timestamped & Provenanced
-                                          ▼
-                   ┌──────────────────────────────────────────────┐
-                   │        Deterministic Policy Engine           │
-                   │  - Evaluates factual truth against evidence  │
-                   │  - Detects multi-feed contradictions         │
-                   │  - Validates freshness & carrier cutoffs     │
-                   └──────────────────────┬───────────────────────┘
-                                          │ Fail-Closed Composite Verdict
-                    ┌─────────────────────┼─────────────────────┐
-                    ▼                     ▼                     ▼
-              [   ALLOW   ]         [   REVIEW   ]        [   BLOCK   ]
-             All claims fresh      Ambiguous claims,      Factual conflict,
-             & corroborated.       stale data, or out-    stockout, or false
-             Ready to publish.     of-scope promises.     price discount.
-                    │                     │                     │
-                    │               ┌─────┴─────┐               │
-                    │               │  Human    │ (Senior Only) │
-                    │               │  Review   ├───────────────┘
-                    │               │  Queue    │ (Audited Override)
-                    │               └─────┬─────┘
-                    ▼                     ▼
-       ┌───────────────────────────────────────────────────────────────┐
-       │                 Publication State Machine                     │
-       │    Guards strictly prohibit unverified publication from       │
-       │    REJECTED_BLOCK or PENDING_HUMAN_REVIEW without override.   │
-       └──────────────────────────────┬────────────────────────────────┘
-                                      ▼
-       ┌───────────────────────────────────────────────────────────────┐
-       │             Replayable Tamper-Evident Audit Log               │
-       │    Deterministic canonical JSON + SHA-256 replay digest       │
-       └───────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph INTAKE["1. Ad Copy & Claim Intake"]
+        A[Retail Ad Copy Input] --> B[Open LLM on AMD ROCm / Instinct<br/>vLLM Structured Extraction]
+        B -->|Normalized Claim Spans v1| C[Extracted Claims: Price, Stock, Shipping, Attributes]
+    end
+
+    subgraph EVIDENCE["2. Authoritative Evidence Feeds"]
+        E1[(Catalog Database<br/>24h TTL)]
+        E2[(Promotion Engine<br/>1h TTL / Expire)]
+        E3[(Inventory Feed<br/>15m TTL)]
+        E4[(Shipping Service<br/>12h TTL)]
+        E5[(Operator Attestation<br/>7d TTL)]
+        E1 & E2 & E3 & E4 & E5 --> F[Evidence Freshness & Precedence Engine<br/>Hierarchy: Operator > Promo > Inv > Ship > Cat]
+    end
+
+    subgraph ENGINE["3. Deterministic Policy Gate (Worker 01)"]
+        C --> G{Contradiction & Freshness Check}
+        F --> G
+        G -->|Equal-Tier Conflict / Expired| REV_FEED[Fail-Closed: AMBIGUOUS_CLAIM / STALE]
+        G -->|Fresh Corroborated Evidence| H[Deterministic Claim Rule Engine]
+        REV_FEED --> V_REV
+        H -->|All Claims Validated| V_ALLOW[ALLOW<br/>Clean Pass]
+        H -->|Subjective / Near-Expiry| V_REV[REVIEW<br/>Needs Verification]
+        H -->|Price Mismatch / Out of Stock| V_BLOCK[BLOCK<br/>Factual Violation]
+    end
+
+    subgraph WORKFLOW["4. Human Review & State Machine"]
+        V_ALLOW --> SM_PASS[DETERMINISTIC_PASS]
+        V_REV --> QUEUE[Human Review Queue<br/>Priority 1-100 & 15m-4h SLAs]
+        V_BLOCK --> SM_BLOCK[REJECTED_BLOCK]
+        
+        QUEUE -->|Junior / Senior Approval| SM_OVR[OPERATOR_APPROVED_OVERRIDE]
+        QUEUE -->|Confirm Block| SM_CONF[OPERATOR_CONFIRMED_BLOCK]
+        SM_BLOCK -->|Senior Officer Audit Override| SM_OVR
+        SM_BLOCK -->|Direct Publish Blocked| GUARD((Publication Guard))
+        
+        SM_PASS --> PUB[PUBLISHED to Retail Media Network]
+        SM_OVR --> PUB
+    end
+
+    subgraph AUDIT["5. Immutable Audit & Observability"]
+        PUB & SM_BLOCK & SM_CONF --> AUD[Canonical JSON + SHA-256 Digest]
+        AUD --> CHAIN[Chained NDJSON Stream<br/>Merkle Forward Hash Linkage]
+        CHAIN --> REPLAY[Historical Replay Engine<br/>Bit-for-Bit Determinism]
+        CHAIN --> PROM[Prometheus Telemetry & Redacted Logs]
+    end
+
+    classDef allow fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d;
+    classDef block fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#7f1d1d;
+    classDef review fill:#fef9c3,stroke:#ca8a04,stroke-width:2px,color:#713f12;
+    classDef guard fill:#fecaca,stroke:#b91c1c,stroke-width:2px,color:#450a0a;
+
+    class V_ALLOW,SM_PASS,PUB allow;
+    class V_BLOCK,SM_BLOCK,REV_FEED block;
+    class V_REV,QUEUE,SM_OVR review;
+    class GUARD guard;
 ```
 
 ---
 
-## 📦 Implemented Modules & Contracts
+## 📦 Implemented Modules & Architecture
 
 ### 1. Domain Models & Contracts (`src/contracts/v1/`)
 - **Strict Fail-Closed Schemas**: All schemas use `.strict()` to reject undeclared fields, preventing payload smuggling and schema drift.
@@ -106,12 +118,37 @@ Retail media networks and merchants face strict regulatory enforcement (such as 
 
 ### 3. Policy Engine & Review Workflow (`src/policy/`)
 - **Factual Evaluator**: Deterministic logic comparing copy claims to evidence.
-- **Publication State Machine**: 10 distinct states (`UNPROCESSED`, `EVALUATING`, `DETERMINISTIC_PASS`, `REJECTED_BLOCK`, `PENDING_HUMAN_REVIEW`, `OPERATOR_APPROVED_OVERRIDE`, `OPERATOR_CONFIRMED_BLOCK`, `ESCALATED_TO_LEGAL`, `PUBLISHED`, `ARCHIVED`) with transition guards.
+- **Publication State Machine**: 10 distinct states (`UNPROCESSED`, `EVALUATING`, `DETERMINISTIC_PASS`, `REJECTED_BLOCK`, `PENDING_HUMAN_REVIEW`, `OPERATOR_APPROVED_OVERRIDE`, `OPERATOR_CONFIRMED_BLOCK`, `ESCALATED_TO_LEGAL`, `PUBLISHED`, `ARCHIVED`) with transition guards preventing unverified release.
 - **Human Review Queue & SLAs**:
   - Near-expiry flash deals: Priority **95/100**, **15-minute SLA**.
   - Price & stockout blocks: Priority **85–90/100**, **1–2 hour SLA** (requires `SENIOR_COMPLIANCE_OFFICER`).
   - Standard ambiguity: Priority **50/100**, **4-hour SLA** (`JUNIOR_OPERATOR`).
   - Role-based permissions guard against junior operators overriding factual blocks.
+
+### 4. Security Audit, Replay & Telemetry (`src/audit/`)
+- **Chained Audit Stream**: Forward Merkle link hashing (`previousDigest` + `replayDigest` &rarr; `chainDigest`) in NDJSON format for immutable compliance logs.
+- **Historical Replay Engine (`replayHistoricalCheck`)**: Reconstructs past checks from immutable snapshots and validates bit-for-bit determinism and non-repudiation.
+- **Observability & Structured Logging**: End-to-end `traceId` and `spanId` propagation with zero-overhead Prometheus metrics exporter and automated PII redaction.
+
+### 5. Performance Benchmarks & Release Gate (`src/benchmark/`, `tests/regression/`)
+- Sub-millisecond deterministic evaluation (measured p95: **29.4 µs** vs 5ms SLA target).
+- Multi-claim e-commerce regression corpus validating 5 real-world campaigns end-to-end.
+
+---
+
+## ⚡ Performance & Benchmarks
+
+Run the built-in benchmark suite to measure local performance across 1,000 iterations:
+
+```bash
+npm run benchmark
+```
+
+| Engine Component | Target SLA (p95) | Measured (p95) | Measured Avg | Throughput | Status |
+|---|---|---|---|---|
+| **Policy Engine (Multi-Claim)** | < 5,000 µs (5ms) | **29.4 µs** | **18.4 µs** | **53,231 ops/sec** | **PASS** (170x faster) |
+| **Audit Stream Chaining** | < 1,000 µs (1ms) | **175.1 µs** | **89.7 µs** | **11,089 ops/sec** | **PASS** |
+| **Historical Check Replay** | < 2,000 µs (2ms) | **435.1 µs** | **223.5 µs** | **4,464 ops/sec** | **PASS** |
 
 ---
 
@@ -139,13 +176,18 @@ npm install
 ClaimCheck includes a comprehensive automated test suite covering unit validation, boundary conditions, tamper detection, contradiction resolution, and state machine guards.
 
 ```bash
-# Run all automated tests (61 tests across 20 suites)
+# Run all automated tests (85 tests across 28 suites)
 npm test
 
 # Run specific test suites
-npm run test:contracts  # Contract schemas, strict mode & audit digest
-npm run test:evidence   # Freshness TTLs, precedence & contradiction resolver
-npm run test:policy     # Policy factual engine, state machine & review queue
+npm run test:contracts   # Contract schemas, strict mode & compatibility
+npm run test:evidence    # Freshness TTLs, precedence & contradiction resolver
+npm run test:policy      # Policy factual engine, state machine & review queue
+npm run test:audit       # Chained audit stream, historical replay & telemetry
+npm run test:regression  # Full end-to-end e-commerce campaign regression corpus
+
+# Run performance benchmark
+npm run benchmark
 ```
 
 ---
@@ -167,7 +209,7 @@ ClaimCheck is built for the **AMD Developer Hackathon ACT III (Reinvent Commerce
 
 ---
 
-## 📚 Documentation & Planning Traceability
+## 📚 Technical Documentation & Reports
 
 Comprehensive technical documentation is maintained under `docs/` and `.brain/.work/`:
 - [`docs/contracts/OWNERSHIP_AND_COMPATIBILITY.md`](docs/contracts/OWNERSHIP_AND_COMPATIBILITY.md): Contract ownership and SemVer compatibility policy.
@@ -175,10 +217,16 @@ Comprehensive technical documentation is maintained under `docs/` and `.brain/.w
 - [`docs/evidence/RETENTION_AND_REDACTION.md`](docs/evidence/RETENTION_AND_REDACTION.md): Privacy and data redaction specifications.
 - [`docs/policy/DECISION_ENGINE_AND_STATE_MACHINE.md`](docs/policy/DECISION_ENGINE_AND_STATE_MACHINE.md): Decision tables and publication lifecycle guards.
 - [`docs/policy/HUMAN_REVIEW_WORKFLOW_AND_SLA.md`](docs/policy/HUMAN_REVIEW_WORKFLOW_AND_SLA.md): Review queue SLAs and role authorization matrix.
-- Phase Reports:
+- [`docs/security/ACCESS_CONTROL_AND_AUDITABILITY.md`](docs/security/ACCESS_CONTROL_AND_AUDITABILITY.md): RBAC matrix, threat model, and cryptographic chaining.
+- [`docs/security/INCIDENT_RESPONSE_RUNBOOK.md`](docs/security/INCIDENT_RESPONSE_RUNBOOK.md): SEV-1 to SEV-3 operational incident runbooks.
+- [`docs/release/PERFORMANCE_AND_BENCHMARKS.md`](docs/release/PERFORMANCE_AND_BENCHMARKS.md): Latency percentiles, throughput, and memory scaling.
+- [`docs/release/PRODUCTION_ROLLBACK_CRITERIA.md`](docs/release/PRODUCTION_ROLLBACK_CRITERIA.md): Release gates and automated rollback checklist.
+- Production Phase Reports:
   - [Worker 01 Phase 01 Report](.brain/.work/.report/worker_01_p01_report.md)
   - [Worker 01 Phase 02 Report](.brain/.work/.report/worker_01_p02_report.md)
   - [Worker 01 Phase 03 Report](.brain/.work/.report/worker_01_p03_report.md)
+  - [Worker 01 Phase 04 Report](.brain/.work/.report/worker_01_p04_report.md)
+  - [Worker 01 Phase 05 Report](.brain/.work/.report/worker_01_p05_report.md)
 
 ---
 
