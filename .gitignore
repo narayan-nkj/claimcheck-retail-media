@@ -25,3 +25,10 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
