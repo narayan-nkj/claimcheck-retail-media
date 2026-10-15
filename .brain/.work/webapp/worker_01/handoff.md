@@ -22,17 +22,25 @@ Status: **PHASE 03 COMPLETED & HANDED OFF**
 - `src/policy/reviewQueue.ts`: Priority calculation, SLA management (15 min for expiry, 1 hr for price blocks, 4 hr standard), and role-based operator authorization (`JUNIOR_OPERATOR`, `SENIOR_COMPLIANCE_OFFICER`, `LEGAL_COUNSEL`).
 - `docs/policy/DECISION_ENGINE_AND_STATE_MACHINE.md` & `docs/policy/HUMAN_REVIEW_WORKFLOW_AND_SLA.md`.
 
+### Phase 04: Security, Audit Stream, Replay & Operability
+- `src/audit/stream.ts`: Chained audit event schema (`ChainedAuditEvent`), NDJSON serializer/parser, and cryptographic chain verification (`verifyAuditChain`) for tamper detection.
+- `src/audit/replay.ts`: Deterministic historical replay engine (`replayHistoricalCheck`) reconstructing historical checks and validating bit-for-bit reproducibility.
+- `src/audit/telemetry.ts`: `CorrelationContext` generation, Prometheus metrics collector (`telemetry.exportPrometheus()`), and structured logging with automatic PII & credential redaction (`logStructured`).
+- `docs/security/ACCESS_CONTROL_AND_AUDITABILITY.md` & `docs/security/INCIDENT_RESPONSE_RUNBOOK.md`.
+
 ## Downstream Consumer Guidelines
 - **Worker 02 (AMD Serving)**: Open models served on AMD infrastructure extract spans and parameters into `ClaimExtraction`. Model outputs MUST NEVER grant approval directly; they feed directly into `evaluateAdCopyPolicy`.
 - **Worker 03 (Frontend/Operator UI)**:
   - Display policy verdicts with specific reason codes and evidence citations.
   - Implement the review queue interface using `createReviewQueueItem` and priority scores.
   - Enforce operator role checks (`canOperatorResolveItem`) in the review UI actions.
+  - Provide an Audit Explorer view utilizing `replayHistoricalCheck` and `verifyAuditChain` for full transparency.
 - **Tester 01 (Functional Validation)**: Validate the policy decision table across all 4 claim classes and out-of-scope inputs using `tests/policy/engine.test.js`.
-- **Tester 02 (Integration & Release Validation)**: Validate state machine transitions and audit events during simulated operator overrides.
+- **Tester 02 (Integration & Release Validation)**: Validate state machine transitions, tamper detection in chained audit streams, and incident response runbooks.
 
 ## Test Suite & Phase Reports
-- Test command: `npm test` or `node --test tests/contracts/*.test.js tests/evidence/*.test.js tests/policy/*.test.js` (61 tests passing)
+- Test command: `npm test` or `node --test tests/contracts/*.test.js tests/evidence/*.test.js tests/policy/*.test.js tests/audit/*.test.js` (76 tests passing)
 - Phase 01 Report: `.brain/.work/.report/worker_01_p01_report.md`
 - Phase 02 Report: `.brain/.work/.report/worker_01_p02_report.md`
 - Phase 03 Report: `.brain/.work/.report/worker_01_p03_report.md`
+- Phase 04 Report: `.brain/.work/.report/worker_01_p04_report.md`

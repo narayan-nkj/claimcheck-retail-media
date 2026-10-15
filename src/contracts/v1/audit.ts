@@ -72,12 +72,31 @@ export function computeCanonicalAuditDigest(eventWithoutDigest: Omit<AuditEvent,
 }
 
 /**
+ * Extract canonical AuditEvent payload fields (excluding replayDigest and external chaining metadata)
+ */
+export function extractAuditEventPayload(event: AuditEvent): Omit<AuditEvent, 'replayDigest'> {
+  return {
+    auditId: event.auditId,
+    schemaVersion: event.schemaVersion,
+    checkId: event.checkId,
+    timestamp: event.timestamp,
+    adCopyText: event.adCopyText,
+    catalogSnapshot: event.catalogSnapshot,
+    extractedClaims: event.extractedClaims,
+    evidenceSnapshots: event.evidenceSnapshots,
+    overallVerdict: event.overallVerdict,
+    ...(event.humanReview !== undefined ? { humanReview: event.humanReview } : {}),
+    ...(event.modelServingContext !== undefined ? { modelServingContext: event.modelServingContext } : {}),
+  };
+}
+
+/**
  * Verify whether an AuditEvent's replayDigest matches its canonical payload
  */
 export function verifyAuditDigest(event: AuditEvent): boolean {
-  const { replayDigest, ...rest } = event;
-  const computed = computeCanonicalAuditDigest(rest);
-  return computed.toLowerCase() === replayDigest.toLowerCase();
+  const payload = extractAuditEventPayload(event);
+  const computed = computeCanonicalAuditDigest(payload);
+  return computed.toLowerCase() === event.replayDigest.toLowerCase();
 }
 
 /**
