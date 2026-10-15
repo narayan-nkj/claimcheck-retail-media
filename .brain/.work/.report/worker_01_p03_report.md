@@ -48,7 +48,7 @@
 | 3.05 | Review queue, priority & SLAs | `src/policy/reviewQueue.ts` | In progress | origin/main | Pending | None |
 | 3.06 | Inter-workstream exports | `src/policy/index.ts` | In progress | origin/main | Pending | None |
 | 3.07 | Policy & workflow docs | `docs/policy/*.md`, `worker_01/handoff.md` | In progress | origin/main | Pending | None |
-| 3.08 | `node --test tests/**/*.test.js` (61/61 passed) | Phase report, status update | Final phase commit | origin/main | Pushed | Corrected test fixture in `engine.test.js` |
+| 3.08 | `node --test tests/**/*.test.js` (61/61 passed) | Phase report, status update | `7032264` | origin/main | Pushed | Corrected test fixture in `engine.test.js` |
 
 ## Phase/validation gate
 
@@ -56,6 +56,6 @@
 - Regression tests: All 46 Phase 01 & 02 tests pass with 0 regressions (PASS)
 - Security/privacy/secret checks: Role guards and state machine guards verified; no credentials committed (PASS)
 - Documentation and traceability checks: `status.md`, `handoff.md`, `decision_log.md`, `evidence_register.md`, policies updated (PASS)
-- Final commit hash: Recorded upon push
-- GitHub push succeeded: Verified via `git push origin main`
+- Final commit hash: `7032264`
+- GitHub push succeeded: Verified via `git push origin main` (`7032264`)
 - Release/signoff recommendation: Phase 03 accepted; ready for Tester 01 validation and Worker 01 Phase 04.
