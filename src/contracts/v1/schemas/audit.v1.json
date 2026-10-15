@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimcheck.retail/schemas/v1/audit.json",
+  "title": "AuditEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "auditId",
+    "schemaVersion",
+    "checkId",
+    "timestamp",
+    "adCopyText",
+    "catalogSnapshot",
+    "extractedClaims",
+    "evidenceSnapshots",
+    "overallVerdict",
+    "replayDigest"
+  ],
+  "properties": {
+    "auditId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "checkId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "adCopyText": { "type": "string", "minLength": 1, "maxLength": 5000 },
+    "catalogSnapshot": { "$ref": "catalog.v1.json" },
+    "extractedClaims": {
+      "type": "array",
+      "items": { "$ref": "claim.v1.json" }
+    },
+    "evidenceSnapshots": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "overallVerdict": { "$ref": "verdict.v1.json" },
+    "humanReview": { "type": "object" },
+    "modelServingContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime", "modelId", "hardwareTarget"],
+      "properties": {
+        "runtime": { "type": "string" },
+        "modelId": { "type": "string" },
+        "hardwareTarget": { "type": "string" },
+        "servedThroughVllm": { "type": "boolean" }
+      }
+    },
+    "replayDigest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimcheck.retail/schemas/v1/catalog.json",
+  "title": "CatalogItem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "productId",
+    "sku",
+    "title",
+    "brand",
+    "category",
+    "pricing",
+    "inventory",
+    "shipping",
+    "lastVerifiedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0.0" },
+    "productId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "sku": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "brand": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "category": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "pricing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["amount", "currency", "effectiveFrom", "sourceSnapshotId"],
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "enum": ["USD", "EUR", "GBP", "CAD", "AUD", "JPY"] },
+        "regularAmount": { "type": "number", "minimum": 0 },
+        "discountPercentage": { "type": "number", "minimum": 0, "maximum": 100 },
+        "effectiveFrom": { "type": "string", "format": "date-time" },
+        "effectiveTo": { "type": "string", "format": "date-time" },
+        "sourceSnapshotId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stockStatus", "availableQuantity", "leadTimeDays", "updatedAt"],
+      "properties": {
+        "stockStatus": { "type": "string", "enum": ["IN_STOCK", "OUT_OF_STOCK", "LOW_STOCK", "BACKORDER"] },
+        "availableQuantity": { "type": "integer", "minimum": 0 },
+        "leadTimeDays": { "type": "integer", "minimum": 0 },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "warehouseLocation": { "type": "string", "maxLength": 100 }
+      }
+    },
+    "shipping": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["carrierOrTier", "minTransitDays", "maxTransitDays", "isFreeShipping", "validThrough"],
+        "properties": {
+          "carrierOrTier": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "cutoffTimeUtc": { "type": "string", "pattern": "^([01]\\d|2[0-3]):([0-5]\\d)$" },
+          "minTransitDays": { "type": "integer", "minimum": 0 },
+          "maxTransitDays": { "type": "integer", "minimum": 0 },
+          "isFreeShipping": { "type": "boolean" },
+          "minSpendThreshold": { "type": "number", "minimum": 0 },
+          "geoRestrictions": { "type": "array", "items": { "type": "string" } },
+          "validThrough": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "attributes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "value"],
+        "properties": {
+          "key": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "value": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "standardizedValue": { "type": "string", "maxLength": 500 }
+        }
+      }
+    },
+    "disclaimers": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 300 }
+    },
+    "lastVerifiedAt": { "type": "string", "format": "date-time" }
+  }
+}

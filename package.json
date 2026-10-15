@@ -1,0 +1,21 @@
+{
+  "name": "claimcheck",
+  "version": "0.1.0",
+  "description": "ClaimCheck — Deterministic evidence-backed pre-publication claim checker for retail media",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/contracts/*.test.js",
+    "test:ts": "node --test tests/contracts/*.test.ts"
+  },
+  "keywords": [
+    "retail-media",
+    "claimcheck",
+    "advertising-compliance",
+    "evidence-gate"
+  ],
+  "author": "ClaimCheck Team",
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^4.6.7"
+  }
+}

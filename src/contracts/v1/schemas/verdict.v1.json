@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimcheck.retail/schemas/v1/verdict.json",
+  "title": "OverallCheckVerdict",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verdictId",
+    "checkId",
+    "compositeStatus",
+    "claimVerdicts",
+    "summary",
+    "evaluatedAt",
+    "policyVersion"
+  ],
+  "properties": {
+    "verdictId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "checkId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "compositeStatus": { "type": "string", "enum": ["ALLOW", "REVIEW", "BLOCK"] },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "evaluatedAt": { "type": "string", "format": "date-time" },
+    "policyVersion": { "type": "string", "minLength": 1, "maxLength": 50 },
+    "claimVerdicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claimId",
+          "claimClass",
+          "status",
+          "primaryReason",
+          "detail",
+          "evaluatedAt"
+        ],
+        "properties": {
+          "claimId": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "claimClass": {
+            "type": "string",
+            "enum": [
+              "PRICE_DISCOUNT",
+              "AVAILABILITY",
+              "SHIPPING_PROMISE",
+              "PRODUCT_ATTRIBUTE",
+              "OUT_OF_SCOPE"
+            ]
+          },
+          "status": { "type": "string", "enum": ["ALLOW", "REVIEW", "BLOCK"] },
+          "primaryReason": {
+            "type": "string",
+            "enum": [
+              "MATCHES_APPROVED_FACTS",
+              "PRICE_MISMATCH",
+              "DISCOUNT_UNSUPPORTED",
+              "PRODUCT_OUT_OF_STOCK",
+              "SHIPPING_TIMELINE_UNSUPPORTED",
+              "ATTRIBUTE_CONTRADICTED",
+              "STALE_EVIDENCE",
+              "AMBIGUOUS_CLAIM",
+              "OUT_OF_SCOPE_CLAIM",
+              "MISSING_EVIDENCE",
+              "LOW_EXTRACTOR_CONFIDENCE",
+              "POLICY_EXPIRY_THRESHOLD",
+              "UNSUPPORTED_CLAIM_CLASS"
+            ]
+          },
+          "detail": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "evidenceReferences": { "type": "array", "items": { "type": "object" } },
+          "evaluatedAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

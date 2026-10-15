@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://claimcheck.retail/schemas/v1/claim.json",
+  "title": "ClaimExtraction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claimId",
+    "claimClass",
+    "rawSpan",
+    "normalizedStatement",
+    "extractorConfidence",
+    "extractionSource"
+  ],
+  "properties": {
+    "claimId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "claimClass": {
+      "type": "string",
+      "enum": [
+        "PRICE_DISCOUNT",
+        "AVAILABILITY",
+        "SHIPPING_PROMISE",
+        "PRODUCT_ATTRIBUTE",
+        "OUT_OF_SCOPE"
+      ]
+    },
+    "rawSpan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startIndex", "endIndex", "text"],
+      "properties": {
+        "startIndex": { "type": "integer", "minimum": 0 },
+        "endIndex": { "type": "integer", "minimum": 1 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 500 }
+      }
+    },
+    "normalizedStatement": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "extractedParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "statedPrice": { "type": "number", "minimum": 0 },
+        "statedCurrency": { "type": "string", "enum": ["USD", "EUR", "GBP", "CAD", "AUD", "JPY"] },
+        "statedDiscountPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "statedStockStatus": { "type": "string" },
+        "statedDeliveryWindowDays": { "type": "integer", "minimum": 0 },
+        "statedAttributeKey": { "type": "string" },
+        "statedAttributeValue": { "type": "string" }
+      }
+    },
+    "extractorConfidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1.0
+    },
+    "extractionSource": {
+      "type": "string",
+      "enum": ["MODEL_GENERATED", "OPERATOR_ENTERED", "RULE_BASED"]
+    }
+  }
+}
