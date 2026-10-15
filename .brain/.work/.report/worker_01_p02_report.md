@@ -53,7 +53,7 @@
 | 2.05 | Cryptographic chain-of-custody | `src/evidence/provenance.ts` | In progress | origin/main | Pending | None |
 | 2.06 | Privacy sanitizer & redaction | `src/evidence/redaction.ts` | In progress | origin/main | Pending | None |
 | 2.07 | Freshness & redaction policies | `docs/evidence/*.md`, `worker_01/handoff.md` | In progress | origin/main | Pending | None |
-| 2.08 | `node --test tests/**/*.test.js` (46/46 passed) | Phase report, status update | Final phase commit | origin/main | Pushed | Type-only import syntax resolved |
+| 2.08 | `node --test tests/**/*.test.js` (46/46 passed) | Phase report, status update | `7654ac9` | origin/main | Pushed | Type-only import syntax resolved |
 
 ## Phase/validation gate
 
@@ -61,6 +61,6 @@
 - Regression tests: All 31 Phase 01 contract tests pass with 0 regressions (PASS)
 - Security/privacy/secret checks: Redaction tested and verified; no credentials or secrets committed (PASS)
 - Documentation and traceability checks: `status.md`, `handoff.md`, `decision_log.md`, `evidence_register.md`, policies updated (PASS)
-- Final commit hash: Recorded upon push
-- GitHub push succeeded: Verified via `git push origin main`
+- Final commit hash: `7654ac9`
+- GitHub push succeeded: Verified via `git push origin main` (`7654ac9`)
 - Release/signoff recommendation: Phase 02 accepted; ready for Tester 01 validation and Worker 01 Phase 03.
