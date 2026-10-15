@@ -60,7 +60,7 @@
 | 1.05 | Replay digest & auditability | `src/contracts/v1/audit.ts`, `tests/contracts/audit.test.js` | In progress | origin/main | Pending | None |
 | 1.06 | Inter-schema contract integration | `tests/contracts/verdict.test.js`, `review_and_evidence.test.js` | In progress | origin/main | Pending | None |
 | 1.07 | Ownership & compatibility policy | `docs/contracts/OWNERSHIP_AND_COMPATIBILITY.md`, `worker_01/handoff.md` | In progress | origin/main | Pending | None |
-| 1.08 | `node --test tests/contracts/*.test.js` (31/31 passed) | `.brain/.work/.report/worker_01_p01_report.md`, `worker_01/status.md` | Final phase commit | origin/main | Pushed | Disk full resolved by cleaning npm cache |
+| 1.08 | `node --test tests/contracts/*.test.js` (31/31 passed) | `.brain/.work/.report/worker_01_p01_report.md`, `worker_01/status.md` | `2a14abd` | origin/main | Pushed | Disk full resolved by cleaning npm cache |
 
 ## Phase/validation gate
 
@@ -68,6 +68,6 @@
 - Regression tests: Clean baseline (PASS)
 - Security/privacy/secret checks: No secrets, credentials, or private merchant data committed (PASS)
 - Documentation and traceability checks: `status.md`, `handoff.md`, `decision_log.md`, `evidence_register.md`, `OWNERSHIP_AND_COMPATIBILITY.md` updated (PASS)
-- Final commit hash: Recorded upon push
-- GitHub push succeeded: Verified via `git push origin main`
+- Final commit hash: `2a14abd`
+- GitHub push succeeded: Verified via `git push origin main` (`2a14abd`)
 - Release/signoff recommendation: Phase 01 accepted; ready for Tester 01 validation and Worker 01 Phase 02.
