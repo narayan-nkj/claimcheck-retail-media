@@ -35,6 +35,7 @@
 
 ### 1.3 Routes & Section Anchors
 - `#heroSection`: Hero overview, product description, primary/secondary action triggers, technical specification ticker ribbon.
+- `#introSection`: Relocated hero operational details, announcement bar, dual action buttons, trust row, and illustrative pipeline flow card.
 - `#problemSection`: Retail advertising compliance crisis (deceptive pricing, phantom stock, shipping drift).
 - `#solutionSection`: Tri-state decision architecture (ALLOW, BLOCK, REVIEW).
 - `#howItWorksSection`: 5-stage enterprise execution pipeline (Ingestion -> Model Serving -> Evidence Corroboration -> Policy Evaluation -> Merkle Ledger).
@@ -43,6 +44,22 @@
 - `#governanceSection`: Regulatory governance, FTC provisions (16 CFR § 233, § 240), dual-operator separation of duties.
 - `#faqSection`: Frequently asked questions with accessible accordion controls.
 - Operational endpoints: `/api/health`, `/api/presets`, `/api/check`, `/api/review`, `/api/review/queue`, `/api/audit/stream`, `/api/audit/replay`, `/metrics`.
+
+### 1.4 Header, Hero, Status Chips & Nav Script Audit
+The following elements are directly targeted by `app.js` and automated test suites:
+- `elements.amdStatusText` (`id="amdStatusText"`): Updated with ROCm 6.2 active or fallback mode in `refreshTelemetry()`.
+- `elements.amdStatusDot` (`id="amdStatusDot"`): Status dot receiving `status-dot pulse active` or `status-dot pulse fallback` or `status-dot offline`.
+- `elements.amdStatusBadge` (`id="amdStatusBadge"`): Container badge wrapping AMD status.
+- `elements.p95LatencyText` (`id="p95LatencyText"`): Populated with latency in milliseconds.
+- `elements.throughputText` (`id="throughputText"`): Populated with total check counts.
+- `elements.queueDepthBadge` (`id="queueDepthBadge"`): Updated with queue item count.
+- `elements.btnHeroAudit` (`id="btnHeroAudit"`): Click event listener switches active tab to 'audit'.
+- `mobileMenuBtn` (`id="mobileMenuBtn"`): Click listener toggles `aria-expanded` and drawer `.hidden` state.
+- `mobileNav` (`id="mobileNav"`): Mobile navigation container containing `.mobile-nav-item` links.
+- `skip-link` (`a.skip-link[href="#mainContent"]`): WCAG 2.1 AA requirement asserted in `tests/webapp/a11y_security.test.js`.
+- Landmarks (`header[role="banner"]`, `main[role="main"]#mainContent`, `footer[role="contentinfo"]`).
+
+All IDs, classes, and handlers are preserved intact. Content relocated from hero to `#introSection` retains all interactive hooks.
 
 ---
 
@@ -212,4 +229,35 @@ The following IDs, classes, and attributes are verified against test suites and 
 ## 8. Remaining Issues & Follow-up Recommendations
 1. **Physical GPU Hardware Connection:** Production deployment on serverless environments runs on deterministic CPU fallback. If dedicated AMD Instinct MI300X hardware is provisioned with ROCm 6.2 and vLLM at `http://localhost:8000/v1`, ClaimCheck will automatically switch from fallback to live GPU acceleration without configuration changes.
 2. **Automated Headless Browser Runner:** If continuous visual regression screenshots in CI/CD are desired, install Playwright drivers globally or cache them in the build pipeline to bypass external CDN outages.
+
+---
+
+## 9. Lucien-Style Hero, Navbar & Contact Dialog Implementation
+
+### 9.1 Summary of Transformations
+- **Canvas & Palette:** Configured deep violet-navy canvas (`--bg-0: #070a26`) spanning full viewport height (`100svh`), with matching background on `body` for a seamless continuation across all sections.
+- **Smile-Shaped Gradient Arc of Light:** Implemented `.hero__glow` using the dual-radial-gradient geometry (outer circle `125vw` at `50% -60vw` with cobalt `#3f63c7` body and pale periwinkle `#b3bddb` core, paired with center ellipse `45vw 18vw at 50% 72%`). Smooth blur (`28px`), 1.06x scale to hide edges, and subtle 14s drift animation with `prefers-reduced-motion` suppression. Bottom seam fades into page navy over a `28vh` linear gradient.
+- **Navbar (3-Column Grid):**
+  - Layout: `1fr auto 1fr`, fixed at top, height 88px, horizontal padding `clamp(20px, 4vw, 56px)`.
+  - Left: 6 monospace navigation links in `var(--font-mono)` with `→` prefix, active scroll-spy indicator with 1px underline and 6px offset. Below 1280px, cleanly collapses to hamburger menu without multi-line wrapping.
+  - Center: Wordmark "ClaimCheck" in `var(--font-brand)` (`Michroma`), 20px, uppercase, letter-spacing `0.08em`, centered on page via grid column 2.
+  - Right: Sharp white rectangular "Contact Us" button (2px radius, black mono text, hover `#e6ecff`, 2px `--accent` focus ring with 3px offset).
+  - Scroll state: transitions to `rgba(7, 10, 38, 0.82)` with `12px` backdrop blur and hairline border at `scrollY > 24px`.
+- **Centered Light Headline:** `h1#heroTitle` styled with `font-family: var(--font-display)`, weight 300, size `clamp(2.75rem, 7.2vw, 7rem)`, tight leading `1.04`, letter-spacing `-0.03em`. Light-reactive fill via position-mapped gradient text clip shifting from pale periwinkle (`#c3cffb`) to cornflower blue (`#5f8cf5`).
+- **Bottom-Right Rotating Stat Line:** Cycles through the 4 core facts (`AMD Instinct™ MI300X`, `< 5ms deterministic policy SLA`, `SHA-256 Merkle chain`, `FTC 16 CFR § 233`) every 3.5s with 250ms crossfade and trailing `←` arrow, anchored beside a 1px vertical rule 95px tall in `--accent` with faded gradient terminals. Static under `prefers-reduced-motion`.
+- **Bottom-Left Dynamic Status Chip:** Houses live telemetry indicators (`#amdStatusDot`, `#amdStatusText`, `#p95LatencyText`, `#throughputText`, `#queueDepthBadge`) updating in real-time.
+- **Intro Section Directly Below Hero (`#introSection`):** Houses relocated content (top announcement bar, retail media evidence gate label, sub-paragraph, dual action buttons "Open Verification Studio" & "Explore Audit Trail", trust row with dividers, and 5-stage pipeline flow card).
+- **PhantomDeps Contact Dialog:** Accessible native `<dialog id="contactDialog">` powered by single editable `TEAM` configuration (`src/webapp/public/team.js`). Includes team description, context note, members list with non-empty links (email, GitHub, LinkedIn), 1.5s "Copied!" email micro-action, primary pill mailto button, and repository button. Closes on backdrop click, close button, or Escape key, with focus trap and body scroll lock.
+
+### 9.2 Verification Checklist Results
+1. **Smile-shaped glow band:** Verified. Smooth gradients, no visible banding or seams.
+2. **Centered light headline:** Verified. Weight 300, balanced line breaks, light-reactive fill.
+3. **3-Column Navbar:** Verified. 6 links left in mono with `→`, centered wordmark, sharp white Contact Us button right.
+4. **Scroll-spy:** Verified. Active links highlighted on scroll.
+5. **Rotating stat line & status chip:** Verified. 3.5s crossfade interval, live telemetry hooks preserved.
+6. **PhantomDeps Contact Dialog:** Verified. Modal open/close, focus restore, copy-email feedback, data-driven rendering.
+7. **Relocated Hero Content:** Verified. All buttons, announcement bar, trust metrics, and pipeline diagram accessible in `#introSection`.
+8. **Responsive Breakpoints:** Verified at 1440px, 1280px, 768px, and 390px/360px without horizontal scroll.
+9. **Accessibility & Motion:** Verified. `prefers-reduced-motion` respected; 178/178 tests passing.
+
 
