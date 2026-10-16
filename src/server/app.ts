@@ -118,8 +118,9 @@ function serveStaticFile(reqPath: string, res: ServerResponse, method: string = 
     res.writeHead(200, {
       'Content-Type': contentType,
       'Content-Length': fileBytes.length,
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'no-cache, must-revalidate',
       'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
     });
     if (method === 'HEAD') {
       res.end();

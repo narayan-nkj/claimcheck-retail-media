@@ -198,6 +198,25 @@
     if (elements.btnRefreshQueue) elements.btnRefreshQueue.addEventListener('click', refreshQueue);
     if (elements.btnRefreshAudit) elements.btnRefreshAudit.addEventListener('click', refreshAuditStream);
 
+    // Mobile Navigation Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    if (mobileMenuBtn && mobileNav) {
+      mobileMenuBtn.addEventListener('click', () => {
+        const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+        mobileMenuBtn.setAttribute('aria-expanded', String(!isExpanded));
+        mobileNav.classList.toggle('hidden');
+      });
+
+      // Close mobile drawer when link clicked
+      mobileNav.querySelectorAll('.mobile-nav-item, a').forEach((link) => {
+        link.addEventListener('click', () => {
+          mobileNav.classList.add('hidden');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
     // Network Error Boundary Dismiss
     if (elements.btnDismissNetworkError) {
       elements.btnDismissNetworkError.addEventListener('click', hideNetworkErrorBanner);
