@@ -25,11 +25,11 @@ for /f "tokens=*" %%i in ('node -v') do set NODE_VER=%%i
 echo [*] Detected Node.js: %NODE_VER%
 
 :: 2. Check and install dependencies if missing
-if not exist "node_modules\" (
-    echo [*] Dependencies ('node_modules') not found. Installing packages...
+if not exist "node_modules" (
+    echo [*] Dependencies not found. Installing packages with npm install...
     call npm install
-    if %errorlevel% neq 0 (
-        echo [ERROR] 'npm install' failed.
+    if errorlevel 1 (
+        echo [ERROR] npm install failed.
         pause
         exit /b 1
     )
