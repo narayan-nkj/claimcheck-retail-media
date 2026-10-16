@@ -233,6 +233,14 @@ npm install
 
 ### Launching the Operator Web Portal
 
+**Windows 1-Click Launch (Recommended for Windows):**
+Simply double-click [`launch.bat`](launch.bat) or run:
+```cmd
+launch.bat
+```
+*(Automatically verifies Node.js, installs missing dependencies, starts the HTTP server, and opens `http://localhost:3000` in your default browser).*
+
+**Command Line (All Platforms):**
 ```bash
 # Launch production operator portal (http://localhost:3000)
 npm start
