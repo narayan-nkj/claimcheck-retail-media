@@ -256,7 +256,11 @@ export async function extractClaims(
     claims: validatedClaims,
     metadata: {
       extractionTimeMs: Date.now() - startTime,
-      source: validatedClaims[0]?.extractionSource ?? (fallbackUsed ? 'RULE_BASED' : 'MODEL_GENERATED'),
+      source: validatedClaims[0]?.extractionSource === 'RULE_BASED'
+        ? 'RULE_BASED'
+        : (validatedClaims[0]?.extractionSource === 'MODEL_GENERATED'
+          ? 'MODEL_GENERATED'
+          : (fallbackUsed ? 'RULE_BASED' : 'MODEL_GENERATED')),
       fallbackUsed,
       model: client.config.modelName,
       sanitized: wasSanitized,

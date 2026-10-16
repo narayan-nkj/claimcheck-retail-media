@@ -36,6 +36,11 @@ if not exist "node_modules" (
     echo [*] Dependencies installed successfully.
 )
 
+if not exist "dist" (
+    echo [*] Compiling TypeScript with npm run build...
+    call npm run build
+)
+
 :: 3. Launch browser in background after 2 second delay for server spin-up
 start "" cmd /c "timeout /t 2 /nobreak >nul & start http://localhost:3000"
 

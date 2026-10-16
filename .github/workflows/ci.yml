@@ -1,0 +1,45 @@
+name: ClaimCheck CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test & Evaluate (Node ${{ matrix.node-version }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Type Check & Build
+        run: npm run build
+
+      - name: Execute Full Test Suite
+        run: npm test
+
+      - name: Run Multi-Vertical Evaluation Benchmark (52 Campaigns)
+        run: npm run evaluate
+
+      - name: Run Deterministic Engine Benchmark
+        run: npm run benchmark
+
+      - name: Run Offline Fallback Adapter Benchmark
+        run: npm run benchmark:fallback

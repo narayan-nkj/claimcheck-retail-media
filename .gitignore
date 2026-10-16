@@ -3,7 +3,6 @@ node_modules/
 .npm/
 
 # Build artifacts
-dist/
 build/
 coverage/
 

@@ -29,7 +29,9 @@ import { appState } from './state.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
-const PUBLIC_DIR = resolve(__dirname, '../webapp/public');
+const directPublicDir = resolve(__dirname, '../webapp/public');
+const cwdPublicDir = resolve(process.cwd(), 'src/webapp/public');
+const PUBLIC_DIR = existsSync(directPublicDir) ? directPublicDir : cwdPublicDir;
 
 // Initialize shared AMD inference client with deterministic fallback
 const amdClient = new AMDInferenceClient({
@@ -44,7 +46,7 @@ const amdClient = new AMDInferenceClient({
 async function parseJsonBody(req: IncomingMessage): Promise<any> {
   return new Promise((resolvePromise, reject) => {
     let body = '';
-    req.on('data', (chunk) => {
+    req.on('data', (chunk: Buffer | string) => {
       body += chunk.toString('utf8');
       if (body.length > 1024 * 1024) {
         req.destroy();

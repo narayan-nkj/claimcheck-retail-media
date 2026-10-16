@@ -1,0 +1,16 @@
+services:
+  claimcheck:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: claimcheck-gate
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - AMD_VLLM_ENDPOINT=${AMD_VLLM_ENDPOINT:-http://host.docker.internal:8000/v1}
+      - AMD_TARGET_DEVICE=${AMD_TARGET_DEVICE:-AMD Instinct MI300X}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

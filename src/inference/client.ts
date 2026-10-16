@@ -9,6 +9,8 @@ import {
   generateMockChatCompletion,
 } from './fallback.ts';
 
+export type { ChatCompletionResponse };
+
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;

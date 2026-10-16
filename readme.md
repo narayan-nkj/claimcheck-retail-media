@@ -2,6 +2,7 @@
 
 > **A deterministic, evidence-backed pre-publication verification gate for factual claims in retail advertising copy.**
 
+[![CI](https://github.com/narayan-nkj/claimcheck-retail-media/actions/workflows/ci.yml/badge.svg)](https://github.com/narayan-nkj/claimcheck-retail-media/actions)
 [![Tests](https://img.shields.io/badge/tests-178%20passed-success.svg)](#testing)
 [![Evaluation](https://img.shields.io/badge/evaluation-52%20campaigns%20100%25-brightgreen.svg)](docs/evaluation/EVALUATION_REPORT.md)
 [![Accessibility](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-blueviolet.svg)](#6-operator-web-application--portal-srcserver-srcwebapppublic)
@@ -200,8 +201,13 @@ Measures local policy evaluation, audit chaining, and historical check replay ov
 | **Audit Stream Chaining** | < 1,000 µs (1ms) | **175.1 µs** | **89.7 µs** | **11,089 ops/sec** | **PASS** |
 | **Historical Check Replay** | < 2,000 µs (2ms) | **435.1 µs** | **223.5 µs** | **4,464 ops/sec** | **PASS** |
 
-### 2. AMD Model Serving & Structured Extraction Benchmark (`npm run benchmark:amd`)
-Measures inference latency percentiles and token throughput over 50 realistic retail ad campaigns:
+### 2. AMD Model Serving & Structured Extraction Benchmarks
+
+ClaimCheck provides strict separation between live AMD hardware execution and offline fallback simulation:
+
+- **Live AMD ROCm Benchmark (`npm run benchmark:amd:live`)**: Requires `AMD_VLLM_ENDPOINT` environment variable. Strictly rejects fallback mode, validates the remote `/models` endpoint, and benchmarks live AMD Instinct MI300X inference with raw execution logs saved to `docs/amd/benchmark_live_run.json`.
+- **Deterministic Local Fallback Benchmark (`npm run benchmark:fallback`)**: Benchmarks the offline deterministic rule-based extractor without GPU hardware requirements.
+- **Environment-Detecting Runner (`npm run benchmark:amd`)**: Automatically checks for `AMD_VLLM_ENDPOINT` and executes either live or fallback accordingly with explicit provenance labeling.
 
 | Benchmark Metric | Target SLA (p95) | Measured Value | Operational Assessment |
 |---|---|---|---|
@@ -229,18 +235,22 @@ Evaluates 52 labeled campaigns across 6 enterprise commerce verticals:
 ## 🚀 Getting Started
 
 ### Prerequisites
-- **Node.js**: v20+ or v24+ (Node 24 native TypeScript type stripping supported out-of-the-box).
+- **Node.js**: v20+ or v24+ (TypeScript execution supported via bundled `tsx` runtime loader).
 - **npm**: v10+
+- **Docker & Docker Compose** (Optional, for containerized deployments).
 
-### Installation
+### Installation & Build
 
 ```bash
 # Clone the repository
 git clone https://github.com/narayan-nkj/claimcheck-retail-media.git
 cd claimcheck-retail-media
 
-# Install runtime dependencies
-npm install
+# Clean install dependencies (including typescript, tsx runtime loader)
+npm ci
+
+# Type-check and compile TypeScript to dist/
+npm run build
 ```
 
 ### Launching the Operator Web Portal
@@ -250,15 +260,28 @@ Simply double-click [`launch.bat`](launch.bat) or run:
 ```cmd
 launch.bat
 ```
-*(Automatically verifies Node.js, installs missing dependencies, starts the HTTP server, and opens `http://localhost:3000` in your default browser).*
+*(Automatically verifies Node.js, installs missing dependencies, compiles TypeScript if needed, starts the server, and opens `http://localhost:3000` in your default browser).*
 
-**Command Line (All Platforms):**
+**Command Line (Linux / macOS / Windows):**
 ```bash
 # Launch production operator portal (http://localhost:3000)
 npm start
 
 # Or launch in development watch mode
 npm run dev
+
+# Or launch from compiled distribution
+npm run start:dist
+```
+
+**Docker Containerized Deployment:**
+```bash
+# Build and run with Docker Compose
+docker compose up --build
+
+# Or build standalone Docker image
+docker build -t claimcheck:latest .
+docker run -p 3000:3000 -e AMD_VLLM_ENDPOINT=http://host.docker.internal:8000/v1 claimcheck:latest
 ```
 
 Open your browser to `http://localhost:3000` to interact with the live compliance portal, test one-click presets, inspect highlighted claim spans, triage the human review queue, and verify cryptographic audit replay.
@@ -266,7 +289,7 @@ Open your browser to `http://localhost:3000` to interact with the live complianc
 ### Running the Evaluation Corpus
 
 ```bash
-# Execute the 52-campaign multi-vertical benchmark
+# Execute the 52-campaign multi-vertical benchmark (100% Policy Accuracy)
 npm run evaluate
 ```
 
@@ -291,10 +314,12 @@ npm run test:webapp      # Web portal REST API, WCAG 2.1 AA, role barriers & tel
 npm run test:evaluation  # 52-campaign evaluation runner, metrics & confusion matrix (11 tests)
 npm run test:integration # End-to-end enterprise workflow integration journeys (5 tests)
 
-# Run performance benchmarks
-npm run benchmark        # Policy engine & audit chaining benchmark (1,000 iterations)
-npm run benchmark:amd    # AMD inference & token throughput benchmark (50 iterations)
-npm run evaluate         # Multi-vertical evaluation benchmark runner (52 campaigns)
+# Run performance benchmarks & evaluations
+npm run benchmark           # Policy engine & audit chaining benchmark (1,000 iterations)
+npm run benchmark:fallback  # Deterministic local regex fallback adapter benchmark (50 iterations)
+npm run benchmark:amd       # AMD environment-detecting benchmark runner (50 iterations)
+npm run benchmark:amd:live  # Live AMD ROCm / MI300X verification (Requires AMD_VLLM_ENDPOINT)
+npm run evaluate            # Multi-vertical evaluation benchmark runner (52 campaigns)
 ```
 
 ---

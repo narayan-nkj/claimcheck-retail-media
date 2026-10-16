@@ -1,7 +1,17 @@
 import { performance } from 'node:perf_hooks';
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 import { AMDInferenceClient } from '../inference/client.ts';
 import { extractClaims } from '../inference/extractor.ts';
 import { validateClaim } from '../contracts/v1/claim.ts';
+
+export interface AMDBenchmarkOptions {
+  iterations?: number;
+  requireLive?: boolean;
+  useFallback?: boolean;
+  logPath?: string;
+  client?: AMDInferenceClient;
+}
 
 export interface AMDBenchmarkStats {
   iterations: number;
@@ -33,7 +43,10 @@ export interface AMDBenchmarkStats {
     model: string;
     endpoint: string;
     isFallback: boolean;
+    isLive: boolean;
+    verifiedRemoteModel?: string;
   };
+  rawLatenciesMs?: number[];
 }
 
 export const BENCHMARK_AD_COPIES = [
@@ -46,9 +59,70 @@ export const BENCHMARK_AD_COPIES = [
 
 /**
  * Runs AMD Inference benchmark measuring latency, token throughput, and claim extraction quality.
+ * Can execute in live AMD ROCm mode (requiring remote endpoint) or deterministic fallback mode.
  */
-export async function runAMDBenchmark(iterations = 50): Promise<AMDBenchmarkStats> {
-  const client = new AMDInferenceClient({ useFallback: true });
+export async function runAMDBenchmark(
+  iterationsOrOptions: number | AMDBenchmarkOptions = 50
+): Promise<AMDBenchmarkStats> {
+  const options: AMDBenchmarkOptions =
+    typeof iterationsOrOptions === 'number'
+      ? { iterations: iterationsOrOptions }
+      : iterationsOrOptions;
+
+  const iterations = options.iterations ?? 50;
+  const requireLive = options.requireLive ?? false;
+
+  let client: AMDInferenceClient;
+  let verifiedRemoteModel: string | undefined;
+
+  if (options.client) {
+    client = options.client;
+  } else if (requireLive) {
+    const endpoint = process.env.AMD_VLLM_ENDPOINT;
+    if (!endpoint || !endpoint.trim()) {
+      throw new Error(
+        'AMD_VLLM_ENDPOINT environment variable is required for live AMD execution.\n' +
+        'Set AMD_VLLM_ENDPOINT (e.g. export AMD_VLLM_ENDPOINT=http://mi300x-host:8000/v1) and verify the container is running.\n' +
+        'To benchmark the deterministic local adapter instead, run: npm run benchmark:fallback'
+      );
+    }
+
+    client = new AMDInferenceClient({
+      endpoint,
+      useFallback: false,
+    });
+
+    if (client.isFallbackActive()) {
+      throw new Error(
+        'AMDInferenceClient resolved to fallback mode. Live AMD execution cannot proceed in fallback mode.'
+      );
+    }
+
+    // Verify remote /models endpoint
+    try {
+      const modelsUrl = `${client.config.endpoint.replace(/\/$/, '')}/models`;
+      const res = await fetch(modelsUrl, {
+        headers: client.config.apiKey ? { Authorization: `Bearer ${client.config.apiKey}` } : {},
+        signal: AbortSignal.timeout(3000),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Remote /models returned status ${res.status}`);
+      }
+
+      const modelsData = (await res.json()) as { data?: Array<{ id: string }> };
+      verifiedRemoteModel = modelsData.data?.[0]?.id ?? client.config.modelName;
+    } catch (err) {
+      throw new Error(
+        `Failed to verify live AMD endpoint at ${client.config.endpoint}/models: ${(err as Error).message}`
+      );
+    }
+  } else {
+    // Fallback or auto-detect
+    const useFallback = options.useFallback ?? (process.env.AMD_VLLM_ENDPOINT ? false : true);
+    client = new AMDInferenceClient({ useFallback });
+  }
+
   const latenciesMs: number[] = [];
   let totalPromptTokens = 0;
   let totalCompletionTokens = 0;
@@ -67,7 +141,7 @@ export async function runAMDBenchmark(iterations = 50): Promise<AMDBenchmarkStat
     const result = await extractClaims(copy, { client });
 
     const iterEnd = performance.now();
-    latenciesMs.push(iterEnd - iterStart);
+    latenciesMs.push(Number((iterEnd - iterStart).toFixed(3)));
 
     if (result.metadata.rawTokens) {
       totalPromptTokens += result.metadata.rawTokens.promptTokens;
@@ -104,7 +178,7 @@ export async function runAMDBenchmark(iterations = 50): Promise<AMDBenchmarkStat
   const promptTokensPerSec = Number((totalPromptTokens / durationSec).toFixed(2));
   const completionTokensPerSec = Number((totalCompletionTokens / durationSec).toFixed(2));
 
-  return {
+  const stats: AMDBenchmarkStats = {
     iterations,
     totalDurationMs: Number(totalDurationMs.toFixed(2)),
     requestsPerSec,
@@ -131,9 +205,34 @@ export async function runAMDBenchmark(iterations = 50): Promise<AMDBenchmarkStat
     deviceProof: {
       targetDevice: client.config.targetDevice,
       runtime: client.config.runtime,
-      model: client.config.modelName,
+      model: verifiedRemoteModel ?? client.config.modelName,
       endpoint: client.config.endpoint,
       isFallback: client.isFallbackActive(),
+      isLive: !client.isFallbackActive(),
+      verifiedRemoteModel,
     },
+    rawLatenciesMs: latenciesMs,
   };
+
+  if (options.logPath) {
+    try {
+      mkdirSync(dirname(options.logPath), { recursive: true });
+      writeFileSync(
+        options.logPath,
+        JSON.stringify(
+          {
+            timestamp: new Date().toISOString(),
+            stats,
+          },
+          null,
+          2
+        ),
+        'utf8'
+      );
+    } catch (err) {
+      console.warn(`[WARN] Could not write benchmark log to ${options.logPath}: ${(err as Error).message}`);
+    }
+  }
+
+  return stats;
 }

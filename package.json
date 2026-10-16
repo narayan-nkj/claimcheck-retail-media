@@ -3,22 +3,28 @@
   "version": "0.1.0",
   "description": "ClaimCheck — Deterministic evidence-backed pre-publication claim checker for retail media",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "start": "node src/server/index.ts",
-    "dev": "node src/server/index.ts",
-    "test": "node --test tests/contracts/*.test.js tests/evidence/*.test.js tests/policy/*.test.js tests/audit/*.test.js tests/inference/*.test.js tests/regression/*.test.js tests/webapp/*.test.js tests/evaluation/*.test.js tests/integration/*.test.js",
-    "test:contracts": "node --test tests/contracts/*.test.js",
-    "test:evidence": "node --test tests/evidence/*.test.js",
-    "test:policy": "node --test tests/policy/*.test.js",
-    "test:audit": "node --test tests/audit/*.test.js",
-    "test:inference": "node --test tests/inference/*.test.js",
-    "test:regression": "node --test tests/regression/*.test.js",
-    "test:webapp": "node --test tests/webapp/*.test.js",
-    "test:eval": "node --test tests/evaluation/*.test.js",
-    "test:integration": "node --test tests/integration/*.test.js",
-    "benchmark": "node scripts/benchmark.js",
-    "benchmark:amd": "node scripts/benchmark_amd.js",
-    "evaluate": "node scripts/evaluate.js"
+    "build": "tsc",
+    "start": "node --import tsx src/server/index.ts",
+    "start:dist": "node dist/server/index.js",
+    "dev": "tsx watch src/server/index.ts",
+    "test": "node --import tsx --test tests/contracts/*.test.js tests/evidence/*.test.js tests/policy/*.test.js tests/audit/*.test.js tests/inference/*.test.js tests/regression/*.test.js tests/webapp/*.test.js tests/evaluation/*.test.js tests/integration/*.test.js",
+    "test:contracts": "node --import tsx --test tests/contracts/*.test.js",
+    "test:evidence": "node --import tsx --test tests/evidence/*.test.js",
+    "test:policy": "node --import tsx --test tests/policy/*.test.js",
+    "test:audit": "node --import tsx --test tests/audit/*.test.js",
+    "test:inference": "node --import tsx --test tests/inference/*.test.js",
+    "test:regression": "node --import tsx --test tests/regression/*.test.js",
+    "test:webapp": "node --import tsx --test tests/webapp/*.test.js",
+    "test:eval": "node --import tsx --test tests/evaluation/*.test.js",
+    "test:integration": "node --import tsx --test tests/integration/*.test.js",
+    "benchmark": "node --import tsx scripts/benchmark.js",
+    "benchmark:fallback": "node --import tsx scripts/benchmark_fallback.js",
+    "benchmark:amd": "node --import tsx scripts/benchmark_amd.js",
+    "benchmark:amd:live": "node --import tsx scripts/benchmark_amd_live.js",
+    "evaluate": "node --import tsx scripts/evaluate.js"
   },
   "keywords": [
     "retail-media",
@@ -30,5 +36,11 @@
   "license": "MIT",
   "dependencies": {
     "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }

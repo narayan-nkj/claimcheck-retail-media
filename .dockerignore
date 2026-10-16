@@ -1,0 +1,8 @@
+node_modules
+dist
+.git
+.brain
+.github
+*.log
+.env*
+docs/amd/benchmark_live_run.json
