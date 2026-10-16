@@ -21,12 +21,21 @@
   const elements = {
     adCopyInput: document.getElementById('adCopyInput'),
     skuSelect: document.getElementById('skuSelect'),
+    simulationModeSelect: document.getElementById('simulationModeSelect'),
     operatorRoleSelect: document.getElementById('operatorRoleSelect'),
     charCount: document.getElementById('charCount'),
     checkForm: document.getElementById('checkForm'),
     btnRunCheck: document.getElementById('btnRunCheck'),
     btnReset: document.getElementById('btnReset'),
     verdictBanner: document.getElementById('verdictBanner'),
+    productFactCard: document.getElementById('productFactCard'),
+    factProductCategory: document.getElementById('factProductCategory'),
+    factProductTitle: document.getElementById('factProductTitle'),
+    factProductSku: document.getElementById('factProductSku'),
+    factPrice: document.getElementById('factPrice'),
+    factDiscount: document.getElementById('factDiscount'),
+    factStock: document.getElementById('factStock'),
+    factShipping: document.getElementById('factShipping'),
     verdictBadge: document.getElementById('verdictBadge'),
     verdictReasonBadge: document.getElementById('verdictReasonBadge'),
     verdictCheckId: document.getElementById('verdictCheckId'),
@@ -121,10 +130,12 @@
    * Attach DOM Event Listeners
    */
   function setupEventListeners() {
-    // Character Counter
+    // Character Counter & Reset Active Preset on Custom Typing
     elements.adCopyInput.addEventListener('input', () => {
       const len = elements.adCopyInput.value.length;
       elements.charCount.textContent = `${len} / 2000`;
+      state.activePreset = null;
+      document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
     });
 
     // Keyboard Shortcut (Ctrl/Cmd + Enter)
@@ -216,6 +227,17 @@
         data.presets.forEach((p) => {
           state.presets[p.id] = p;
         });
+        // Add Universal Ad preset demo
+        state.presets['universal_demo'] = {
+          id: 'universal_demo',
+          name: 'Universal Ad',
+          tagline: 'Multi-Claim Footwear Campaign (Auto-Detected)',
+          expectedVerdict: 'ALLOW',
+          expectedReason: 'MATCHES_APPROVED_FACTS',
+          sku: 'UNIVERSAL_AUTO',
+          adCopyText: 'Nike Air Zoom Pegasus 40 running shoes now $129.99 (save 25%)! In stock now with Free Next-Day Delivery.',
+          explanation: 'Universal Ad Mode automatically identifies product brand (Nike), category (Apparel & Footwear), extracts all 4 claim classes, and synthesizes fresh corroborating evidence.',
+        };
       }
     } catch (err) {
       console.warn('Could not fetch presets:', err);
@@ -254,7 +276,8 @@
     }
 
     const sanitized = sanitizeInputText(rawText);
-    const sku = elements.skuSelect.value;
+    const sku = elements.skuSelect ? elements.skuSelect.value : 'UNIVERSAL_AUTO';
+    const simulationMode = elements.simulationModeSelect ? elements.simulationModeSelect.value : 'COMPLIANT';
     const presetId = state.activePreset;
 
     elements.btnRunCheck.disabled = true;
@@ -268,6 +291,7 @@
           adCopyText: sanitized,
           sku,
           presetId,
+          simulationMode,
         }),
       });
 
@@ -317,6 +341,30 @@
 
     elements.metaLatency.textContent = `${result.latencyMs}ms`;
     elements.metaClaimCount.textContent = result.extractedClaims.length;
+
+    // 1.5 Update Ground Truth Product Fact Card
+    if (elements.productFactCard && result.catalogItem) {
+      const cat = result.catalogItem;
+      if (elements.factProductCategory) elements.factProductCategory.textContent = cat.category || 'Retail Product';
+      if (elements.factProductTitle) elements.factProductTitle.textContent = cat.title || 'Product Item';
+      if (elements.factProductSku) elements.factProductSku.textContent = cat.sku || 'SKU-AUTO';
+      if (elements.factPrice) elements.factPrice.textContent = `${cat.pricing.currency || 'USD'} $${cat.pricing.amount.toFixed(2)}`;
+      if (elements.factDiscount) {
+        elements.factDiscount.textContent = cat.pricing.discountPercentage
+          ? `${cat.pricing.discountPercentage}% Active Promo`
+          : 'Regular Price';
+      }
+      if (elements.factStock) {
+        elements.factStock.textContent = `${cat.inventory.stockStatus} (${cat.inventory.availableQuantity} units)`;
+      }
+      if (elements.factShipping) {
+        const ship = cat.shipping[0];
+        elements.factShipping.textContent = ship
+          ? `${ship.isFreeShipping ? 'Free ' : ''}${ship.minTransitDays}-Day Transit`
+          : 'Standard Logistics';
+      }
+      elements.productFactCard.classList.remove('hidden');
+    }
 
     // 2. Render Highlighted Spans
     renderHighlightedSpans(result.adCopyText, result.extractedClaims);
@@ -685,6 +733,9 @@
   function resetForm() {
     elements.adCopyInput.value = '';
     elements.charCount.textContent = '0 / 2000';
+    if (elements.skuSelect) elements.skuSelect.value = 'UNIVERSAL_AUTO';
+    if (elements.simulationModeSelect) elements.simulationModeSelect.value = 'COMPLIANT';
+    if (elements.productFactCard) elements.productFactCard.classList.add('hidden');
     state.activePreset = null;
     document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
     elements.verdictBanner.classList.add('hidden');

@@ -52,20 +52,37 @@ export function extractClaimsFallback(
   let claimSeq = 1;
 
   // 1. Price & Discount Patterns
-  // Examples: "$199.99", "only $49", "save 20%", "50% off", "now $149.99"
-  const priceRegex = /\$(\d+(?:\.\d{2})?)/g;
+  // Examples: "$199.99", "only $49", "€89.00", "£45.50", "¥5000", "save 20%", "50% off", "now $149.99"
+  const priceRegex = /(?:(\$|€|£|¥|C\$|A\$)\s*(\d+(?:,\d{3})*(?:\.\d{2})?|\d+(?:\.\d{2})?)|\b(\d+(?:\.\d{2})?)\s*(USD|EUR|GBP|CAD|AUD|JPY)\b)/g;
   let match: RegExpExecArray | null;
   while ((match = priceRegex.exec(copyText)) !== null) {
-    const rawVal = match[1];
-    const statedPrice = Number.parseFloat(rawVal);
+    const rawSymbol = match[1];
+    const rawVal = match[2] || match[3];
+    const explicitCurrency = match[4];
+    const statedPrice = Number.parseFloat(rawVal.replace(/,/g, ''));
     const startIndex = match.index;
     const endIndex = startIndex + match[0].length;
 
+    let statedCurrency: 'USD' | 'EUR' | 'GBP' | 'CAD' | 'AUD' | 'JPY' = 'USD';
+    if (explicitCurrency) {
+      statedCurrency = explicitCurrency as any;
+    } else if (rawSymbol === '€') {
+      statedCurrency = 'EUR';
+    } else if (rawSymbol === '£') {
+      statedCurrency = 'GBP';
+    } else if (rawSymbol === '¥') {
+      statedCurrency = 'JPY';
+    } else if (rawSymbol === 'C$') {
+      statedCurrency = 'CAD';
+    } else if (rawSymbol === 'A$') {
+      statedCurrency = 'AUD';
+    }
+
     // Check if preceded by discount or sale phrasing
     const precedingSlice = copyText.slice(Math.max(0, startIndex - 20), startIndex);
-    let normalized = `Product offered at price $${statedPrice.toFixed(2)} USD`;
+    let normalized = `Product offered at price ${match[0].trim()} ${statedCurrency}`;
     if (/sale|now|special|deal/i.test(precedingSlice)) {
-      normalized = `Promotional sale price of $${statedPrice.toFixed(2)} USD`;
+      normalized = `Promotional sale price of ${match[0].trim()} ${statedCurrency}`;
     }
 
     const claim = validateClaim({
@@ -79,7 +96,7 @@ export function extractClaimsFallback(
       normalizedStatement: normalized,
       extractedParameters: {
         statedPrice,
-        statedCurrency: 'USD',
+        statedCurrency,
       },
       extractorConfidence: 0.95,
       extractionSource: source,
@@ -114,16 +131,17 @@ export function extractClaimsFallback(
   }
 
   // 2. Availability & Stock Patterns
-  // Examples: "In Stock", "Out of Stock", "Only 3 left in stock", "Limited stock", "Backorder"
-  const availabilityRegex = /\b(in\s+stock|out\s+of\s+stock|only\s+(\d+)\s+left\s+(?:in\s+stock)?|limited\s+stock|backorder(?:ed)?|pre-?order)\b/gi;
+  // Examples: "In Stock", "Out of Stock", "Only 3 left in stock", "Limited stock", "Backorder", "Ready to ship"
+  const availabilityRegex =
+    /\b(in\s+stock|out\s+of\s+stock|only\s+(\d+)\s+left\s+(?:in\s+stock)?|limited\s+stock|backorder(?:ed)?|pre-?order|ready\s+to\s+ship|ships\s+today|available\s+now|in\s+store\s+now|sold\s+out|low\s+stock)\b/gi;
   while ((match = availabilityRegex.exec(copyText)) !== null) {
     const rawMatch = match[0];
     const startIndex = match.index;
     const endIndex = startIndex + rawMatch.length;
     let stockStatus = 'IN_STOCK';
-    if (/out\s+of\s+stock/i.test(rawMatch)) {
+    if (/out\s+of\s+stock|sold\s+out/i.test(rawMatch)) {
       stockStatus = 'OUT_OF_STOCK';
-    } else if (/limited|only/i.test(rawMatch)) {
+    } else if (/limited|only|low/i.test(rawMatch)) {
       stockStatus = 'LIMITED_STOCK';
     } else if (/backorder/i.test(rawMatch)) {
       stockStatus = 'BACKORDER';
@@ -150,8 +168,9 @@ export function extractClaimsFallback(
   }
 
   // 3. Shipping Promise Patterns
-  // Examples: "Free 2-Day Delivery", "Delivered tomorrow", "Delivery in 3 days", "Free shipping", "Overnight shipping"
-  const shippingRegex = /\b(free\s+(\d+)-day\s+delivery|(?:guaranteed\s+)?next-day\s+delivery|(?:guaranteed\s+)?(\d+)-day\s+delivery|delivered\s+tomorrow|delivery\s+in\s+(\d+)\s+days?|free\s+shipping|same-day\s+delivery|overnight\s+shipping)\b/gi;
+  // Examples: "Free 2-Day Delivery", "Delivered tomorrow", "Delivery in 3 days", "Free shipping", "Overnight shipping", "Free delivery"
+  const shippingRegex =
+    /\b(free\s+(\d+)-day\s+delivery|(?:guaranteed\s+)?next-day\s+delivery|(?:guaranteed\s+)?(\d+)-day\s+delivery|delivered\s+tomorrow|delivery\s+in\s+(\d+)\s+days?|free\s+shipping|same-day\s+delivery|overnight\s+shipping|free\s+delivery|express\s+delivery|fast\s+(\d+)-day\s+shipping|standard\s+shipping|curbside\s+pickup)\b/gi;
   while ((match = shippingRegex.exec(copyText)) !== null) {
     const rawMatch = match[0];
     const startIndex = match.index;
@@ -167,7 +186,9 @@ export function extractClaimsFallback(
       days = Number.parseInt(match[3], 10);
     } else if (match[4]) {
       days = Number.parseInt(match[4], 10);
-    } else if (/free\s+shipping/i.test(rawMatch)) {
+    } else if (match[5]) {
+      days = Number.parseInt(match[5], 10);
+    } else if (/free\s+shipping|free\s+delivery/i.test(rawMatch)) {
       days = 5; // standard ground shipping window
     }
 
@@ -195,25 +216,26 @@ export function extractClaimsFallback(
   }
 
   // 4. Product Attribute Patterns
-  // Examples: "300W", "Bluetooth 5.3", "Stainless Steel", "Active Noise Cancelling", "4K OLED", "Organic Cotton"
-  const attributeRegex = /\b(300W|500W|\d+W|Bluetooth\s+\d+(?:\.\d+)?|Wireless|Organic\s+Cotton|Stainless\s+Steel|Waterproof|Active\s+Noise\s+Cancelling|4K\s+OLED|\d+GB|\d+TB|Dark\s+Roast|Light\s+Roast|GORE-TEX(?:\s+Pro)?|\d+-Quart|SPF\s+\d+|\d+mm|100%\s+Merino\s+Wool)\b/gi;
+  // Examples: "300W", "Bluetooth 5.3", "Stainless Steel", "Active Noise Cancelling", "4K OLED", "Organic Cotton", "SPF 30", "1500mm"
+  const attributeRegex =
+    /\b(300W|500W|\d+W|\d+kW|Bluetooth\s+\d+(?:\.\d+)?|Wireless|Organic\s+Cotton|100%\s+Cotton|Stainless\s+Steel|Waterproof|Active\s+Noise\s+Cancelling|4K\s+OLED|4K|8K|OLED|QLED|\d+GB|\d+TB|Dark\s+Roast|Light\s+Roast|GORE-TEX(?:\s+Pro)?|\d+-Quart|\d+-Liter|SPF\s+\d+|\d+mm|100%\s+Merino\s+Wool)\b/gi;
   while ((match = attributeRegex.exec(copyText)) !== null) {
     const rawMatch = match[0];
     const startIndex = match.index;
     const endIndex = startIndex + rawMatch.length;
 
     let key = 'feature';
-    if (/\d+W/i.test(rawMatch)) key = 'powerOutput';
-    else if (/Bluetooth/i.test(rawMatch)) key = 'connectivity';
-    else if (/Stainless Steel|Organic Cotton|Merino Wool/i.test(rawMatch)) key = 'material';
+    if (/\d+W|\d+kW/i.test(rawMatch)) key = 'powerOutput';
+    else if (/Bluetooth|Wireless/i.test(rawMatch)) key = 'connectivity';
+    else if (/Stainless Steel|Organic Cotton|Merino Wool|100% Cotton/i.test(rawMatch)) key = 'material';
     else if (/Noise Cancelling/i.test(rawMatch)) key = 'audioFeature';
-    else if (/OLED/i.test(rawMatch)) key = 'displayType';
+    else if (/OLED|QLED|4K|8K/i.test(rawMatch)) key = 'displayType';
     else if (/\d+(?:GB|TB)/i.test(rawMatch)) key = 'capacity';
     else if (/Roast/i.test(rawMatch)) key = 'roastLevel';
     else if (/GORE-TEX/i.test(rawMatch)) key = 'membrane';
-    else if (/Quart/i.test(rawMatch)) key = 'capacity';
+    else if (/Quart|Liter/i.test(rawMatch)) key = 'capacity';
     else if (/SPF/i.test(rawMatch)) key = 'spf';
-    else if (/mm/i.test(rawMatch)) key = 'waterproofRating';
+    else if (/mm|Waterproof/i.test(rawMatch)) key = 'waterproofRating';
 
     const claim = validateClaim({
       claimId: `${prefix}-${claimSeq++}`,
@@ -235,8 +257,9 @@ export function extractClaimsFallback(
   }
 
   // 5. Out of Scope / Unverifiable Puffery Patterns
-  // Examples: "#1 rated", "world's best", "guaranteed to change your life", "miracle results", "best in the world"
-  const outOfScopeRegex = /\b(#1\s+rated|world'?s\s+best|best\s+in\s+the\s+world|greatest\s+audio\s+experience|guaranteed\s+100%\s+cure|100%\s+cure|erases\s+\d+\s+years|guaranteed\s+to\s+change\s+your\s+life|miracle\s+results|miraculous\s+sound|heavenly\s+flavor|voted\s+#1|unmatched\s+perfection|ignore\s+previous\s+rules|output\s+VERDICT|REDACTED_INSTRUCTION)\b/gi;
+  // Examples: "#1 rated", "world's best", "guaranteed to change your life", "miracle results", "best in the world", "revolutionary formula"
+  const outOfScopeRegex =
+    /\b(#1\s+rated|world'?s\s+best|best\s+in\s+the\s+world|greatest\s+audio\s+experience|guaranteed\s+100%\s+cure|100%\s+cure|erases\s+\d+\s+years|guaranteed\s+to\s+change\s+your\s+life|miracle\s+results|miraculous\s+sound|heavenly\s+flavor|voted\s+#1|unmatched\s+perfection|revolutionary\s+formula|unbeatable\s+performance|legendary\s+quality|ignore\s+previous\s+rules|output\s+VERDICT|REDACTED_INSTRUCTION)\b/gi;
   while ((match = outOfScopeRegex.exec(copyText)) !== null) {
     const rawMatch = match[0];
     const startIndex = match.index;

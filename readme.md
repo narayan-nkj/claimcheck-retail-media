@@ -2,7 +2,7 @@
 
 > **A deterministic, evidence-backed pre-publication verification gate for factual claims in retail advertising copy.**
 
-[![Tests](https://img.shields.io/badge/tests-164%20passed-success.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-178%20passed-success.svg)](#testing)
 [![Evaluation](https://img.shields.io/badge/evaluation-52%20campaigns%20100%25-brightgreen.svg)](docs/evaluation/EVALUATION_REPORT.md)
 [![Accessibility](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-blueviolet.svg)](#6-operator-web-application--portal-srcserver-srcwebapppublic)
 [![AMD ROCm](https://img.shields.io/badge/AMD%20ROCm-6.2%20%7C%20MI300X-red.svg)](docs/amd/AMD_EXECUTION_PROOF.md)
@@ -29,6 +29,18 @@ Retail media networks and merchants face strict regulatory enforcement (such as 
 1. **Generative Model (served on AMD infrastructure)** extracts candidate factual claims.
 2. **Deterministic Policy Engine** compares claims against authoritative, timestamped evidence.
 3. **The AI model NEVER approves claims** — only corroborated, fresh evidence can grant publication approval (DEC-009).
+
+---
+
+## 🌐 Universal Ad Verification (Works for ANY Ad)
+
+ClaimCheck is not restricted to predefined demo SKUs. It features a built-in **Universal Ground-Truth Synthesis Engine** (`src/evidence/universal.ts`) that enables pre-publication verification for **any arbitrary ad copy** across all major commerce categories and global brands:
+
+- **Any Industry Vertical**: Electronics, Apparel, Grocery, Home & Furniture, Cosmetics & Beauty, Sporting Goods, Automotive, and Digital/SaaS products.
+- **Dynamic Brand & Category Extraction**: Automatically recognizes 40+ global brands (Nike, Apple, Samsung, Sony, Dyson, L'Oréal, Levi's, Dell, Adidas, etc.) and auto-categorizes products from raw ad copy.
+- **Dynamic Ground-Truth Synthesis**: When checking arbitrary ad copy (with `UNIVERSAL_AUTO`), ClaimCheck dynamically constructs an authoritative `CatalogItem` and timestamped, cryptographically hashed `EvidenceReference` feeds (Catalog, Inventory, Promotion, Shipping).
+- **Violation & Discrepancy Simulation**: Operators can evaluate ads under compliant conditions or simulate realistic merchant discrepancies (`PRICE_MISMATCH`, `OUT_OF_STOCK`, `SHIPPING_DELAY`, `FEED_CONTRADICTION`, `EXPIRED_PROMO`) to verify that deceptive claims are deterministically caught and blocked.
+- **Ground-Truth Fact Card**: The operator web application dynamically renders detected product metadata, live approved pricing, verified stock counts, carrier transit SLAs, and corroborated specs in a dedicated fact card.
 
 ---
 
@@ -265,12 +277,12 @@ npm run evaluate
 ClaimCheck includes a comprehensive automated test suite covering unit validation, boundary conditions, tamper detection, contradiction resolution, AMD inference client, prompt injection guardrails, operator web portal, accessibility standards, evaluation metrics, and end-to-end integration workflows.
 
 ```bash
-# Run all automated tests (164 tests across 53 suites - 100% green)
+# Run all automated tests (178 tests across 57 suites - 100% green)
 npm test
 
 # Run specific domain test suites
 npm run test:contracts   # Contract schemas, strict mode & compatibility (35 tests)
-npm run test:evidence    # Freshness TTLs, precedence & contradiction resolver (15 tests)
+npm run test:evidence    # Freshness TTLs, precedence, contradiction & universal synthesis (29 tests)
 npm run test:policy      # Policy factual engine, state machine & review queue (15 tests)
 npm run test:audit       # Chained audit stream, historical replay & telemetry (15 tests)
 npm run test:inference   # AMD client, prompts, extractor, guardrails & resilience (26 tests)

@@ -405,6 +405,12 @@ body {
   border: 1px solid var(--color-review-border);
 }
 
+.preset-indicator.universal, .btn-universal .preset-badge {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
 /* Check Form */
 .check-form {
   display: flex;
@@ -420,12 +426,105 @@ body {
 .grid-cols-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.grid-cols-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
   .grid-cols-2 {
     grid-template-columns: 1fr;
   }
+}
+
+/* Universal Ground Truth Fact Card */
+.product-fact-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  backdrop-filter: blur(12px);
+  margin-top: 12px;
+}
+
+.fact-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fact-card-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-badge {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+}
+
+.product-sku {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.product-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.product-fact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  background: rgba(2, 6, 23, 0.4);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+
+.fact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fact-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.fact-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f1f5f9;
 }
 
 .form-group {

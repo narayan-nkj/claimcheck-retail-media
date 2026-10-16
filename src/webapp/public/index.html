@@ -96,6 +96,11 @@
             <span class="preset-title">Feed Conflict</span>
             <span class="preset-badge">REVIEW</span>
           </button>
+          <button type="button" class="preset-btn btn-universal" id="presetUniversal" data-preset="universal_demo" aria-label="Load Universal Custom Ad scenario">
+            <span class="preset-indicator universal"></span>
+            <span class="preset-title">Universal Ad</span>
+            <span class="preset-badge">ANY AD</span>
+          </button>
         </div>
       </div>
 
@@ -105,14 +110,14 @@
           <div class="form-group flex-2">
             <label for="adCopyInput" class="form-label">
               Ad Copy Submission Text
-              <span class="label-info">(Multi-claim retail promotion)</span>
+              <span class="label-info">(Multi-claim retail promotion for any product/brand)</span>
             </label>
             <div class="textarea-wrapper">
               <textarea 
                 id="adCopyInput" 
                 class="form-control copy-textarea" 
                 rows="4" 
-                placeholder="Enter retail media ad copy text, e.g.: Save 25% on UltraView 4K OLED TV! Now $899.99. In stock with Free 2-Day Shipping!"
+                placeholder="Enter ANY retail ad copy text, e.g.: Nike Air Zoom Pegasus 40 running shoes now $129.99 (save 25%)! In stock now with Free Next-Day Delivery."
                 maxlength="2000"
                 required
                 aria-describedby="charCount"
@@ -125,15 +130,30 @@
           </div>
         </div>
 
-        <div class="form-row grid-cols-2">
+        <div class="form-row grid-cols-3">
           <div class="form-group">
             <label for="skuSelect" class="form-label">Target Product SKU</label>
             <div class="select-wrapper">
               <select id="skuSelect" class="form-control form-select">
+                <option value="UNIVERSAL_AUTO" selected>✨ Universal Auto-Detect (Works for ANY Ad)</option>
                 <option value="SKU-VISION-55-OLED">SKU-VISION-55-OLED (VisionView 55" 4K OLED TV)</option>
                 <option value="SKU-CHAIR-ERG">SKU-CHAIR-ERG (ErgoComfort Pro Mesh Chair)</option>
                 <option value="SKU-MILK-ORG">SKU-MILK-ORG (FarmFresh Organic Whole Milk Gallon)</option>
                 <option value="SKU-RUN-SHOE">SKU-RUN-SHOE (Apex Carbon Road Running Shoes)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="simulationModeSelect" class="form-label">Evidence Policy Mode</label>
+            <div class="select-wrapper">
+              <select id="simulationModeSelect" class="form-control form-select">
+                <option value="COMPLIANT" selected>🟢 Auto-Corroborate (Clean ALLOW)</option>
+                <option value="PRICE_MISMATCH">🔴 Simulate Price Mismatch (BLOCK)</option>
+                <option value="OUT_OF_STOCK">🔴 Simulate Stockout (BLOCK)</option>
+                <option value="SHIPPING_DELAY">🔴 Simulate Shipping Delay (BLOCK)</option>
+                <option value="FEED_CONTRADICTION">🟡 Simulate Feed Conflict (REVIEW)</option>
+                <option value="EXPIRED_PROMO">🟡 Simulate Expired Promo (REVIEW)</option>
               </select>
             </div>
           </div>
@@ -181,6 +201,35 @@
           <span class="meta-item">Policy: <strong id="metaPolicyVer">1.0.0</strong></span>
           <span class="meta-item">Latency: <strong id="metaLatency">1.2ms</strong></span>
           <span class="meta-item">Claims: <strong id="metaClaimCount">3</strong></span>
+        </div>
+      </div>
+
+      <!-- Universal Ground Truth Fact Card -->
+      <div id="productFactCard" class="product-fact-card hidden" role="region" aria-label="Detected Merchant Ground Truth Facts">
+        <div class="fact-card-header">
+          <div class="fact-card-badge-row">
+            <span class="product-badge" id="factProductCategory">Consumer Electronics</span>
+            <span class="product-sku" id="factProductSku">SKU-AUTO</span>
+          </div>
+          <h3 class="product-title" id="factProductTitle">Ground Truth Product Facts</h3>
+        </div>
+        <div class="product-fact-grid">
+          <div class="fact-item">
+            <span class="fact-label">Authoritative Price</span>
+            <span class="fact-value" id="factPrice">$0.00</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-label">Active Discount</span>
+            <span class="fact-value" id="factDiscount">0%</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-label">Inventory Feeds</span>
+            <span class="fact-value" id="factStock">In Stock</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-label">Carrier SLA</span>
+            <span class="fact-value" id="factShipping">2-Day Delivery</span>
+          </div>
         </div>
       </div>
 

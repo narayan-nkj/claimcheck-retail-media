@@ -19,6 +19,8 @@ import {
   PolicyStateMachine,
   redactSensitiveString,
   redactSensitiveData,
+  synthesizeUniversalCatalogItem,
+  synthesizeUniversalEvidence,
   type PolicyState,
 } from '../index.ts';
 
@@ -241,30 +243,6 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         return;
       }
 
-      const sku = (body.sku as string) || (presetId && PRESET_SCENARIOS[presetId]?.sku) || 'SKU-GENERAL';
-      
-      let catalogItem = body.catalogItem;
-      let evidenceList = body.evidenceList || [];
-
-      if (presetId && PRESET_SCENARIOS[presetId]) {
-        const preset = PRESET_SCENARIOS[presetId];
-        catalogItem = catalogItem || preset.catalogItem;
-        if (!evidenceList || evidenceList.length === 0) {
-          evidenceList = preset.evidenceList;
-        }
-      } else {
-        // Match preset by SKU if available
-        const matchedPreset = Object.values(PRESET_SCENARIOS).find((p) => p.sku === sku);
-        if (matchedPreset) {
-          catalogItem = catalogItem || matchedPreset.catalogItem;
-          if (!evidenceList || evidenceList.length === 0) {
-            evidenceList = matchedPreset.evidenceList;
-          }
-        } else if (!catalogItem) {
-          catalogItem = PRESET_SCENARIOS.golden_pass.catalogItem;
-        }
-      }
-
       // Step 1: Sanitize ad copy text (Prompt Injection, length boundaries, and credential/PII redaction)
       const sanitizedText = redactSensitiveString(sanitizeAdCopyInput(rawText));
       const checkId = `chk-${randomUUID().slice(0, 8)}`;
@@ -275,8 +253,41 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       });
       const claims = extraction.claims;
 
-      // Build corroborating evidence for the extracted claims
-      const finalEvidence = buildCorroboratingEvidence(claims, catalogItem, presetId);
+      const sku = (body.sku as string) || (presetId && PRESET_SCENARIOS[presetId]?.sku) || 'UNIVERSAL_AUTO';
+      
+      let catalogItem = body.catalogItem;
+      let finalEvidence: any[] = body.evidenceList || [];
+
+      if (presetId && PRESET_SCENARIOS[presetId]) {
+        const preset = PRESET_SCENARIOS[presetId];
+        catalogItem = catalogItem || preset.catalogItem;
+        if (!finalEvidence || finalEvidence.length === 0) {
+          finalEvidence = preset.evidenceList;
+        }
+        finalEvidence = buildCorroboratingEvidence(claims, catalogItem, presetId);
+      } else if (sku && sku !== 'UNIVERSAL_AUTO') {
+        const matchedPreset = Object.values(PRESET_SCENARIOS).find((p) => p.sku === sku);
+        if (matchedPreset) {
+          catalogItem = catalogItem || matchedPreset.catalogItem;
+          finalEvidence = buildCorroboratingEvidence(claims, catalogItem, matchedPreset.id);
+        }
+      }
+
+      // Universal Ad Mode: If no static catalog matched or UNIVERSAL_AUTO selected, dynamically synthesize ground truth
+      if (!catalogItem) {
+        catalogItem = synthesizeUniversalCatalogItem(sanitizedText, claims, {
+          simulationMode: body.simulationMode,
+          sku: sku !== 'UNIVERSAL_AUTO' ? sku : undefined,
+          customPrice: body.customPrice,
+          customStock: body.customStock,
+          customShippingDays: body.customShippingDays,
+        });
+        if (!finalEvidence || finalEvidence.length === 0) {
+          finalEvidence = synthesizeUniversalEvidence(claims, catalogItem, {
+            simulationMode: body.simulationMode,
+          });
+        }
+      }
 
       // Step 3: Evaluate deterministic policy rules against evidence
       const policyVerdict = evaluateAdCopyPolicy({
@@ -326,6 +337,7 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         checkId,
         adCopyText: sanitizedText,
         sku: catalogItem.sku,
+        catalogItem,
         extractedClaims: claims,
         verdict: policyVerdict,
         reviewItem: reviewQueueItem,
