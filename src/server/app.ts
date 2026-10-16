@@ -401,8 +401,11 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         catalogSnapshot: redactSensitiveData(catalogSnapshot),
         extractedClaims: storedCheck ? storedCheck.auditEvent.extractedClaims : [],
         evidenceSnapshots: storedCheck ? storedCheck.auditEvent.evidenceSnapshots : [],
-        overallVerdict: storedCheck ? storedCheck.result : {
-          verdictId: `vrd-${queueItem.checkId}`,
+        overallVerdict: storedCheck ? {
+          ...storedCheck.result,
+          summary: `Resolved via ${action} by ${operatorRole}: ${cleanRationale || 'No rationale provided'}`,
+        } : {
+          verdictId: `vrd-rev-${queueItem.checkId}`,
           checkId: queueItem.checkId,
           compositeStatus: queueItem.compositeStatus,
           claimVerdicts: [],
