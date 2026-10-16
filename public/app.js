@@ -250,9 +250,9 @@
     const sections = [
       { id: 'heroSection', el: document.getElementById('heroSection') },
       { id: 'opsSection', el: document.getElementById('opsSection') },
+      { id: 'studioSection', el: document.getElementById('studioSection') },
       { id: 'problemSection', el: document.getElementById('problemSection') },
       { id: 'howItWorksSection', el: document.getElementById('howItWorksSection') },
-      { id: 'studioSection', el: document.getElementById('studioSection') },
       { id: 'faqSection', el: document.getElementById('faqSection') },
     ];
 
