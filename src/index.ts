@@ -15,5 +15,9 @@ export * from './policy/index.ts';
 // Immutable Chained Audit Stream, Deterministic Replay & Telemetry
 export * from './audit/index.ts';
 
-// Performance Benchmark Runner
+// AMD Model Serving, Structured Extraction & Guardrails
+export * from './inference/index.ts';
+
+// Performance Benchmark Runners
 export * from './benchmark/runner.ts';
+export * from './benchmark/amdRunner.ts';
