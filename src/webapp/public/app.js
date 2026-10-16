@@ -64,14 +64,18 @@
   };
 
   /**
-   * Client-side PII and credential sanitizer (Phase 03 requirement)
+   * Client-side PII, credential, and secret sanitizer (Phase 03 WCAG & Security)
    */
   function sanitizeInputText(text) {
     if (!text) return '';
     return text
-      .replace(/(?:bearer\s+)?[a-zA-Z0-9_\-]{24,}/gi, '[REDACTED_TOKEN]')
+      .replace(/(?:bearer\s+)?[a-zA-Z0-9_\-\.]{24,}/gi, '[REDACTED_SECRET]')
+      .replace(/sk-[a-zA-Z0-9]{20,}/gi, '[REDACTED_SECRET]')
+      .replace(/ghp_[a-zA-Z0-9]{20,}/gi, '[REDACTED_SECRET]')
       .replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[REDACTED_EMAIL]')
-      .replace(/\b(?:\d{4}[ -]?){3}\d{4}\b/g, '[REDACTED_PAYMENT_CARD]');
+      .replace(/\b(?:\d{4}[ -]?){3}\d{4}\b/g, '[REDACTED_PAYMENT_CARD]')
+      .replace(/\b\d{3}-\d{2}-\d{4}\b/g, '[REDACTED_SSN]')
+      .replace(/\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g, '[REDACTED_PHONE]');
   }
 
   /**
@@ -453,6 +457,11 @@
    * Resolve an Item in the Review Queue
    */
   async function resolveQueueItem(queueId, action) {
+    if (action === 'APPROVED_OVERRIDE' && state.operatorRole === 'JUNIOR_OPERATOR') {
+      alert('Security Role Guard: Junior Operators cannot authorize overrides on factual BLOCKs (DEC-010). Escalation to Senior Compliance Officer required.');
+      return;
+    }
+
     try {
       const res = await fetch('/api/review', {
         method: 'POST',

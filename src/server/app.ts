@@ -17,6 +17,8 @@ import {
   amdTelemetry,
   AMDInferenceClient,
   PolicyStateMachine,
+  redactSensitiveString,
+  redactSensitiveData,
   type PolicyState,
 } from '../index.ts';
 
@@ -257,8 +259,8 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         }
       }
 
-      // Step 1: Sanitize ad copy text (Prompt Injection & length boundaries)
-      const sanitizedText = sanitizeAdCopyInput(rawText);
+      // Step 1: Sanitize ad copy text (Prompt Injection, length boundaries, and credential/PII redaction)
+      const sanitizedText = redactSensitiveString(sanitizeAdCopyInput(rawText));
       const checkId = `chk-${randomUUID().slice(0, 8)}`;
 
       // Step 2: Extract factual claims using AMD inference client (with deterministic fallback)
@@ -294,9 +296,9 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         checkId,
         timestamp: nowIso,
         adCopyText: sanitizedText,
-        catalogSnapshot: catalogItem,
+        catalogSnapshot: redactSensitiveData(catalogItem),
         extractedClaims: claims,
-        evidenceSnapshots: finalEvidence,
+        evidenceSnapshots: redactSensitiveData(finalEvidence),
         overallVerdict: policyVerdict,
       };
 
@@ -378,6 +380,7 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       const storedCheck = appState.getCheck(queueItem.checkId);
       const catalogSnapshot = storedCheck ? storedCheck.auditEvent.catalogSnapshot : PRESET_SCENARIOS.golden_pass.catalogItem;
 
+      const cleanRationale = redactSensitiveString(rationale || '');
       const nowRevIso = new Date().toISOString();
       const baseRevData = {
         auditId: reviewAuditId,
@@ -385,7 +388,7 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         checkId: queueItem.checkId,
         timestamp: nowRevIso,
         adCopyText: queueItem.adCopyText,
-        catalogSnapshot,
+        catalogSnapshot: redactSensitiveData(catalogSnapshot),
         extractedClaims: storedCheck ? storedCheck.auditEvent.extractedClaims : [],
         evidenceSnapshots: storedCheck ? storedCheck.auditEvent.evidenceSnapshots : [],
         overallVerdict: storedCheck ? storedCheck.result : {
@@ -393,7 +396,7 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
           checkId: queueItem.checkId,
           compositeStatus: queueItem.compositeStatus,
           claimVerdicts: [],
-          summary: `Resolved via ${action} by ${operatorRole}: ${rationale || 'No rationale provided'}`,
+          summary: `Resolved via ${action} by ${operatorRole}: ${cleanRationale || 'No rationale provided'}`,
           evaluatedAt: nowRevIso,
           policyVersion: '1.0.0',
         },
@@ -410,7 +413,7 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         success: true,
         queueItem: updatedItem,
         action,
-        rationale: rationale || 'Operator action confirmed',
+        rationale: cleanRationale || 'Operator action confirmed',
         operatorRole,
         auditEvent: chained,
       });
