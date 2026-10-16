@@ -7,72 +7,40 @@
   <title>ClaimCheck — Retail Media Evidence Gate</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2.1">
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;600;700&family=Michroma&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=3.0">
 </head>
 <body class="site-body">
   <!-- Accessible Skip Navigation Link (WCAG 2.1 AA) -->
   <a href="#mainContent" class="skip-link">Skip to main content</a>
 
-  <!-- Top Announcement Ticker Bar -->
-  <aside class="top-announcement-bar" aria-label="System Notice">
-    <div class="announcement-inner">
-      <span class="announcement-pill">ENTERPRISE GATE</span>
-      <span class="announcement-text">Deterministic retail media compliance — AMD Instinct™ &amp; ROCm 6.2 with CPU fallback &amp; forward-chained Merkle audit</span>
-      <a href="#studioSection" class="announcement-link">Test Live Workspace &rarr;</a>
-    </div>
-  </aside>
-
-  <!-- Lucien-Inspired Sticky Glassmorphic Header -->
+  <!-- Lucien-Style 3-Column Fixed/Sticky Navbar (1fr auto 1fr) -->
   <header class="app-header" role="banner">
     <div class="header-container">
-      <!-- Left: Brand Identity -->
-      <div class="header-brand">
+      <!-- Left Cell: 6 Monospace Nav Links with → Prefix -->
+      <nav class="header-nav-left" id="desktopNav" aria-label="Main Navigation">
+        <a href="#heroSection" class="nav-item active"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Overview</a>
+        <a href="#opsSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
+        <a href="#problemSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Why ClaimCheck</a>
+        <a href="#howItWorksSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>How It Works</a>
+        <a href="#studioSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
+        <a href="#faqSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>FAQ</a>
+      </nav>
+
+      <!-- Center Cell: Perfectly Centered Brand Wordmark -->
+      <div class="header-brand-center">
         <a href="#heroSection" class="brand-link" aria-label="ClaimCheck Home">
-          <div class="brand-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <path d="m9 12 2 2 4-4"/>
-            </svg>
-          </div>
-          <div class="brand-titles">
-            <span class="brand-name">ClaimCheck</span>
-            <span class="brand-tagline">Retail Media Evidence Gate</span>
-          </div>
+          <span class="brand-name">ClaimCheck</span>
         </a>
       </div>
 
-      <!-- Centre: Desktop Navigation Links -->
-      <nav class="header-nav" id="desktopNav" aria-label="Main Navigation">
-        <a href="#heroSection" class="nav-item">Overview</a>
-        <a href="#problemSection" class="nav-item">Why ClaimCheck</a>
-        <a href="#howItWorksSection" class="nav-item">How It Works</a>
-        <a href="#studioSection" class="nav-item nav-highlight">Studio</a>
-        <a href="#opsSection" class="nav-item">Ops &amp; Audit</a>
-        <a href="#faqSection" class="nav-item">FAQ</a>
-      </nav>
+      <!-- Right Cell: Sharp White Rectangular Contact Us Button & Mobile Trigger -->
+      <div class="header-actions-right">
+        <button type="button" id="btnNavContact" class="btn-nav-contact" aria-haspopup="dialog" aria-controls="contactDialog">
+          Contact Us
+        </button>
 
-      <!-- Right: Live Status Indicator & Primary Action -->
-      <div class="header-actions">
-        <!-- Compact Hardware & Telemetry Status Pill -->
-        <div class="header-telemetry" id="headerTelemetry" role="region" aria-label="System Operational Status">
-          <div class="telemetry-pill amd-status" id="amdStatusBadge" title="AMD ROCm vLLM Serving Status">
-            <span class="status-dot pulse" id="amdStatusDot"></span>
-            <span class="pill-label">AMD Instinct™</span>
-            <span class="pill-value" id="amdStatusText">ROCm 6.2 / Fallback</span>
-          </div>
-          <!-- Hidden fallback metadata elements to satisfy test selectors while keeping header clean -->
-          <span class="sr-only" id="p95LatencyText">&lt; 1.2ms</span>
-          <span class="sr-only" id="throughputText">Active</span>
-          <span class="sr-only" id="queueDepthBadge">0</span>
-        </div>
-
-        <a href="#studioSection" class="btn btn-sm btn-primary header-cta">
-          <span class="btn-text">Open Studio</span>
-          <span class="btn-arrow">&rarr;</span>
-        </a>
-
-        <!-- Mobile Menu Toggle Button -->
+        <!-- Mobile Menu Toggle Button (Visible below 1280px) -->
         <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation menu">
           <svg class="hamburger-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -85,14 +53,20 @@
 
     <!-- Mobile Navigation Drawer -->
     <nav class="mobile-nav-drawer hidden" id="mobileNav" aria-label="Mobile Navigation">
-      <a href="#heroSection" class="mobile-nav-item">Overview</a>
-      <a href="#problemSection" class="mobile-nav-item">Why ClaimCheck</a>
-      <a href="#howItWorksSection" class="mobile-nav-item">How It Works</a>
-      <a href="#studioSection" class="mobile-nav-item mobile-nav-highlight">Verification Studio</a>
-      <a href="#opsSection" class="mobile-nav-item">Ops &amp; Audit Trail</a>
-      <a href="#faqSection" class="mobile-nav-item">FAQ &amp; Docs</a>
+      <div class="mobile-nav-header">
+        <span class="mobile-nav-brand">ClaimCheck</span>
+        <button type="button" class="mobile-nav-close" id="btnCloseMobileNav" aria-label="Close navigation menu">&times;</button>
+      </div>
+      <div class="mobile-nav-links">
+        <a href="#heroSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Overview</a>
+        <a href="#opsSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
+        <a href="#problemSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Why ClaimCheck</a>
+        <a href="#howItWorksSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>How It Works</a>
+        <a href="#studioSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
+        <a href="#faqSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>FAQ</a>
+      </div>
       <div class="mobile-nav-footer">
-        <a href="#studioSection" class="btn btn-primary btn-block">Open Verification Studio</a>
+        <button type="button" id="btnMobileContact" class="btn btn-primary btn-block">Contact Team</button>
       </div>
     </nav>
   </header>
@@ -110,84 +84,107 @@
   <main class="app-main" id="mainContent" role="main">
 
     <!-- =====================================================================
-         SECTION 1: HERO & BALANCED 2-COLUMN TECHNICAL COMPOSITION
+         SECTION 1: HERO (LUCIEN-STYLE GRADIENT BOWL, CENTERED HEADLINE & STATS)
          ===================================================================== -->
-    <section class="section hero-section" id="heroSection" aria-labelledby="heroTitle">
-      <div class="hero-bg-glow"></div>
-      <div class="hero-grid-overlay" aria-hidden="true"></div>
+    <section class="hero hero-section" id="heroSection" aria-labelledby="heroTitle">
+      <!-- Smile-shaped soft gradient glow arc -->
+      <div class="hero__glow" aria-hidden="true"></div>
 
+      <!-- Centered Light-Weight Light-Reactive Headline (Exact 2 Lines, Dead Center) -->
+      <div class="hero-center-content">
+        <h1 id="heroTitle" class="hero-headline">
+          <span class="hero-line">Every retail claim.</span>
+          <span class="hero-line">Verified against evidence.</span>
+        </h1>
+      </div>
+
+      <!-- Bottom-Left: Live Dynamic Status Chip -->
+      <div class="hero-bottom-left" id="headerTelemetry" role="region" aria-label="System Operational Status">
+        <div class="telemetry-chip amd-status" id="amdStatusBadge" title="AMD ROCm vLLM Serving Status">
+          <span class="status-dot pulse" id="amdStatusDot"></span>
+          <span class="chip-label">AMD Instinct™</span>
+          <span class="chip-val" id="amdStatusText">ROCm 6.2 / Fallback</span>
+          <span class="chip-sep" aria-hidden="true">·</span>
+          <span class="chip-sub" id="p95LatencyText">&lt; 1.2ms</span>
+          <span class="chip-sep" aria-hidden="true">·</span>
+          <span class="chip-sub" id="throughputText">Active 0</span>
+          <span class="sr-only" id="queueDepthBadge">0</span>
+        </div>
+      </div>
+
+      <!-- Bottom-Right: Rotating Stat Line with Thin Vertical Rule -->
+      <div class="hero-bottom-right" role="region" aria-label="Key Performance Indicators">
+        <div class="hero-stat-rotator" id="heroStatRotator" aria-hidden="true">
+          <span class="hero-stat-text" id="heroStatText">AMD Instinct™ MI300X</span>
+          <span class="hero-stat-arrow">&larr;</span>
+        </div>
+        <div class="hero-vertical-rule" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         INTRO SECTION: RELOCATED HERO ACTIONS, TRUST ROW & PIPELINE CARD
+         ===================================================================== -->
+    <section class="section intro-section" id="introSection" aria-labelledby="introTitle">
       <div class="content-container">
-        <div class="hero-split-grid">
-          <!-- Left Column: Copy & Actions -->
-          <div class="hero-copy-col">
-            <div class="hero-badge-row">
-              <span class="tech-eyebrow">// 01 — RETAIL MEDIA EVIDENCE GATE</span>
-              <span class="hero-sub-badge">DETERMINISTIC COMPLIANCE</span>
+        <!-- 1. Announcement Bar -->
+        <div class="intro-announcement-wrap">
+          <aside class="top-announcement-bar intro-announcement" aria-label="System Notice">
+            <div class="announcement-inner">
+              <span class="announcement-pill">ENTERPRISE GATE</span>
+              <span class="announcement-text">Deterministic retail media compliance — AMD Instinct™ &amp; ROCm 6.2 with CPU fallback &amp; forward-chained Merkle audit</span>
+              <a href="#studioSection" class="announcement-link">Test Live Workspace &rarr;</a>
             </div>
-            <div class="section-heading-dash hero-dash" aria-hidden="true"></div>
+          </aside>
+        </div>
 
-            <h1 id="heroTitle" class="hero-title">
-              Every retail claim.<br>
-              <span class="linear-wipe-text">Verified against evidence.</span>
-            </h1>
-
-            <p class="hero-description">
+        <div class="intro-grid">
+          <!-- Left Column: Copy & Actions -->
+          <div class="intro-copy-col">
+            <span class="intro-category-label">Retail media evidence gate</span>
+            <h2 id="introTitle" class="intro-heading">Deterministic compliance across programmatic retail media.</h2>
+            <p class="intro-description">
               Evaluate advertising claims against product catalogues, pricing information, inventory feeds,
               and configured compliance policies through a deterministic, explainable verification workflow.
               Eliminate deceptive pricing, phantom stock, and regulatory liability before publication.
             </p>
 
-            <div class="hero-cta-group">
-              <a href="#studioSection" class="btn btn-primary btn-lg hero-cta-btn">
-                <span class="btn-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polygon points="10 8 16 12 10 16 10 8"/>
-                  </svg>
-                </span>
+            <div class="intro-cta-group">
+              <a href="#studioSection" class="btn btn-primary btn-lg">
                 <span class="btn-text">Open Verification Studio</span>
+                <span class="btn-arrow">&rarr;</span>
               </a>
               <a href="#opsSection" class="btn btn-secondary btn-lg" id="btnHeroAudit">
-                <span class="btn-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                    <polyline points="10 9 9 9 8 9"/>
-                  </svg>
-                </span>
                 <span class="btn-text">Explore Audit Trail</span>
               </a>
             </div>
 
-            <!-- Metric Ribbon Ticker -->
-            <div class="hero-ticker-ribbon" role="region" aria-label="Key Performance Indicators">
-              <div class="ticker-item">
-                <span class="ticker-dot live-dot"></span>
-                <span class="ticker-label">ACCELERATION</span>
-                <strong class="ticker-val">AMD Instinct™ MI300X</strong>
+            <!-- Trust Row -->
+            <div class="intro-trust-row" role="region" aria-label="Operational Specifications">
+              <div class="trust-item">
+                <span class="trust-label">ACCELERATION</span>
+                <strong class="trust-val">AMD Instinct™ MI300X</strong>
               </div>
-              <div class="ticker-item">
-                <span class="ticker-dot"></span>
-                <span class="ticker-label">POLICY SLA</span>
-                <strong class="ticker-val">&lt; 5ms Deterministic</strong>
+              <div class="trust-divider" aria-hidden="true"></div>
+              <div class="trust-item">
+                <span class="trust-label">POLICY SLA</span>
+                <strong class="trust-val">&lt; 5ms Deterministic</strong>
               </div>
-              <div class="ticker-item">
-                <span class="ticker-dot"></span>
-                <span class="ticker-label">INTEGRITY</span>
-                <strong class="ticker-val">SHA-256 Merkle Chain</strong>
+              <div class="trust-divider" aria-hidden="true"></div>
+              <div class="trust-item">
+                <span class="trust-label">INTEGRITY</span>
+                <strong class="trust-val">SHA-256 Merkle Chain</strong>
               </div>
-              <div class="ticker-item">
-                <span class="ticker-dot"></span>
-                <span class="ticker-label">GOVERNANCE</span>
-                <strong class="ticker-val">FTC 16 CFR § 233</strong>
+              <div class="trust-divider" aria-hidden="true"></div>
+              <div class="trust-item">
+                <span class="trust-label">GOVERNANCE</span>
+                <strong class="trust-val">FTC 16 CFR § 233</strong>
               </div>
             </div>
           </div>
 
-          <!-- Right Column: Interactive Technical Verification Visualizer -->
-          <div class="hero-visual-col">
+          <!-- Right Column: 5-Stage Architectural Pipeline Card -->
+          <div class="intro-pipeline-col">
             <div class="hero-visualisation" aria-label="ClaimCheck Evidence Engine Workflow Diagram">
               <div class="vis-header">
                 <div class="vis-status-left">
@@ -316,12 +313,125 @@
     </section>
 
     <!-- =====================================================================
-         SECTION 2: THE PROBLEM (COMPLIANCE CRISIS - 3 BALANCED CARDS)
+         SECTION 2: OPERATIONS & AUDIT TRAIL (COMMAND DECK)
+         ===================================================================== -->
+    <section class="section ops-section" id="opsSection" aria-labelledby="opsTitle">
+      <div class="content-container">
+        <div class="section-header">
+          <span class="tech-eyebrow">// 02 — OPERATIONS &amp; AUDIT</span>
+          <div class="section-heading-dash" aria-hidden="true"></div>
+          <h2 id="opsTitle" class="section-title">Operations Command Deck</h2>
+          <p class="section-subtitle">
+            Live human review queue with role-based governance, forward-chained SHA-256 tamper-evident audit streaming, and real-time Prometheus operational metrics.
+          </p>
+        </div>
+
+        <div class="ops-deck-wrapper">
+          <div class="panel ops-panel" aria-labelledby="opsTitle">
+            <div class="panel-header tabs-header">
+              <h3 id="opsHeading" class="panel-title sr-only">Operational Controls</h3>
+              <div class="tabs-nav" role="tablist">
+                <button type="button" class="tab-btn active" id="tabReview" role="tab" aria-selected="true" aria-controls="viewReview">
+                  Review Queue
+                  <span class="tab-badge" id="tabQueueBadge">0</span>
+                </button>
+                <button type="button" class="tab-btn" id="tabAudit" role="tab" aria-selected="false" aria-controls="viewAudit">
+                  Audit Stream
+                </button>
+                <button type="button" class="tab-btn" id="tabTelemetry" role="tab" aria-selected="false" aria-controls="viewTelemetry">
+                  Live Telemetry
+                </button>
+              </div>
+            </div>
+
+            <!-- Tab View 1: Human Review Queue -->
+            <div id="viewReview" class="tab-view active" role="tabpanel" aria-labelledby="tabReview">
+              <div class="queue-toolbar">
+                <div class="role-indicator">
+                  Role: <strong id="activeRoleLabel">Senior Compliance Officer</strong>
+                </div>
+                <button type="button" id="btnRefreshQueue" class="btn btn-sm btn-secondary">Refresh</button>
+              </div>
+
+              <div id="queueEmptyState" class="empty-state">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="empty-icon" aria-hidden="true">
+                  <polyline points="9 11 12 14 22 4"/>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                <p class="empty-title">Review Queue is Clear</p>
+                <p class="empty-text">No ad copy items currently require human resolution. Test "Deceptive Price" or "Out of Stock" to trigger queue escalation.</p>
+              </div>
+
+              <div id="queueItemsList" class="queue-list" role="list"></div>
+            </div>
+
+            <!-- Tab View 2: Chained Audit Explorer & Replay -->
+            <div id="viewAudit" class="tab-view hidden" role="tabpanel" aria-labelledby="tabAudit">
+              <div class="audit-toolbar">
+                <div class="chain-status">
+                  Chain: <span class="badge-status-valid" id="chainStatusBadge">✓ Linked</span>
+                </div>
+                <button type="button" id="btnRefreshAudit" class="btn btn-sm btn-secondary">Refresh</button>
+              </div>
+
+              <div id="auditEmptyState" class="empty-state">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="empty-icon" aria-hidden="true">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+                <p class="empty-title">Audit Log Empty</p>
+                <p class="empty-text">Run a verification check to initialize the forward-chained SHA-256 tamper-evident log.</p>
+              </div>
+
+              <div id="auditReplayResultBanner" class="replay-result-banner hidden" role="status">
+                <div class="replay-header">
+                  <span class="replay-icon">✓</span>
+                  <span class="replay-title">1-Click Historical Replay Determinism Verified</span>
+                </div>
+                <p class="replay-details" id="replayDetailsText">Original digest equals replayed digest. Zero logic drift detected.</p>
+              </div>
+
+              <div id="auditStreamList" class="audit-stream-list" role="list"></div>
+            </div>
+
+            <!-- Tab View 3: Live Telemetry & Metrics -->
+            <div id="viewTelemetry" class="tab-view hidden" role="tabpanel" aria-labelledby="tabTelemetry">
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <span class="metric-title">Total Checks</span>
+                  <span class="metric-val" id="metricTotalChecks">0</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-title">Passes</span>
+                  <span class="metric-val text-accent-emerald" id="metricTotalPasses">0</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-title">Blocks</span>
+                  <span class="metric-val text-accent-ruby" id="metricTotalBlocks">0</span>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-title">Overrides</span>
+                  <span class="metric-val text-accent-amber" id="metricTotalOverrides">0</span>
+                </div>
+              </div>
+
+              <div class="card terminal-card">
+                <div class="card-title">Prometheus Telemetry (/metrics)</div>
+                <pre class="telemetry-raw" id="telemetryRawDisplay">Loading Prometheus exposition metrics...</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 3: THE PROBLEM (COMPLIANCE CRISIS - 3 BALANCED CARDS)
          ===================================================================== -->
     <section class="section problem-section" id="problemSection" aria-labelledby="problemTitle">
       <div class="content-container">
         <div class="section-header">
-          <span class="tech-eyebrow">// 02 — THE COMPLIANCE CRISIS</span>
+          <span class="tech-eyebrow">// 03 — THE COMPLIANCE CRISIS</span>
           <div class="section-heading-dash" aria-hidden="true"></div>
           <h2 id="problemTitle" class="section-title">
             Retail advertising moves faster<br>than manual compliance.
@@ -588,11 +698,9 @@
           </p>
         </div>
 
-        <!-- 2-Column Professional Workspace Layout (62% Left / 38% Right) -->
-        <div class="workspace-split-layout">
-          <!-- Left Column: Verification Studio Core -->
-          <div class="workspace-studio-col">
-            <div class="panel studio-panel" aria-labelledby="studioHeading">
+        <!-- Professional Studio Workspace Container -->
+        <div class="studio-workspace-container">
+          <div class="panel studio-panel" aria-labelledby="studioHeading">
               <div class="panel-header">
                 <div>
                   <h3 id="studioHeading" class="panel-title">Verification Studio</h3>
@@ -781,106 +889,7 @@
               </div>
             </div>
           </div>
-
-          <!-- Right Column: Operations Command Deck (Queue, Audit, Telemetry) -->
-          <div class="workspace-ops-col" id="opsSection">
-            <div class="panel ops-panel" aria-labelledby="opsHeading">
-              <div class="panel-header tabs-header">
-                <h2 id="opsHeading" class="panel-title sr-only">Operational Controls</h2>
-                <div class="tabs-nav" role="tablist">
-                  <button type="button" class="tab-btn active" id="tabReview" role="tab" aria-selected="true" aria-controls="viewReview">
-                    Review Queue
-                    <span class="tab-badge" id="tabQueueBadge">0</span>
-                  </button>
-                  <button type="button" class="tab-btn" id="tabAudit" role="tab" aria-selected="false" aria-controls="viewAudit">
-                    Audit Stream
-                  </button>
-                  <button type="button" class="tab-btn" id="tabTelemetry" role="tab" aria-selected="false" aria-controls="viewTelemetry">
-                    Live Telemetry
-                  </button>
-                </div>
-              </div>
-
-              <!-- Tab View 1: Human Review Queue -->
-              <div id="viewReview" class="tab-view active" role="tabpanel" aria-labelledby="tabReview">
-                <div class="queue-toolbar">
-                  <div class="role-indicator">
-                    Role: <strong id="activeRoleLabel">Senior Compliance Officer</strong>
-                  </div>
-                  <button type="button" id="btnRefreshQueue" class="btn btn-sm btn-secondary">Refresh</button>
-                </div>
-
-                <div id="queueEmptyState" class="empty-state">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="empty-icon" aria-hidden="true">
-                    <polyline points="9 11 12 14 22 4"/>
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                  </svg>
-                  <p class="empty-title">Review Queue is Clear</p>
-                  <p class="empty-text">No ad copy items currently require human resolution. Test "Deceptive Price" or "Out of Stock" to trigger queue escalation.</p>
-                </div>
-
-                <div id="queueItemsList" class="queue-list" role="list"></div>
-              </div>
-
-              <!-- Tab View 2: Chained Audit Explorer & Replay -->
-              <div id="viewAudit" class="tab-view hidden" role="tabpanel" aria-labelledby="tabAudit">
-                <div class="audit-toolbar">
-                  <div class="chain-status">
-                    Chain: <span class="badge-status-valid" id="chainStatusBadge">✓ Linked</span>
-                  </div>
-                  <button type="button" id="btnRefreshAudit" class="btn btn-sm btn-secondary">Refresh</button>
-                </div>
-
-                <div id="auditEmptyState" class="empty-state">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="empty-icon" aria-hidden="true">
-                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                  </svg>
-                  <p class="empty-title">Audit Log Empty</p>
-                  <p class="empty-text">Run a verification check to initialize the forward-chained SHA-256 tamper-evident log.</p>
-                </div>
-
-                <div id="auditReplayResultBanner" class="replay-result-banner hidden" role="status">
-                  <div class="replay-header">
-                    <span class="replay-icon">✓</span>
-                    <span class="replay-title">1-Click Historical Replay Determinism Verified</span>
-                  </div>
-                  <p class="replay-details" id="replayDetailsText">Original digest equals replayed digest. Zero logic drift detected.</p>
-                </div>
-
-                <div id="auditStreamList" class="audit-stream-list" role="list"></div>
-              </div>
-
-              <!-- Tab View 3: Live Telemetry & Metrics -->
-              <div id="viewTelemetry" class="tab-view hidden" role="tabpanel" aria-labelledby="tabTelemetry">
-                <div class="metrics-grid">
-                  <div class="metric-card">
-                    <span class="metric-title">Total Checks</span>
-                    <span class="metric-val" id="metricTotalChecks">0</span>
-                  </div>
-                  <div class="metric-card">
-                    <span class="metric-title">Passes</span>
-                    <span class="metric-val text-accent-emerald" id="metricTotalPasses">0</span>
-                  </div>
-                  <div class="metric-card">
-                    <span class="metric-title">Blocks</span>
-                    <span class="metric-val text-accent-ruby" id="metricTotalBlocks">0</span>
-                  </div>
-                  <div class="metric-card">
-                    <span class="metric-title">Overrides</span>
-                    <span class="metric-val text-accent-amber" id="metricTotalOverrides">0</span>
-                  </div>
-                </div>
-
-                <div class="card terminal-card">
-                  <div class="card-title">Prometheus Telemetry (/metrics)</div>
-                  <pre class="telemetry-raw" id="telemetryRawDisplay">Loading Prometheus exposition metrics...</pre>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </section>
 
     <!-- =====================================================================
@@ -1117,6 +1126,46 @@
     </div>
   </footer>
 
-  <script src="app.js?v=2.1"></script>
+  <!-- Contact Us / PhantomDeps Team Modal Dialog (Section 6) -->
+  <dialog id="contactDialog" class="contact-dialog" aria-labelledby="contactDialogTitle">
+    <div class="contact-dialog-panel">
+      <!-- Soft cobalt glow in top-right corner -->
+      <div class="dialog-glow" aria-hidden="true"></div>
+
+      <!-- Header -->
+      <div class="contact-dialog-header">
+        <div class="dialog-header-text">
+          <span class="dialog-kicker">TEAM</span>
+          <h2 id="contactDialogTitle" class="dialog-title">PhantomDeps</h2>
+          <p class="dialog-desc">TypeScript fail-closed BLOCK / WARN / ALLOW engine with NDJSON audit logs.</p>
+        </div>
+        <button type="button" class="dialog-close-btn" id="btnCloseContact" aria-label="Close dialog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Context Line -->
+      <div class="dialog-context-row">
+        <span class="dialog-event-text">Built for AMD Developer Hackathon: ACT III · lablab.ai</span>
+      </div>
+
+      <!-- Dynamic Members List Container -->
+      <div class="dialog-members-list" id="dialogMembersList" role="list" aria-label="Team Members"></div>
+
+      <!-- Team Actions & Links -->
+      <div class="dialog-team-links" id="dialogTeamLinks"></div>
+
+      <!-- Footer Note -->
+      <div class="dialog-footer-note">
+        <span>ClaimCheck · Retail media evidence gate</span>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="team.js"></script>
+  <script src="app.js?v=3.0"></script>
 </body>
 </html>
