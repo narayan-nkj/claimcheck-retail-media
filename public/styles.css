@@ -663,15 +663,58 @@ section[id] {
   padding: 0 24px;
 }
 
-/* Dual Radial Gradient Smile-Shaped Arc of Light - Disabled for Plain Colors */
+/* Dual Radial Gradient Smile-Shaped Arc of Light */
 .hero__glow {
-  display: none !important;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Layer A: the main arc of light (rim of a huge circle) */
+  background:
+    radial-gradient(
+      circle 125vw at 50% -60vw,
+      rgba(7, 10, 38, 0)   0%,
+      rgba(7, 10, 38, 0)   55%,
+      rgba(44, 66, 143, 0.50) 68%,
+      #3f63c7           76%,   /* cobalt body */
+      #b3bddb           82%,   /* pale core of the band (lowest at center) */
+      #6b7fc0           88%,
+      rgba(42, 58, 134, 0.6) 94%,
+      rgba(7, 10, 38, 0)  100%
+    ),
+    /* Layer B: extra pale bloom at the center */
+    radial-gradient(
+      ellipse 45vw 18vw at 50% 72%,
+      rgba(190, 200, 228, 0.55),
+      rgba(190, 200, 228, 0) 70%
+    );
+  filter: blur(28px);
+  transform: scale(1.06);
 }
 
-/* Seamless bottom fade into page background - Disabled for Plain Colors */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__glow {
+    animation: heroGlowDrift 14s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes heroGlowDrift {
+  0% { transform: scale(1.06) translateY(0); }
+  100% { transform: scale(1.06) translateY(8px); }
+}
+
+/* Seamless bottom fade into page background */
 .hero::after,
 .hero-section::after {
-  display: none !important;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28vh;
+  background: linear-gradient(to bottom, rgba(7, 10, 38, 0), var(--bg-0));
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Centered Headline Content - Complete Centre of the Page */
@@ -709,10 +752,10 @@ section[id] {
   text-align: center;
   margin: 0;
   padding: 0;
-  background: none;
-  -webkit-background-clip: unset;
-  background-clip: unset;
-  color: #ffffff;
+  background: linear-gradient(180deg, var(--text-pale) 0%, var(--text-pale) 35%, var(--text-blue) 70%, var(--text-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .hero-headline .hero-line {
@@ -3003,17 +3046,30 @@ section[id] {
 @media (max-width: 768px) {
   .hero {
     min-height: 100svh;
-    padding: 88px 20px 40px 20px;
-  }
-  .hero__glow {
-    display: none !important;
-  }
-  .hero {
-    min-height: 100svh;
     height: 100svh;
     padding: 0 16px;
     justify-content: center;
     align-items: center;
+  }
+  .hero__glow {
+    filter: blur(20px);
+    background:
+      radial-gradient(
+        circle 180vw at 50% -30vw,
+        rgba(7, 10, 38, 0)   0%,
+        rgba(7, 10, 38, 0)   45%,
+        rgba(44, 66, 143, 0.50) 60%,
+        #3f63c7           72%,
+        #b3bddb           80%,
+        #6b7fc0           86%,
+        rgba(42, 58, 134, 0.6) 92%,
+        rgba(7, 10, 38, 0)  100%
+      ),
+      radial-gradient(
+        ellipse 70vw 25vw at 50% 65%,
+        rgba(190, 200, 228, 0.55),
+        rgba(190, 200, 228, 0) 70%
+      );
   }
   .hero-bottom-left {
     position: absolute;
