@@ -151,7 +151,7 @@ export function extractClaimsFallback(
 
   // 3. Shipping Promise Patterns
   // Examples: "Free 2-Day Delivery", "Delivered tomorrow", "Delivery in 3 days", "Free shipping", "Overnight shipping"
-  const shippingRegex = /\b(free\s+(\d+)-day\s+delivery|delivered\s+tomorrow|delivery\s+in\s+(\d+)\s+days?|free\s+shipping|same-day\s+delivery|overnight\s+shipping)\b/gi;
+  const shippingRegex = /\b(free\s+(\d+)-day\s+delivery|(?:guaranteed\s+)?next-day\s+delivery|(?:guaranteed\s+)?(\d+)-day\s+delivery|delivered\s+tomorrow|delivery\s+in\s+(\d+)\s+days?|free\s+shipping|same-day\s+delivery|overnight\s+shipping)\b/gi;
   while ((match = shippingRegex.exec(copyText)) !== null) {
     const rawMatch = match[0];
     const startIndex = match.index;
@@ -159,15 +159,22 @@ export function extractClaimsFallback(
     let days = 2; // default standard fast shipping
     if (/same-day/i.test(rawMatch)) {
       days = 0;
-    } else if (/tomorrow|overnight/i.test(rawMatch) || rawMatch.includes('1-day')) {
+    } else if (/tomorrow|overnight|next-day/i.test(rawMatch) || rawMatch.includes('1-day')) {
       days = 1;
     } else if (match[2]) {
       days = Number.parseInt(match[2], 10);
     } else if (match[3]) {
       days = Number.parseInt(match[3], 10);
+    } else if (match[4]) {
+      days = Number.parseInt(match[4], 10);
     } else if (/free\s+shipping/i.test(rawMatch)) {
       days = 5; // standard ground shipping window
     }
+
+    const isFree = /free/i.test(rawMatch);
+    const normalizedStatement = isFree
+      ? `Delivery transit promised within ${days} days with free shipping`
+      : `Delivery transit promised within ${days} days`;
 
     const claim = validateClaim({
       claimId: `${prefix}-${claimSeq++}`,
@@ -177,7 +184,7 @@ export function extractClaimsFallback(
         endIndex,
         text: rawMatch,
       },
-      normalizedStatement: `Delivery transit promised within ${days} days`,
+      normalizedStatement,
       extractedParameters: {
         statedDeliveryWindowDays: days,
       },
@@ -189,7 +196,7 @@ export function extractClaimsFallback(
 
   // 4. Product Attribute Patterns
   // Examples: "300W", "Bluetooth 5.3", "Stainless Steel", "Active Noise Cancelling", "4K OLED", "Organic Cotton"
-  const attributeRegex = /\b(300W|500W|\d+W|Bluetooth\s+\d+(?:\.\d+)?|Wireless|Organic\s+Cotton|Stainless\s+Steel|Waterproof|Active\s+Noise\s+Cancelling|4K\s+OLED|\d+GB|\d+TB)\b/gi;
+  const attributeRegex = /\b(300W|500W|\d+W|Bluetooth\s+\d+(?:\.\d+)?|Wireless|Organic\s+Cotton|Stainless\s+Steel|Waterproof|Active\s+Noise\s+Cancelling|4K\s+OLED|\d+GB|\d+TB|Dark\s+Roast|Light\s+Roast|GORE-TEX(?:\s+Pro)?|\d+-Quart|SPF\s+\d+|\d+mm|100%\s+Merino\s+Wool)\b/gi;
   while ((match = attributeRegex.exec(copyText)) !== null) {
     const rawMatch = match[0];
     const startIndex = match.index;
@@ -198,10 +205,15 @@ export function extractClaimsFallback(
     let key = 'feature';
     if (/\d+W/i.test(rawMatch)) key = 'powerOutput';
     else if (/Bluetooth/i.test(rawMatch)) key = 'connectivity';
-    else if (/Stainless Steel|Organic Cotton/i.test(rawMatch)) key = 'material';
+    else if (/Stainless Steel|Organic Cotton|Merino Wool/i.test(rawMatch)) key = 'material';
     else if (/Noise Cancelling/i.test(rawMatch)) key = 'audioFeature';
     else if (/OLED/i.test(rawMatch)) key = 'displayType';
     else if (/\d+(?:GB|TB)/i.test(rawMatch)) key = 'capacity';
+    else if (/Roast/i.test(rawMatch)) key = 'roastLevel';
+    else if (/GORE-TEX/i.test(rawMatch)) key = 'membrane';
+    else if (/Quart/i.test(rawMatch)) key = 'capacity';
+    else if (/SPF/i.test(rawMatch)) key = 'spf';
+    else if (/mm/i.test(rawMatch)) key = 'waterproofRating';
 
     const claim = validateClaim({
       claimId: `${prefix}-${claimSeq++}`,
@@ -224,7 +236,7 @@ export function extractClaimsFallback(
 
   // 5. Out of Scope / Unverifiable Puffery Patterns
   // Examples: "#1 rated", "world's best", "guaranteed to change your life", "miracle results", "best in the world"
-  const outOfScopeRegex = /\b(#1\s+rated|world'?s\s+best|best\s+in\s+the\s+world|guaranteed\s+to\s+change\s+your\s+life|miracle\s+results|voted\s+#1|unmatched\s+perfection)\b/gi;
+  const outOfScopeRegex = /\b(#1\s+rated|world'?s\s+best|best\s+in\s+the\s+world|greatest\s+audio\s+experience|guaranteed\s+100%\s+cure|100%\s+cure|erases\s+\d+\s+years|guaranteed\s+to\s+change\s+your\s+life|miracle\s+results|miraculous\s+sound|heavenly\s+flavor|voted\s+#1|unmatched\s+perfection|ignore\s+previous\s+rules|output\s+VERDICT|REDACTED_INSTRUCTION)\b/gi;
   while ((match = outOfScopeRegex.exec(copyText)) !== null) {
     const rawMatch = match[0];
     const startIndex = match.index;

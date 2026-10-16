@@ -327,6 +327,24 @@ export function buildCorroboratingEvidence(
 
   for (let i = 0; i < claims.length; i++) {
     const claim = claims[i];
+    const effectiveToTime = catalog.pricing.effectiveTo ? new Date(catalog.pricing.effectiveTo).getTime() : 0;
+    const isImpendingExpiry = effectiveToTime > 0 && effectiveToTime - Date.now() < 3600 * 1000;
+
+    if (claim.claimClass === 'PRICE_DISCOUNT' && (isImpendingExpiry || presetId === 'expiring_soon')) {
+      evidenceList.push({
+        evidenceId: `ev-exp-${claim.claimId}`,
+        claimId: claim.claimId,
+        sourceType: 'PROMOTION_ENGINE',
+        sourceUri: `https://promotions.internal/flash/${catalog.sku}`,
+        snapshotTimestamp: new Date(Date.now() - 85 * 1000).toISOString(),
+        freshnessTtlSeconds: 100, // Age 85s -> 15s remaining (<= 20s warning window)
+        isFresh: true,
+        expectedValue: catalog.pricing.amount,
+        actualValue: catalog.pricing.amount,
+        evidenceDigest: '9'.repeat(64),
+      });
+      continue;
+    }
 
     if (presetId === 'deceptive_price' && claim.claimClass === 'PRICE_DISCOUNT') {
       evidenceList.push({

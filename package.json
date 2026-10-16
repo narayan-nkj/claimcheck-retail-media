@@ -17,7 +17,8 @@
     "test:eval": "node --test tests/evaluation/*.test.js",
     "test:integration": "node --test tests/integration/*.test.js",
     "benchmark": "node scripts/benchmark.js",
-    "benchmark:amd": "node scripts/benchmark_amd.js"
+    "benchmark:amd": "node scripts/benchmark_amd.js",
+    "evaluate": "node scripts/evaluate.js"
   },
   "keywords": [
     "retail-media",
