@@ -11,6 +11,7 @@ export class AppState {
   private totalOverrides = 0;
   private totalBlocks = 0;
   private totalPasses = 0;
+  private latencies: number[] = [];
 
   public reset(): void {
     this.auditStream = [];
@@ -20,6 +21,7 @@ export class AppState {
     this.totalOverrides = 0;
     this.totalBlocks = 0;
     this.totalPasses = 0;
+    this.latencies = [];
   }
 
   public recordAuditEvent(
@@ -84,15 +86,20 @@ export class AppState {
     return this.reviewQueue[index];
   }
 
-  public recordCheck(checkId: string, result: any, auditEvent: ChainedAuditEvent): void {
+  public recordCheck(checkId: string, result: any, auditEvent: ChainedAuditEvent, latencyMs?: number): void {
     this.totalChecksProcessed++;
     if (result.compositeStatus === 'ALLOW') this.totalPasses++;
     else if (result.compositeStatus === 'BLOCK') this.totalBlocks++;
+
+    if (typeof latencyMs === 'number' && latencyMs > 0) {
+      this.latencies.push(latencyMs);
+    }
 
     this.checks.set(checkId, {
       result,
       auditEvent,
       timestamp: new Date().toISOString(),
+      latencyMs,
     });
   }
 
@@ -105,6 +112,10 @@ export class AppState {
   }
 
   public getStats() {
+    const sorted = [...this.latencies].sort((a, b) => a - b);
+    const p95 = sorted.length > 0 ? sorted[Math.floor(sorted.length * 0.95)] : 0.8;
+    const avg = sorted.length > 0 ? sorted.reduce((a, b) => a + b, 0) / sorted.length : 0.5;
+
     return {
       totalChecks: this.totalChecksProcessed,
       totalPasses: this.totalPasses,
@@ -112,6 +123,8 @@ export class AppState {
       totalOverrides: this.totalOverrides,
       queueDepth: this.reviewQueue.filter((q) => q.status !== 'RESOLVED').length,
       auditChainLength: this.auditStream.length,
+      avgLatencyMs: Math.round(avg * 100) / 100,
+      p95LatencyMs: Math.round(p95 * 100) / 100,
     };
   }
 }

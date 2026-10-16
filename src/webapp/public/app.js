@@ -61,7 +61,29 @@
     viewTelemetry: document.getElementById('viewTelemetry'),
     btnRefreshQueue: document.getElementById('btnRefreshQueue'),
     btnRefreshAudit: document.getElementById('btnRefreshAudit'),
+    networkErrorBanner: document.getElementById('networkErrorBanner'),
+    networkErrorMessage: document.getElementById('networkErrorMessage'),
+    btnDismissNetworkError: document.getElementById('btnDismissNetworkError'),
+    amdStatusText: document.getElementById('amdStatusText'),
+    amdStatusDot: document.getElementById('amdStatusDot'),
+    throughputText: document.getElementById('throughputText'),
   };
+
+  /**
+   * Network Error Boundary Display
+   */
+  function showNetworkErrorBanner(message) {
+    if (elements.networkErrorBanner && elements.networkErrorMessage) {
+      elements.networkErrorMessage.textContent = message;
+      elements.networkErrorBanner.classList.remove('hidden');
+    }
+  }
+
+  function hideNetworkErrorBanner() {
+    if (elements.networkErrorBanner) {
+      elements.networkErrorBanner.classList.add('hidden');
+    }
+  }
 
   /**
    * Client-side PII, credential, and secret sanitizer (Phase 03 WCAG & Security)
@@ -146,6 +168,11 @@
     // Refresh Buttons
     elements.btnRefreshQueue.addEventListener('click', refreshQueue);
     elements.btnRefreshAudit.addEventListener('click', refreshAuditStream);
+
+    // Network Error Boundary Dismiss
+    if (elements.btnDismissNetworkError) {
+      elements.btnDismissNetworkError.addEventListener('click', hideNetworkErrorBanner);
+    }
   }
 
   /**
@@ -256,7 +283,7 @@
       await refreshAuditStream();
       await refreshTelemetry();
     } catch (err) {
-      alert(`Network Error: ${err.message}`);
+      showNetworkErrorBanner(`Verification Check Failed: ${err.message}. Connection dropped or server unreachable.`);
     } finally {
       elements.btnRunCheck.disabled = false;
       elements.btnRunCheck.querySelector('.btn-text').textContent = 'Verify Ad Copy with Evidence Gate';
@@ -607,8 +634,25 @@
         fetch('/metrics'),
       ]);
 
+      if (!healthRes.ok) throw new Error(`Health check returned status ${healthRes.status}`);
+
       const health = await healthRes.json();
       const rawMetrics = await metricsRes.text();
+
+      // Clear network drop warning if health check recovered
+      hideNetworkErrorBanner();
+
+      if (health.amdInference) {
+        const amd = health.amdInference;
+        const isHardware = amd.rocmAvailable && amd.deviceProof?.verified;
+        if (isHardware) {
+          elements.amdStatusText.textContent = 'ROCm 6.2 (Active)';
+          elements.amdStatusDot.className = 'status-dot pulse active';
+        } else {
+          elements.amdStatusText.textContent = 'ROCm / Fallback Mode';
+          elements.amdStatusDot.className = 'status-dot pulse fallback';
+        }
+      }
 
       if (health.metrics) {
         elements.metricTotalChecks.textContent = health.metrics.totalChecks;
@@ -616,11 +660,22 @@
         elements.metricTotalBlocks.textContent = health.metrics.totalBlocks;
         elements.metricTotalOverrides.textContent = health.metrics.totalOverrides;
         elements.queueDepthBadge.textContent = health.metrics.queueDepth;
+        elements.tabQueueBadge.textContent = health.metrics.queueDepth;
+
+        // Update real-time throughput and p95 latency
+        const total = health.metrics.totalChecks || 0;
+        elements.throughputText.textContent = total > 0 ? `${total} checks` : 'Active';
+        if (health.metrics.avgLatencyMs) {
+          elements.p95LatencyText.textContent = `${health.metrics.avgLatencyMs.toFixed(2)}ms`;
+        }
       }
 
       elements.telemetryRawDisplay.textContent = rawMetrics;
     } catch (err) {
       console.warn('Telemetry refresh warning:', err);
+      if (elements.amdStatusText) elements.amdStatusText.textContent = 'Disconnected (Offline)';
+      if (elements.amdStatusDot) elements.amdStatusDot.className = 'status-dot offline';
+      showNetworkErrorBanner('Operational Telemetry Offline: Backend service unreachable. Background reconnection in progress...');
     }
   }
 

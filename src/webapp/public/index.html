@@ -51,6 +51,15 @@
     </div>
   </header>
 
+  <!-- Global Network Error Boundary Banner (Phase 04 Observability) -->
+  <div id="networkErrorBanner" class="network-error-banner hidden" role="alert" aria-live="assertive">
+    <div class="network-error-content">
+      <span class="network-error-icon">⚠️</span>
+      <span id="networkErrorMessage" class="network-error-message">Network connection dropped. Attempting to reconnect...</span>
+      <button type="button" id="btnDismissNetworkError" class="btn btn-sm btn-outline">Dismiss</button>
+    </div>
+  </div>
+
   <!-- Main Portal Layout -->
   <main class="app-main" id="mainContent" role="main">
     <!-- Left Column: Verification Studio -->

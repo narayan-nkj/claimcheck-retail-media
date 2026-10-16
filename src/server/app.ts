@@ -145,6 +145,12 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     return;
   }
 
+  // Handle Unsupported HTTP Methods (PUT, DELETE, PATCH, etc.)
+  if (['DELETE', 'PUT', 'PATCH', 'TRACE', 'CONNECT'].includes(req.method || '')) {
+    sendJson(res, 405, { success: false, error: `Method Not Allowed: ${req.method}` });
+    return;
+  }
+
   try {
     // 1. GET /api/health
     if (req.method === 'GET' && pathname === '/api/health') {
@@ -307,10 +313,10 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         replayDigest: computeCanonicalAuditDigest(baseAuditData),
       };
 
-      const chainedAuditEvent = appState.recordAuditEvent(auditEventPayload, correlationId, traceId);
-      appState.recordCheck(checkId, policyVerdict, chainedAuditEvent);
-
       const latencyMs = performance.now() - startTime;
+      const chainedAuditEvent = appState.recordAuditEvent(auditEventPayload, correlationId, traceId);
+      appState.recordCheck(checkId, policyVerdict, chainedAuditEvent, latencyMs);
+
       telemetry.recordEvaluation(policyVerdict.compositeStatus, {
         claims: claims.map((c) => ({ claimClass: c.claimClass })),
       });
@@ -327,6 +333,10 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
         latencyMs: Math.round(latencyMs * 100) / 100,
       });
     } catch (err: any) {
+      if (err instanceof SyntaxError || err.message?.includes('JSON')) {
+        sendJson(res, 400, { success: false, error: 'Malformed JSON payload: failed to parse body' });
+        return;
+      }
       sendJson(res, 500, { success: false, error: err.message || 'Internal check execution error' });
     }
     return;
@@ -458,7 +468,7 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
   }
 
   // 404 Not Found
-  sendJson(res, 404, { error: `Endpoint not found: ${req.method} ${pathname}` });
+  sendJson(res, 404, { success: false, error: `Endpoint not found: ${req.method} ${pathname}` });
   } catch (err: any) {
     sendJson(res, 500, { success: false, error: `Unhandled server error: ${err.message}` });
   }

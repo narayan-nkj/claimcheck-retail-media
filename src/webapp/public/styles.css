@@ -202,10 +202,57 @@ body {
   animation: pulse-green 2s infinite;
 }
 
+.status-dot.active {
+  background-color: var(--color-allow);
+}
+
+.status-dot.fallback {
+  background-color: var(--color-review);
+  animation: pulse-amber 2s infinite;
+}
+
+.status-dot.offline {
+  background-color: var(--color-block);
+  animation: none;
+}
+
+@keyframes pulse-amber {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
 @keyframes pulse-green {
   0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
   70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Global Network Error Boundary Banner (Phase 04) */
+.network-error-banner {
+  background: rgba(220, 38, 38, 0.95);
+  color: #ffffff;
+  padding: 10px 24px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 64px;
+  z-index: 49;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.network-error-banner.hidden {
+  display: none !important;
+}
+
+.network-error-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .badge-count {
