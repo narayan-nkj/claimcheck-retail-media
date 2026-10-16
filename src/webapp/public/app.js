@@ -1,6 +1,7 @@
 /**
  * ClaimCheck Operator Web Portal Client Application
  * Zero-bloat, accessible vanilla JS implementation.
+ * Inspired by Lucien (https://www.lucien.com/)
  */
 
 (function () {
@@ -76,10 +77,11 @@
     amdStatusText: document.getElementById('amdStatusText'),
     amdStatusDot: document.getElementById('amdStatusDot'),
     throughputText: document.getElementById('throughputText'),
+    btnHeroAudit: document.getElementById('btnHeroAudit'),
   };
 
   /**
-   * Network Error Boundary Display
+   * Network Error Boundary Display (Observability & Test Contract)
    */
   function showNetworkErrorBanner(message) {
     if (elements.networkErrorBanner && elements.networkErrorMessage) {
@@ -114,6 +116,7 @@
    */
   async function init() {
     setupEventListeners();
+    setupFaqAccordion();
     await loadPresets();
     await refreshQueue();
     await refreshAuditStream();
@@ -131,28 +134,32 @@
    */
   function setupEventListeners() {
     // Character Counter & Reset Active Preset on Custom Typing
-    elements.adCopyInput.addEventListener('input', () => {
-      const len = elements.adCopyInput.value.length;
-      elements.charCount.textContent = `${len} / 2000`;
-      state.activePreset = null;
-      document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
-    });
+    if (elements.adCopyInput && elements.charCount) {
+      elements.adCopyInput.addEventListener('input', () => {
+        const len = elements.adCopyInput.value.length;
+        elements.charCount.textContent = `${len} / 2000`;
+        state.activePreset = null;
+        document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
+      });
 
-    // Keyboard Shortcut (Ctrl/Cmd + Enter)
-    elements.adCopyInput.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        elements.checkForm.dispatchEvent(new Event('submit', { cancelable: true }));
-      }
-    });
+      // Keyboard Shortcut (Ctrl/Cmd + Enter)
+      elements.adCopyInput.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          elements.checkForm.dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+      });
+    }
 
     // Role Selector Change
-    elements.operatorRoleSelect.addEventListener('change', (e) => {
-      state.operatorRole = e.target.value;
-      const roleText = e.target.options[e.target.selectedIndex].text.split(' (')[0];
-      elements.activeRoleLabel.textContent = roleText;
-      renderQueue(); // Re-render to enforce role buttons
-    });
+    if (elements.operatorRoleSelect) {
+      elements.operatorRoleSelect.addEventListener('change', (e) => {
+        state.operatorRole = e.target.value;
+        const roleText = e.target.options[e.target.selectedIndex].text.split(' (')[0];
+        if (elements.activeRoleLabel) elements.activeRoleLabel.textContent = roleText;
+        renderQueue(); // Re-render to enforce role buttons
+      });
+    }
 
     // Preset Buttons
     document.querySelectorAll('.preset-btn').forEach((btn) => {
@@ -163,22 +170,33 @@
     });
 
     // Form Submit
-    elements.checkForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      await runVerificationCheck();
-    });
+    if (elements.checkForm) {
+      elements.checkForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await runVerificationCheck();
+      });
+    }
 
     // Form Reset
-    elements.btnReset.addEventListener('click', resetForm);
+    if (elements.btnReset) {
+      elements.btnReset.addEventListener('click', resetForm);
+    }
 
     // Tabs Navigation
-    elements.tabReview.addEventListener('click', () => switchTab('review'));
-    elements.tabAudit.addEventListener('click', () => switchTab('audit'));
-    elements.tabTelemetry.addEventListener('click', () => switchTab('telemetry'));
+    if (elements.tabReview) elements.tabReview.addEventListener('click', () => switchTab('review'));
+    if (elements.tabAudit) elements.tabAudit.addEventListener('click', () => switchTab('audit'));
+    if (elements.tabTelemetry) elements.tabTelemetry.addEventListener('click', () => switchTab('telemetry'));
+
+    // Hero Audit CTA
+    if (elements.btnHeroAudit) {
+      elements.btnHeroAudit.addEventListener('click', () => {
+        switchTab('audit');
+      });
+    }
 
     // Refresh Buttons
-    elements.btnRefreshQueue.addEventListener('click', refreshQueue);
-    elements.btnRefreshAudit.addEventListener('click', refreshAuditStream);
+    if (elements.btnRefreshQueue) elements.btnRefreshQueue.addEventListener('click', refreshQueue);
+    if (elements.btnRefreshAudit) elements.btnRefreshAudit.addEventListener('click', refreshAuditStream);
 
     // Network Error Boundary Dismiss
     if (elements.btnDismissNetworkError) {
@@ -187,9 +205,43 @@
   }
 
   /**
+   * Setup FAQ Accordion Interaction
+   */
+  function setupFaqAccordion() {
+    const toggles = document.querySelectorAll('[data-accordion="toggle"]');
+    toggles.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        if (!item) return;
+        const isOpen = item.classList.contains('active');
+
+        // Close other items
+        document.querySelectorAll('.faq-item').forEach((other) => {
+          if (other !== item) {
+            other.classList.remove('active');
+            const otherBtn = other.querySelector('[data-accordion="toggle"]');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Toggle current item
+        if (isOpen) {
+          item.classList.remove('active');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          item.classList.add('active');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  }
+
+  /**
    * Switch Active Tab
    */
   function switchTab(tabKey) {
+    if (!elements.tabReview || !elements.tabAudit || !elements.tabTelemetry) return;
+
     elements.tabReview.classList.remove('active');
     elements.tabReview.setAttribute('aria-selected', 'false');
     elements.tabAudit.classList.remove('active');
@@ -197,22 +249,22 @@
     elements.tabTelemetry.classList.remove('active');
     elements.tabTelemetry.setAttribute('aria-selected', 'false');
 
-    elements.viewReview.classList.add('hidden');
-    elements.viewAudit.classList.add('hidden');
-    elements.viewTelemetry.classList.add('hidden');
+    if (elements.viewReview) elements.viewReview.classList.add('hidden');
+    if (elements.viewAudit) elements.viewAudit.classList.add('hidden');
+    if (elements.viewTelemetry) elements.viewTelemetry.classList.add('hidden');
 
     if (tabKey === 'review') {
       elements.tabReview.classList.add('active');
       elements.tabReview.setAttribute('aria-selected', 'true');
-      elements.viewReview.classList.remove('hidden');
+      if (elements.viewReview) elements.viewReview.classList.remove('hidden');
     } else if (tabKey === 'audit') {
       elements.tabAudit.classList.add('active');
       elements.tabAudit.setAttribute('aria-selected', 'true');
-      elements.viewAudit.classList.remove('hidden');
+      if (elements.viewAudit) elements.viewAudit.classList.remove('hidden');
     } else if (tabKey === 'telemetry') {
       elements.tabTelemetry.classList.add('active');
       elements.tabTelemetry.setAttribute('aria-selected', 'true');
-      elements.viewTelemetry.classList.remove('hidden');
+      if (elements.viewTelemetry) elements.viewTelemetry.classList.remove('hidden');
     }
   }
 
@@ -252,9 +304,9 @@
     if (!preset) return;
 
     state.activePreset = presetKey;
-    elements.adCopyInput.value = preset.adCopyText;
-    elements.skuSelect.value = preset.sku;
-    elements.charCount.textContent = `${preset.adCopyText.length} / 2000`;
+    if (elements.adCopyInput) elements.adCopyInput.value = preset.adCopyText;
+    if (elements.skuSelect) elements.skuSelect.value = preset.sku;
+    if (elements.charCount) elements.charCount.textContent = `${preset.adCopyText.length} / 2000`;
 
     // Highlight active preset button visually
     document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
@@ -269,6 +321,7 @@
    * Run Ad Copy Verification Check
    */
   async function runVerificationCheck() {
+    if (!elements.adCopyInput) return;
     const rawText = elements.adCopyInput.value.trim();
     if (!rawText) {
       elements.adCopyInput.focus();
@@ -280,8 +333,11 @@
     const simulationMode = elements.simulationModeSelect ? elements.simulationModeSelect.value : 'COMPLIANT';
     const presetId = state.activePreset;
 
-    elements.btnRunCheck.disabled = true;
-    elements.btnRunCheck.querySelector('.btn-text').textContent = 'Evaluating Deterministic Policy...';
+    if (elements.btnRunCheck) {
+      elements.btnRunCheck.disabled = true;
+      const btnText = elements.btnRunCheck.querySelector('.btn-text');
+      if (btnText) btnText.textContent = 'Evaluating Deterministic Policy...';
+    }
 
     try {
       const response = await fetch('/api/check', {
@@ -309,8 +365,11 @@
     } catch (err) {
       showNetworkErrorBanner(`Verification Check Failed: ${err.message}. Connection dropped or server unreachable.`);
     } finally {
-      elements.btnRunCheck.disabled = false;
-      elements.btnRunCheck.querySelector('.btn-text').textContent = 'Verify Ad Copy with Evidence Gate';
+      if (elements.btnRunCheck) {
+        elements.btnRunCheck.disabled = false;
+        const btnText = elements.btnRunCheck.querySelector('.btn-text');
+        if (btnText) btnText.textContent = 'Verify Ad Copy with Evidence Gate';
+      }
     }
   }
 
@@ -322,25 +381,29 @@
     const status = verdict.compositeStatus; // 'ALLOW', 'REVIEW', 'BLOCK'
 
     // 1. Update Verdict Banner
-    elements.verdictBanner.className = `verdict-banner status-${status.toLowerCase()}`;
-    elements.verdictBanner.classList.remove('hidden');
-
-    elements.verdictBadge.textContent = status;
-    const primaryReason = verdict.claimVerdicts[0]?.primaryReason || 'UNKNOWN';
-    elements.verdictReasonBadge.textContent = primaryReason;
-    elements.verdictCheckId.textContent = result.checkId;
-    elements.verdictSummary.textContent = verdict.summary;
-
-    if (status === 'ALLOW') {
-      elements.verdictIcon.textContent = '🛡️';
-    } else if (status === 'BLOCK') {
-      elements.verdictIcon.textContent = '⛔';
-    } else {
-      elements.verdictIcon.textContent = '⚠️';
+    if (elements.verdictBanner) {
+      elements.verdictBanner.className = `verdict-banner status-${status.toLowerCase()}`;
+      elements.verdictBanner.classList.remove('hidden');
     }
 
-    elements.metaLatency.textContent = `${result.latencyMs}ms`;
-    elements.metaClaimCount.textContent = result.extractedClaims.length;
+    if (elements.verdictBadge) elements.verdictBadge.textContent = status;
+    const primaryReason = verdict.claimVerdicts[0]?.primaryReason || 'UNKNOWN';
+    if (elements.verdictReasonBadge) elements.verdictReasonBadge.textContent = primaryReason;
+    if (elements.verdictCheckId) elements.verdictCheckId.textContent = result.checkId;
+    if (elements.verdictSummary) elements.verdictSummary.textContent = verdict.summary;
+
+    if (elements.verdictIcon) {
+      if (status === 'ALLOW') {
+        elements.verdictIcon.textContent = '🛡️';
+      } else if (status === 'BLOCK') {
+        elements.verdictIcon.textContent = '⛔';
+      } else {
+        elements.verdictIcon.textContent = '⚠️';
+      }
+    }
+
+    if (elements.metaLatency) elements.metaLatency.textContent = `${result.latencyMs}ms`;
+    if (elements.metaClaimCount) elements.metaClaimCount.textContent = result.extractedClaims.length;
 
     // 1.5 Update Ground Truth Product Fact Card
     if (elements.productFactCard && result.catalogItem) {
@@ -377,6 +440,7 @@
    * Render Highlighted Spans in Raw Ad Copy Text
    */
   function renderHighlightedSpans(fullText, claims) {
+    if (!elements.highlightedCopyContainer || !elements.highlightedText) return;
     elements.highlightedCopyContainer.classList.remove('hidden');
 
     if (!claims || claims.length === 0) {
@@ -420,6 +484,7 @@
    * Render Claims Breakdown Cards
    */
   function renderClaimsGrid(claims, claimVerdicts) {
+    if (!elements.claimsContainer || !elements.claimsGrid) return;
     elements.claimsContainer.classList.remove('hidden');
     elements.claimsGrid.innerHTML = '';
 
@@ -468,6 +533,7 @@
    * Render Review Queue List
    */
   function renderQueue() {
+    if (!elements.queueDepthBadge || !elements.tabQueueBadge || !elements.queueEmptyState || !elements.queueItemsList) return;
     const activeItems = state.queueItems.filter((item) => item.status !== 'RESOLVED');
     elements.queueDepthBadge.textContent = activeItems.length;
     elements.tabQueueBadge.textContent = activeItems.length;
@@ -605,6 +671,7 @@
    * Render Chained Audit Stream
    */
   function renderAuditStream() {
+    if (!elements.auditEmptyState || !elements.auditStreamList) return;
     if (state.auditEvents.length === 0) {
       elements.auditEmptyState.classList.remove('hidden');
       elements.auditStreamList.innerHTML = '';
@@ -660,11 +727,13 @@
       const data = await res.json();
       if (data.success && data.replayResult) {
         const r = data.replayResult;
-        elements.auditReplayResultBanner.classList.remove('hidden');
-        if (r.isReproducible) {
-          elements.replayDetailsText.textContent = `✓ Bit-for-bit match verified for ${r.auditId}. Stored status "${r.originalCompositeStatus}" equals replayed status "${r.replayedCompositeStatus}". Zero logic drift.`;
-        } else {
-          elements.replayDetailsText.textContent = `⚠️ Discrepancy detected: ${r.discrepancies.join('; ')}`;
+        if (elements.auditReplayResultBanner) elements.auditReplayResultBanner.classList.remove('hidden');
+        if (elements.replayDetailsText) {
+          if (r.isReproducible) {
+            elements.replayDetailsText.textContent = `✓ Bit-for-bit match verified for ${r.auditId}. Stored status "${r.originalCompositeStatus}" equals replayed status "${r.replayedCompositeStatus}". Zero logic drift.`;
+          } else {
+            elements.replayDetailsText.textContent = `⚠️ Discrepancy detected: ${r.discrepancies.join('; ')}`;
+          }
         }
       }
     } catch (err) {
@@ -690,7 +759,7 @@
       // Clear network drop warning if health check recovered
       hideNetworkErrorBanner();
 
-      if (health.amdInference) {
+      if (health.amdInference && elements.amdStatusText && elements.amdStatusDot) {
         const amd = health.amdInference;
         const isHardware = amd.rocmAvailable && amd.deviceProof?.verified;
         if (isHardware) {
@@ -703,22 +772,26 @@
       }
 
       if (health.metrics) {
-        elements.metricTotalChecks.textContent = health.metrics.totalChecks;
-        elements.metricTotalPasses.textContent = health.metrics.totalPasses;
-        elements.metricTotalBlocks.textContent = health.metrics.totalBlocks;
-        elements.metricTotalOverrides.textContent = health.metrics.totalOverrides;
-        elements.queueDepthBadge.textContent = health.metrics.queueDepth;
-        elements.tabQueueBadge.textContent = health.metrics.queueDepth;
+        if (elements.metricTotalChecks) elements.metricTotalChecks.textContent = health.metrics.totalChecks;
+        if (elements.metricTotalPasses) elements.metricTotalPasses.textContent = health.metrics.totalPasses;
+        if (elements.metricTotalBlocks) elements.metricTotalBlocks.textContent = health.metrics.totalBlocks;
+        if (elements.metricTotalOverrides) elements.metricTotalOverrides.textContent = health.metrics.totalOverrides;
+        if (elements.queueDepthBadge) elements.queueDepthBadge.textContent = health.metrics.queueDepth;
+        if (elements.tabQueueBadge) elements.tabQueueBadge.textContent = health.metrics.queueDepth;
 
         // Update real-time throughput and p95 latency
         const total = health.metrics.totalChecks || 0;
-        elements.throughputText.textContent = total > 0 ? `${total} checks` : 'Active';
-        if (health.metrics.avgLatencyMs) {
+        if (elements.throughputText) {
+          elements.throughputText.textContent = total > 0 ? `${total} checks` : 'Active';
+        }
+        if (health.metrics.avgLatencyMs && elements.p95LatencyText) {
           elements.p95LatencyText.textContent = `${health.metrics.avgLatencyMs.toFixed(2)}ms`;
         }
       }
 
-      elements.telemetryRawDisplay.textContent = rawMetrics;
+      if (elements.telemetryRawDisplay) {
+        elements.telemetryRawDisplay.textContent = rawMetrics;
+      }
     } catch (err) {
       console.warn('Telemetry refresh warning:', err);
       if (elements.amdStatusText) elements.amdStatusText.textContent = 'Disconnected (Offline)';
@@ -731,16 +804,16 @@
    * Reset Form to Clean Baseline
    */
   function resetForm() {
-    elements.adCopyInput.value = '';
-    elements.charCount.textContent = '0 / 2000';
+    if (elements.adCopyInput) elements.adCopyInput.value = '';
+    if (elements.charCount) elements.charCount.textContent = '0 / 2000';
     if (elements.skuSelect) elements.skuSelect.value = 'UNIVERSAL_AUTO';
     if (elements.simulationModeSelect) elements.simulationModeSelect.value = 'COMPLIANT';
     if (elements.productFactCard) elements.productFactCard.classList.add('hidden');
     state.activePreset = null;
     document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
-    elements.verdictBanner.classList.add('hidden');
-    elements.highlightedCopyContainer.classList.add('hidden');
-    elements.claimsContainer.classList.add('hidden');
+    if (elements.verdictBanner) elements.verdictBanner.classList.add('hidden');
+    if (elements.highlightedCopyContainer) elements.highlightedCopyContainer.classList.add('hidden');
+    if (elements.claimsContainer) elements.claimsContainer.classList.add('hidden');
   }
 
   /**
