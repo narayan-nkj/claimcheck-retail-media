@@ -1,6 +1,6 @@
 # ClaimCheck Synthetic Evaluation Benchmark Report
 
-- **Date:** 2026-10-16T15:21:47.563Z
+- **Date:** 2026-10-16T15:40:06.430Z
 - **Model Target:** Meta Llama-3.1-8B-Instruct (AMD ROCm 6.2 / vLLM + Deterministic Local Adapter)
 - **Evaluation Corpus Size:** 52 labeled retail media campaigns
 - **Total Claims Evaluated:** 104 factual claims across 4 commerce categories
@@ -52,17 +52,17 @@
 | CAMP-ELEC-01 | Consumer Electronics | `ALLOW` | `ALLOW` | 2.81ms | ✅ PASS |
 | CAMP-ELEC-02 | Consumer Electronics | `BLOCK` | `BLOCK` | 0.31ms | ✅ PASS |
 | CAMP-ELEC-03 | Consumer Electronics | `BLOCK` | `BLOCK` | 0.12ms | ✅ PASS |
-| CAMP-ELEC-04 | Consumer Electronics | `BLOCK` | `BLOCK` | 0.11ms | ✅ PASS |
+| CAMP-ELEC-04 | Consumer Electronics | `BLOCK` | `BLOCK` | 0.12ms | ✅ PASS |
 | CAMP-ELEC-05 | Consumer Electronics | `REVIEW` | `REVIEW` | 0.06ms | ✅ PASS |
 | CAMP-ELEC-06 | Consumer Electronics | `REVIEW` | `REVIEW` | 0.06ms | ✅ PASS |
-| CAMP-ELEC-07 | Consumer Electronics | `REVIEW` | `REVIEW` | 0.1ms | ✅ PASS |
+| CAMP-ELEC-07 | Consumer Electronics | `REVIEW` | `REVIEW` | 0.09ms | ✅ PASS |
 | CAMP-ELEC-08 | Consumer Electronics | `ALLOW` | `ALLOW` | 0.14ms | ✅ PASS |
-| CAMP-ELEC-09 | Consumer Electronics | `BLOCK` | `BLOCK` | 0.06ms | ✅ PASS |
+| CAMP-ELEC-09 | Consumer Electronics | `BLOCK` | `BLOCK` | 0.05ms | ✅ PASS |
 | CAMP-ELEC-10 | Consumer Electronics | `REVIEW` | `REVIEW` | 0.04ms | ✅ PASS |
 | CAMP-GROC-01 | Groceries & Gourmet | `BLOCK` | `BLOCK` | 0.04ms | ✅ PASS |
-| CAMP-GROC-02 | Groceries & Gourmet | `ALLOW` | `ALLOW` | 0.04ms | ✅ PASS |
+| CAMP-GROC-02 | Groceries & Gourmet | `ALLOW` | `ALLOW` | 0.05ms | ✅ PASS |
 | CAMP-GROC-03 | Groceries & Gourmet | `BLOCK` | `BLOCK` | 0.06ms | ✅ PASS |
-| CAMP-GROC-04 | Groceries & Gourmet | `BLOCK` | `BLOCK` | 0.02ms | ✅ PASS |
+| CAMP-GROC-04 | Groceries & Gourmet | `BLOCK` | `BLOCK` | 0.03ms | ✅ PASS |
 | CAMP-GROC-05 | Groceries & Gourmet | `ALLOW` | `ALLOW` | 0.03ms | ✅ PASS |
 | ... | *(37 more campaigns)* | ... | ... | ... | ✅ PASS |
 

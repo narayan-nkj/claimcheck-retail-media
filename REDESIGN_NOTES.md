@@ -260,4 +260,22 @@ The following IDs, classes, and attributes are verified against test suites and 
 8. **Responsive Breakpoints:** Verified at 1440px, 1280px, 768px, and 390px/360px without horizontal scroll.
 9. **Accessibility & Motion:** Verified. `prefers-reduced-motion` respected; 178/178 tests passing.
 
+---
+
+## 10. Homepage Gradient Restoration & Flow Streamlining
+
+### 10.1 Transformations Implemented
+1. **Hero Gradient Arc Restoration:**
+   - Restored `.hero__glow` dual radial gradient smile-bowl arc (`circle 125vw at 50% -60vw` cobalt/periwinkle bloom + `ellipse 45vw 18vw at 50% 72%` center core) with 14s subtle drift animation.
+   - Restored `.hero::after` 28vh linear gradient fade to seamlessly transition into `--bg-0`.
+   - Restored `.hero-headline` position-mapped light-reactive text gradient (`linear-gradient(180deg, var(--text-pale) 0%, var(--text-pale) 35%, var(--text-blue) 70%, var(--text-blue) 100%)`).
+   - Restored mobile `@media (max-width: 768px)` `.hero__glow` geometry scaling.
+2. **Second Page (`#introSection`) Removal:**
+   - Removed obsolete intermediate intro section and illustrative architectural card from DOM, streamlining page flow directly from Overview into operational commands.
+3. **Studio Section Reordering:**
+   - Shifted `#studioSection` directly after `#opsSection` in page structure.
+   - Reordered desktop and mobile navigation links: `→Overview`, `→Ops & Audit`, `→Studio`, `→Why ClaimCheck`, `→How It Works`, `→FAQ`.
+   - Synchronized `setupHeaderScrollAndSpy()` section observers to ensure accurate active scroll highlight.
+
+
 
