@@ -55,6 +55,6 @@
 - Regression tests: 123 passing (`npm test`)
 - Security/privacy/secret checks: Zero secrets in repo, credential redaction verified
 - Documentation and traceability checks: DEC-025 logged, P01 report complete
-- Final commit hash: Pending commit
-- GitHub push succeeded: Pending push
+- Final commit hash: `918ca82`
+- GitHub push succeeded: Yes (`origin/main`)
 - Release/signoff recommendation: APPROVED for Phase 01 completion.

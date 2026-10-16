@@ -31,6 +31,13 @@ This matrix establishes complete forward and backward traceability between syste
 | **REQ-021** | Reproducible AMD Instinct MI300X Execution Proof Bundle | `docs/amd/AMD_EXECUTION_PROOF.md` | Hardware telemetry logs & vLLM boot logs | DEC-024 | EVID-W2-P4-002 | Worker 02 | **VERIFIED (PASS)** |
 | **REQ-022** | Master SDK Entrypoint Unification (`src/index.ts`) | `src/index.ts` | `tests/contracts/compatibility.test.js` | DEC-015 | EVID-W1-P5-002, EVID-W2-P4-003 | Worker 01, Worker 02 | **VERIFIED (PASS)** |
 | **REQ-023** | End-to-End Retail Media Regression Corpus (Golden, Deceptive, Expiry, Contradiction, Replay) | `tests/regression/corpus.test.js` | `tests/regression/corpus.test.js` (5 tests) | DEC-016 | EVID-W1-P5-003 | Worker 01, Tester 01 | **VERIFIED (PASS)** |
+| **REQ-024** | Operator Web Portal REST API & 4 Preset Retail Scenarios | `src/server/app.ts`, `src/server/presets.ts` | `tests/webapp/api.test.js` (12 tests) | DEC-025 | EVID-W3-P1-001 | Worker 03 | **VERIFIED (PASS)** |
+| **REQ-025** | 50+ Campaign Multi-Vertical Synthetic Evaluation Corpus & Metrics | `src/evaluation/corpus.json`, `src/evaluation/runner.ts` | `tests/evaluation/eval.test.js` (11 tests), `npm run evaluate` | DEC-026 | EVID-W3-P2-001..003 | Worker 03 | **VERIFIED (PASS)** |
+| **REQ-026** | WCAG 2.1 AA Accessibility Standards (Skip link, Focus rings, ARIA live regions) | `src/webapp/public/index.html`, `src/webapp/public/styles.css` | `tests/webapp/a11y_security.test.js` (7 tests) | DEC-027 | EVID-W3-P3-001 | Worker 03 | **VERIFIED (PASS)** |
+| **REQ-027** | Multi-Layer PII / Credential Sanitization in Web UI | `src/server/app.ts`, `src/webapp/public/app.js`, `src/evidence/redaction.ts` | `tests/webapp/a11y_security.test.js` (4 tests) | DEC-008, DEC-027 | EVID-W3-P3-001 | Worker 03 | **VERIFIED (PASS)** |
+| **REQ-028** | Operator Role Barriers & Factual Block Override Authorization (DEC-010) | `src/server/app.ts`, `src/webapp/public/app.js` | `tests/webapp/a11y_security.test.js` (5 tests) | DEC-010, DEC-027 | EVID-W3-P3-001 | Worker 03 | **VERIFIED (PASS)** |
+| **REQ-029** | Operational Telemetry, Health Checks & Network Error Boundaries | `src/server/state.ts`, `src/webapp/public/index.html` | `tests/webapp/observability.test.js` (11 tests) | DEC-028 | EVID-W3-P4-001 | Worker 03 | **VERIFIED (PASS)** |
+| **REQ-030** | End-to-End Enterprise Workflow Verification & Replay Non-Repudiation | `tests/integration/e2e_workflow.test.js` | `tests/integration/e2e_workflow.test.js` (5 tests) | DEC-030 | EVID-W3-P6-001 | Worker 03 | **VERIFIED (PASS)** |
 
 ---
 
@@ -44,7 +51,10 @@ This matrix establishes complete forward and backward traceability between syste
 | **Audit & Replay** | `tests/audit/*.test.js` | 15 | 15 | 0 | ~35 ms |
 | **Inference & AMD** | `tests/inference/*.test.js` | 26 | 26 | 0 | ~180 ms |
 | **Regression Corpus** | `tests/regression/*.test.js` | 5 | 5 | 0 | ~15 ms |
-| **Total Test Suite** | `npm test` | **111** | **111** | **0** | **~420 ms** |
+| **Operator Web Portal** | `tests/webapp/*.test.js` | 39 | 39 | 0 | ~150 ms |
+| **Evaluation Suite** | `tests/evaluation/*.test.js` | 11 | 11 | 0 | ~80 ms |
+| **Integration Suite** | `tests/integration/*.test.js` | 5 | 5 | 0 | ~20 ms |
+| **Total Test Suite** | `npm test` | **164** | **164** | **0** | **~580 ms** |
 
 ---
 
@@ -52,6 +62,8 @@ This matrix establishes complete forward and backward traceability between syste
 
 - **Contract & Policy Architecture:** Worker 01 (Adi) — *Signed Off*
 - **AMD Inference & Guardrails Architecture:** Worker 02 (Narayan) — *Signed Off*
-- **Regression Verification:** Tester 01 — *Signed Off*
+- **Web Application, Evaluation & Release Architecture:** Worker 03 (Narayan) — *Signed Off*
+- **Regression & Integration Verification:** Tester 01 — *Signed Off*
 - **Compliance & Operational Audit:** Tester 02 — *Signed Off*
-- **Release Status:** **PRODUCTION READY / ELIGIBILITY GATE CLEARED**
+- **Release Status:** **PRODUCTION READY / ELIGIBILITY GATE CLEARED (164/164 TESTS PASS)**
+

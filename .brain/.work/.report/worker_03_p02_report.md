@@ -52,6 +52,6 @@
 - Full regression tests: 132/132 tests pass across contracts, evidence, policy, audit, regression, inference, webapp, evaluation
 - Security/privacy/secret checks: Clean; zero credentials or live secrets
 - Documentation and traceability checks: DEC-026 logged; report updated
-- Final commit hash: Pending commit
-- GitHub push succeeded: Pending push
+- Final commit hash: `9057610`
+- GitHub push succeeded: Yes (`origin/main`)
 - Release/signoff recommendation: APPROVED for Phase 03

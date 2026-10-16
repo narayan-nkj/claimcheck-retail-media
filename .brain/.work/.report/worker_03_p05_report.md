@@ -48,6 +48,6 @@
 - Full regression suite: 159 tests pass across all test suites
 - Security/privacy/secret checks: Clean; zero live secrets or raw PII
 - Documentation and traceability checks: DEC-029 logged; report updated
-- Final commit hash: Pending commit
-- GitHub push succeeded: Pending push
+- Final commit hash: `86b3526`
+- GitHub push succeeded: Yes (`origin/main`)
 - Release/signoff recommendation: APPROVED for Phase 06

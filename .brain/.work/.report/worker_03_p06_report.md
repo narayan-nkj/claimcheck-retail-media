@@ -48,6 +48,6 @@
 - Benchmark evaluation: `npm run evaluate` (52/52 campaigns passing)
 - Security/privacy/secret checks: Verified clean
 - Documentation and traceability checks: DEC-030 recorded; handoff document complete
-- Final commit hash: Pending commit
-- GitHub push succeeded: Pending push
+- Final commit hash: `12a5909`
+- GitHub push succeeded: Yes (`origin/main`)
 - Release/signoff recommendation: APPROVED for Phase 07
