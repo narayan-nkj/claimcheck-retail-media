@@ -5,3 +5,5 @@
 export * from './config.ts';
 export * from './fallback.ts';
 export * from './client.ts';
+export * from './prompts.ts';
+export * from './extractor.ts';
