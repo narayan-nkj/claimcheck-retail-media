@@ -90,7 +90,7 @@ function sendJson(res: ServerResponse, statusCode: number, data: any) {
 /**
  * Serves static web assets from src/webapp/public
  */
-function serveStaticFile(reqPath: string, res: ServerResponse): boolean {
+function serveStaticFile(reqPath: string, res: ServerResponse, method: string = 'GET'): boolean {
   let relativePath = reqPath === '/' ? 'index.html' : reqPath.replace(/^\//, '');
   // Sanitize path against directory traversal
   const safePath = join(PUBLIC_DIR, relativePath);
@@ -121,7 +121,11 @@ function serveStaticFile(reqPath: string, res: ServerResponse): boolean {
       'Cache-Control': 'public, max-age=3600',
       'X-Content-Type-Options': 'nosniff',
     });
-    res.end(fileBytes);
+    if (method === 'HEAD') {
+      res.end();
+    } else {
+      res.end(fileBytes);
+    }
     return true;
   } catch (err: any) {
     sendJson(res, 500, { error: `Failed to read static file: ${err.message}` });
@@ -478,9 +482,9 @@ export async function handleRequest(req: IncomingMessage, res: ServerResponse) {
     return;
   }
 
-  // 9. Static File Serving (fallback for all other GET requests)
-  if (req.method === 'GET') {
-    const served = serveStaticFile(pathname, res);
+  // 9. Static File Serving (fallback for all other GET and HEAD requests)
+  if (req.method === 'GET' || req.method === 'HEAD') {
+    const served = serveStaticFile(pathname, res, req.method);
     if (served) return;
   }
 
