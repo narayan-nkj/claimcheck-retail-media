@@ -66,7 +66,7 @@ function sendJson(res, statusCode, data) {
 /**
  * Serves static web assets from src/webapp/public
  */
-function serveStaticFile(reqPath, res) {
+function serveStaticFile(reqPath, res, method = 'GET') {
     let relativePath = reqPath === '/' ? 'index.html' : reqPath.replace(/^\//, '');
     // Sanitize path against directory traversal
     const safePath = join(PUBLIC_DIR, relativePath);
@@ -98,10 +98,16 @@ function serveStaticFile(reqPath, res) {
         res.writeHead(200, {
             'Content-Type': contentType,
             'Content-Length': fileBytes.length,
-            'Cache-Control': 'public, max-age=3600',
+            'Cache-Control': 'no-cache, must-revalidate',
             'X-Content-Type-Options': 'nosniff',
+            'X-Frame-Options': 'DENY',
         });
-        res.end(fileBytes);
+        if (method === 'HEAD') {
+            res.end();
+        }
+        else {
+            res.end(fileBytes);
+        }
         return true;
     }
     catch (err) {
@@ -424,9 +430,9 @@ export async function handleRequest(req, res) {
             }
             return;
         }
-        // 9. Static File Serving (fallback for all other GET requests)
-        if (req.method === 'GET') {
-            const served = serveStaticFile(pathname, res);
+        // 9. Static File Serving (fallback for all other GET and HEAD requests)
+        if (req.method === 'GET' || req.method === 'HEAD') {
+            const served = serveStaticFile(pathname, res, req.method);
             if (served)
                 return;
         }

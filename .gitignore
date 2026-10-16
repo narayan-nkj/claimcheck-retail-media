@@ -31,3 +31,5 @@ yarn-error.log*
 *.tar.gz
 *.tgz
 
+.vercel
+.env*

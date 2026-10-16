@@ -1,0 +1,857 @@
+/**
+ * ClaimCheck Operator Web Portal Client Application
+ * Zero-bloat, accessible vanilla JS implementation.
+ * Inspired by Lucien (https://www.lucien.com/)
+ */
+
+(function () {
+  'use strict';
+
+  // Client State
+  const state = {
+    presets: {},
+    activePreset: null,
+    currentCheck: null,
+    operatorRole: 'SENIOR_COMPLIANCE_OFFICER',
+    queueItems: [],
+    auditEvents: [],
+    timerIntervalId: null,
+  };
+
+  // DOM Elements
+  const elements = {
+    adCopyInput: document.getElementById('adCopyInput'),
+    skuSelect: document.getElementById('skuSelect'),
+    simulationModeSelect: document.getElementById('simulationModeSelect'),
+    operatorRoleSelect: document.getElementById('operatorRoleSelect'),
+    charCount: document.getElementById('charCount'),
+    checkForm: document.getElementById('checkForm'),
+    btnRunCheck: document.getElementById('btnRunCheck'),
+    btnReset: document.getElementById('btnReset'),
+    verdictBanner: document.getElementById('verdictBanner'),
+    productFactCard: document.getElementById('productFactCard'),
+    factProductCategory: document.getElementById('factProductCategory'),
+    factProductTitle: document.getElementById('factProductTitle'),
+    factProductSku: document.getElementById('factProductSku'),
+    factPrice: document.getElementById('factPrice'),
+    factDiscount: document.getElementById('factDiscount'),
+    factStock: document.getElementById('factStock'),
+    factShipping: document.getElementById('factShipping'),
+    verdictBadge: document.getElementById('verdictBadge'),
+    verdictReasonBadge: document.getElementById('verdictReasonBadge'),
+    verdictCheckId: document.getElementById('verdictCheckId'),
+    verdictSummary: document.getElementById('verdictSummary'),
+    verdictIcon: document.getElementById('verdictIcon'),
+    metaLatency: document.getElementById('metaLatency'),
+    metaClaimCount: document.getElementById('metaClaimCount'),
+    highlightedCopyContainer: document.getElementById('highlightedCopyContainer'),
+    highlightedText: document.getElementById('highlightedText'),
+    claimsContainer: document.getElementById('claimsContainer'),
+    claimsGrid: document.getElementById('claimsGrid'),
+    queueEmptyState: document.getElementById('queueEmptyState'),
+    queueItemsList: document.getElementById('queueItemsList'),
+    auditEmptyState: document.getElementById('auditEmptyState'),
+    auditStreamList: document.getElementById('auditStreamList'),
+    auditReplayResultBanner: document.getElementById('auditReplayResultBanner'),
+    replayDetailsText: document.getElementById('replayDetailsText'),
+    queueDepthBadge: document.getElementById('queueDepthBadge'),
+    tabQueueBadge: document.getElementById('tabQueueBadge'),
+    activeRoleLabel: document.getElementById('activeRoleLabel'),
+    p95LatencyText: document.getElementById('p95LatencyText'),
+    metricTotalChecks: document.getElementById('metricTotalChecks'),
+    metricTotalPasses: document.getElementById('metricTotalPasses'),
+    metricTotalBlocks: document.getElementById('metricTotalBlocks'),
+    metricTotalOverrides: document.getElementById('metricTotalOverrides'),
+    telemetryRawDisplay: document.getElementById('telemetryRawDisplay'),
+    tabReview: document.getElementById('tabReview'),
+    tabAudit: document.getElementById('tabAudit'),
+    tabTelemetry: document.getElementById('tabTelemetry'),
+    viewReview: document.getElementById('viewReview'),
+    viewAudit: document.getElementById('viewAudit'),
+    viewTelemetry: document.getElementById('viewTelemetry'),
+    btnRefreshQueue: document.getElementById('btnRefreshQueue'),
+    btnRefreshAudit: document.getElementById('btnRefreshAudit'),
+    networkErrorBanner: document.getElementById('networkErrorBanner'),
+    networkErrorMessage: document.getElementById('networkErrorMessage'),
+    btnDismissNetworkError: document.getElementById('btnDismissNetworkError'),
+    amdStatusText: document.getElementById('amdStatusText'),
+    amdStatusDot: document.getElementById('amdStatusDot'),
+    throughputText: document.getElementById('throughputText'),
+    btnHeroAudit: document.getElementById('btnHeroAudit'),
+  };
+
+  /**
+   * Network Error Boundary Display (Observability & Test Contract)
+   */
+  function showNetworkErrorBanner(message) {
+    if (elements.networkErrorBanner && elements.networkErrorMessage) {
+      elements.networkErrorMessage.textContent = message;
+      elements.networkErrorBanner.classList.remove('hidden');
+    }
+  }
+
+  function hideNetworkErrorBanner() {
+    if (elements.networkErrorBanner) {
+      elements.networkErrorBanner.classList.add('hidden');
+    }
+  }
+
+  /**
+   * Client-side PII, credential, and secret sanitizer (Phase 03 WCAG & Security)
+   */
+  function sanitizeInputText(text) {
+    if (!text) return '';
+    return text
+      .replace(/(?:bearer\s+)?[a-zA-Z0-9_\-\.]{24,}/gi, '[REDACTED_SECRET]')
+      .replace(/sk-[a-zA-Z0-9]{20,}/gi, '[REDACTED_SECRET]')
+      .replace(/ghp_[a-zA-Z0-9]{20,}/gi, '[REDACTED_SECRET]')
+      .replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[REDACTED_EMAIL]')
+      .replace(/\b(?:\d{4}[ -]?){3}\d{4}\b/g, '[REDACTED_PAYMENT_CARD]')
+      .replace(/\b\d{3}-\d{2}-\d{4}\b/g, '[REDACTED_SSN]')
+      .replace(/\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g, '[REDACTED_PHONE]');
+  }
+
+  /**
+   * Initialize Application
+   */
+  async function init() {
+    setupEventListeners();
+    setupFaqAccordion();
+    await loadPresets();
+    await refreshQueue();
+    await refreshAuditStream();
+    await refreshTelemetry();
+
+    // Start SLA Countdown clock (updates every second)
+    state.timerIntervalId = setInterval(updateSlaCountdowns, 1000);
+
+    // Periodic telemetry refresh
+    setInterval(refreshTelemetry, 5000);
+  }
+
+  /**
+   * Attach DOM Event Listeners
+   */
+  function setupEventListeners() {
+    // Character Counter & Reset Active Preset on Custom Typing
+    if (elements.adCopyInput && elements.charCount) {
+      elements.adCopyInput.addEventListener('input', () => {
+        const len = elements.adCopyInput.value.length;
+        elements.charCount.textContent = `${len} / 2000`;
+        state.activePreset = null;
+        document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
+      });
+
+      // Keyboard Shortcut (Ctrl/Cmd + Enter)
+      elements.adCopyInput.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          elements.checkForm.dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+      });
+    }
+
+    // Role Selector Change
+    if (elements.operatorRoleSelect) {
+      elements.operatorRoleSelect.addEventListener('change', (e) => {
+        state.operatorRole = e.target.value;
+        const roleText = e.target.options[e.target.selectedIndex].text.split(' (')[0];
+        if (elements.activeRoleLabel) elements.activeRoleLabel.textContent = roleText;
+        renderQueue(); // Re-render to enforce role buttons
+      });
+    }
+
+    // Preset Buttons
+    document.querySelectorAll('.preset-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const presetKey = btn.getAttribute('data-preset');
+        loadPresetIntoForm(presetKey);
+      });
+    });
+
+    // Form Submit
+    if (elements.checkForm) {
+      elements.checkForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await runVerificationCheck();
+      });
+    }
+
+    // Form Reset
+    if (elements.btnReset) {
+      elements.btnReset.addEventListener('click', resetForm);
+    }
+
+    // Tabs Navigation
+    if (elements.tabReview) elements.tabReview.addEventListener('click', () => switchTab('review'));
+    if (elements.tabAudit) elements.tabAudit.addEventListener('click', () => switchTab('audit'));
+    if (elements.tabTelemetry) elements.tabTelemetry.addEventListener('click', () => switchTab('telemetry'));
+
+    // Hero Audit CTA
+    if (elements.btnHeroAudit) {
+      elements.btnHeroAudit.addEventListener('click', () => {
+        switchTab('audit');
+      });
+    }
+
+    // Refresh Buttons
+    if (elements.btnRefreshQueue) elements.btnRefreshQueue.addEventListener('click', refreshQueue);
+    if (elements.btnRefreshAudit) elements.btnRefreshAudit.addEventListener('click', refreshAuditStream);
+
+    // Mobile Navigation Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    if (mobileMenuBtn && mobileNav) {
+      mobileMenuBtn.addEventListener('click', () => {
+        const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+        mobileMenuBtn.setAttribute('aria-expanded', String(!isExpanded));
+        mobileNav.classList.toggle('hidden');
+      });
+
+      // Close mobile drawer when link clicked
+      mobileNav.querySelectorAll('.mobile-nav-item, a').forEach((link) => {
+        link.addEventListener('click', () => {
+          mobileNav.classList.add('hidden');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    // Network Error Boundary Dismiss
+    if (elements.btnDismissNetworkError) {
+      elements.btnDismissNetworkError.addEventListener('click', hideNetworkErrorBanner);
+    }
+  }
+
+  /**
+   * Setup FAQ Accordion Interaction
+   */
+  function setupFaqAccordion() {
+    const toggles = document.querySelectorAll('[data-accordion="toggle"]');
+    toggles.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        if (!item) return;
+        const isOpen = item.classList.contains('active');
+
+        // Close other items
+        document.querySelectorAll('.faq-item').forEach((other) => {
+          if (other !== item) {
+            other.classList.remove('active');
+            const otherBtn = other.querySelector('[data-accordion="toggle"]');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Toggle current item
+        if (isOpen) {
+          item.classList.remove('active');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          item.classList.add('active');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  }
+
+  /**
+   * Switch Active Tab
+   */
+  function switchTab(tabKey) {
+    if (!elements.tabReview || !elements.tabAudit || !elements.tabTelemetry) return;
+
+    elements.tabReview.classList.remove('active');
+    elements.tabReview.setAttribute('aria-selected', 'false');
+    elements.tabAudit.classList.remove('active');
+    elements.tabAudit.setAttribute('aria-selected', 'false');
+    elements.tabTelemetry.classList.remove('active');
+    elements.tabTelemetry.setAttribute('aria-selected', 'false');
+
+    if (elements.viewReview) elements.viewReview.classList.add('hidden');
+    if (elements.viewAudit) elements.viewAudit.classList.add('hidden');
+    if (elements.viewTelemetry) elements.viewTelemetry.classList.add('hidden');
+
+    if (tabKey === 'review') {
+      elements.tabReview.classList.add('active');
+      elements.tabReview.setAttribute('aria-selected', 'true');
+      if (elements.viewReview) elements.viewReview.classList.remove('hidden');
+    } else if (tabKey === 'audit') {
+      elements.tabAudit.classList.add('active');
+      elements.tabAudit.setAttribute('aria-selected', 'true');
+      if (elements.viewAudit) elements.viewAudit.classList.remove('hidden');
+    } else if (tabKey === 'telemetry') {
+      elements.tabTelemetry.classList.add('active');
+      elements.tabTelemetry.setAttribute('aria-selected', 'true');
+      if (elements.viewTelemetry) elements.viewTelemetry.classList.remove('hidden');
+    }
+  }
+
+  /**
+   * Load Presets from Backend API
+   */
+  async function loadPresets() {
+    try {
+      const res = await fetch('/api/presets');
+      const data = await res.json();
+      if (data.success && data.presets) {
+        data.presets.forEach((p) => {
+          state.presets[p.id] = p;
+        });
+        // Add Universal Ad preset demo
+        state.presets['universal_demo'] = {
+          id: 'universal_demo',
+          name: 'Universal Ad',
+          tagline: 'Multi-Claim Footwear Campaign (Auto-Detected)',
+          expectedVerdict: 'ALLOW',
+          expectedReason: 'MATCHES_APPROVED_FACTS',
+          sku: 'UNIVERSAL_AUTO',
+          adCopyText: 'Nike Air Zoom Pegasus 40 running shoes now $129.99 (save 25%)! In stock now with Free Next-Day Delivery.',
+          explanation: 'Universal Ad Mode automatically identifies product brand (Nike), category (Apparel & Footwear), extracts all 4 claim classes, and synthesizes fresh corroborating evidence.',
+        };
+      }
+    } catch (err) {
+      console.warn('Could not fetch presets:', err);
+    }
+  }
+
+  /**
+   * Populate Form with Preset Data
+   */
+  function loadPresetIntoForm(presetKey) {
+    const preset = state.presets[presetKey];
+    if (!preset) return;
+
+    state.activePreset = presetKey;
+    if (elements.adCopyInput) elements.adCopyInput.value = preset.adCopyText;
+    if (elements.skuSelect) elements.skuSelect.value = preset.sku;
+    if (elements.charCount) elements.charCount.textContent = `${preset.adCopyText.length} / 2000`;
+
+    // Highlight active preset button visually
+    document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
+    const activeBtn = document.querySelector(`[data-preset="${presetKey}"]`);
+    if (activeBtn) activeBtn.classList.add('active-preset');
+
+    // Automatically execute the check for immediate feedback
+    runVerificationCheck();
+  }
+
+  /**
+   * Run Ad Copy Verification Check
+   */
+  async function runVerificationCheck() {
+    if (!elements.adCopyInput) return;
+    const rawText = elements.adCopyInput.value.trim();
+    if (!rawText) {
+      elements.adCopyInput.focus();
+      return;
+    }
+
+    const sanitized = sanitizeInputText(rawText);
+    const sku = elements.skuSelect ? elements.skuSelect.value : 'UNIVERSAL_AUTO';
+    const simulationMode = elements.simulationModeSelect ? elements.simulationModeSelect.value : 'COMPLIANT';
+    const presetId = state.activePreset;
+
+    if (elements.btnRunCheck) {
+      elements.btnRunCheck.disabled = true;
+      const btnText = elements.btnRunCheck.querySelector('.btn-text');
+      if (btnText) btnText.textContent = 'Evaluating Deterministic Policy...';
+    }
+
+    try {
+      const response = await fetch('/api/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          adCopyText: sanitized,
+          sku,
+          presetId,
+          simulationMode,
+        }),
+      });
+
+      const result = await response.json();
+      if (!result.success) {
+        alert(`Verification Error: ${result.error}`);
+        return;
+      }
+
+      state.currentCheck = result;
+      renderCheckResult(result);
+      await refreshQueue();
+      await refreshAuditStream();
+      await refreshTelemetry();
+    } catch (err) {
+      showNetworkErrorBanner(`Verification Check Failed: ${err.message}. Connection dropped or server unreachable.`);
+    } finally {
+      if (elements.btnRunCheck) {
+        elements.btnRunCheck.disabled = false;
+        const btnText = elements.btnRunCheck.querySelector('.btn-text');
+        if (btnText) btnText.textContent = 'Verify Ad Copy with Evidence Gate';
+      }
+    }
+  }
+
+  /**
+   * Render Check Result in UI
+   */
+  function renderCheckResult(result) {
+    const verdict = result.verdict;
+    const status = verdict.compositeStatus; // 'ALLOW', 'REVIEW', 'BLOCK'
+
+    // 1. Update Verdict Banner
+    if (elements.verdictBanner) {
+      elements.verdictBanner.className = `verdict-banner status-${status.toLowerCase()}`;
+      elements.verdictBanner.classList.remove('hidden');
+    }
+
+    if (elements.verdictBadge) elements.verdictBadge.textContent = status;
+    const primaryReason = verdict.claimVerdicts[0]?.primaryReason || 'UNKNOWN';
+    if (elements.verdictReasonBadge) elements.verdictReasonBadge.textContent = primaryReason;
+    if (elements.verdictCheckId) elements.verdictCheckId.textContent = result.checkId;
+    if (elements.verdictSummary) elements.verdictSummary.textContent = verdict.summary;
+
+    if (elements.verdictIcon) {
+      if (status === 'ALLOW') {
+        elements.verdictIcon.textContent = '🛡️';
+      } else if (status === 'BLOCK') {
+        elements.verdictIcon.textContent = '⛔';
+      } else {
+        elements.verdictIcon.textContent = '⚠️';
+      }
+    }
+
+    if (elements.metaLatency) elements.metaLatency.textContent = `${result.latencyMs}ms`;
+    if (elements.metaClaimCount) elements.metaClaimCount.textContent = result.extractedClaims.length;
+
+    // 1.5 Update Ground Truth Product Fact Card
+    if (elements.productFactCard && result.catalogItem) {
+      const cat = result.catalogItem;
+      if (elements.factProductCategory) elements.factProductCategory.textContent = cat.category || 'Retail Product';
+      if (elements.factProductTitle) elements.factProductTitle.textContent = cat.title || 'Product Item';
+      if (elements.factProductSku) elements.factProductSku.textContent = cat.sku || 'SKU-AUTO';
+      if (elements.factPrice) elements.factPrice.textContent = `${cat.pricing.currency || 'USD'} $${cat.pricing.amount.toFixed(2)}`;
+      if (elements.factDiscount) {
+        elements.factDiscount.textContent = cat.pricing.discountPercentage
+          ? `${cat.pricing.discountPercentage}% Active Promo`
+          : 'Regular Price';
+      }
+      if (elements.factStock) {
+        elements.factStock.textContent = `${cat.inventory.stockStatus} (${cat.inventory.availableQuantity} units)`;
+      }
+      if (elements.factShipping) {
+        const ship = cat.shipping[0];
+        elements.factShipping.textContent = ship
+          ? `${ship.isFreeShipping ? 'Free ' : ''}${ship.minTransitDays}-Day Transit`
+          : 'Standard Logistics';
+      }
+      elements.productFactCard.classList.remove('hidden');
+    }
+
+    // 2. Render Highlighted Spans
+    renderHighlightedSpans(result.adCopyText, result.extractedClaims);
+
+    // 3. Render Claims Breakdown Grid
+    renderClaimsGrid(result.extractedClaims, verdict.claimVerdicts);
+  }
+
+  /**
+   * Render Highlighted Spans in Raw Ad Copy Text
+   */
+  function renderHighlightedSpans(fullText, claims) {
+    if (!elements.highlightedCopyContainer || !elements.highlightedText) return;
+    elements.highlightedCopyContainer.classList.remove('hidden');
+
+    if (!claims || claims.length === 0) {
+      elements.highlightedText.textContent = fullText;
+      return;
+    }
+
+    // Sort claims by start index
+    const sorted = [...claims].sort((a, b) => a.rawSpan.startIndex - b.rawSpan.startIndex);
+    let html = '';
+    let lastIndex = 0;
+
+    sorted.forEach((claim) => {
+      const start = Math.max(0, Math.min(claim.rawSpan.startIndex, fullText.length));
+      const end = Math.max(start, Math.min(claim.rawSpan.endIndex, fullText.length));
+
+      // Append preceding unhighlighted text
+      if (start > lastIndex) {
+        html += escapeHtml(fullText.substring(lastIndex, start));
+      }
+
+      // Span class
+      let spanClass = 'span-price';
+      if (claim.claimClass === 'AVAILABILITY') spanClass = 'span-avail';
+      else if (claim.claimClass === 'SHIPPING_PROMISE') spanClass = 'span-ship';
+      else if (claim.claimClass === 'PRODUCT_ATTRIBUTE') spanClass = 'span-attr';
+
+      const spanText = fullText.substring(start, end);
+      html += `<mark class="claim-span ${spanClass}" title="${claim.claimClass}: ${escapeHtml(claim.normalizedStatement)}">${escapeHtml(spanText)}</mark>`;
+      lastIndex = end;
+    });
+
+    if (lastIndex < fullText.length) {
+      html += escapeHtml(fullText.substring(lastIndex));
+    }
+
+    elements.highlightedText.innerHTML = html;
+  }
+
+  /**
+   * Render Claims Breakdown Cards
+   */
+  function renderClaimsGrid(claims, claimVerdicts) {
+    if (!elements.claimsContainer || !elements.claimsGrid) return;
+    elements.claimsContainer.classList.remove('hidden');
+    elements.claimsGrid.innerHTML = '';
+
+    if (!claims || claims.length === 0) {
+      elements.claimsGrid.innerHTML = '<p class="empty-text">No structured commerce claims extracted.</p>';
+      return;
+    }
+
+    claims.forEach((claim) => {
+      const vrd = claimVerdicts.find((v) => v.claimId === claim.claimId);
+      const status = vrd ? vrd.status : 'REVIEW';
+      const reason = vrd ? vrd.primaryReason : 'PENDING';
+      const detail = vrd ? vrd.detail : '';
+
+      const card = document.createElement('div');
+      card.className = 'claim-card';
+      card.innerHTML = `
+        <div class="claim-card-header">
+          <span class="claim-class-tag">${escapeHtml(claim.claimClass)}</span>
+          <span class="claim-status-pill pill-${status.toLowerCase()}">${status}: ${escapeHtml(reason)}</span>
+        </div>
+        <div class="claim-statement">"${escapeHtml(claim.normalizedStatement)}"</div>
+        <div class="claim-detail-text">${escapeHtml(detail)}</div>
+      `;
+      elements.claimsGrid.appendChild(card);
+    });
+  }
+
+  /**
+   * Refresh Review Queue from Backend
+   */
+  async function refreshQueue() {
+    try {
+      const res = await fetch('/api/review/queue');
+      const data = await res.json();
+      if (data.success) {
+        state.queueItems = data.items || [];
+        renderQueue();
+      }
+    } catch (err) {
+      console.warn('Failed to refresh queue:', err);
+    }
+  }
+
+  /**
+   * Render Review Queue List
+   */
+  function renderQueue() {
+    if (!elements.queueDepthBadge || !elements.tabQueueBadge || !elements.queueEmptyState || !elements.queueItemsList) return;
+    const activeItems = state.queueItems.filter((item) => item.status !== 'RESOLVED');
+    elements.queueDepthBadge.textContent = activeItems.length;
+    elements.tabQueueBadge.textContent = activeItems.length;
+
+    if (activeItems.length === 0) {
+      elements.queueEmptyState.classList.remove('hidden');
+      elements.queueItemsList.innerHTML = '';
+      return;
+    }
+
+    elements.queueEmptyState.classList.add('hidden');
+    elements.queueItemsList.innerHTML = '';
+
+    activeItems.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'queue-item-card';
+
+      // Check role authorization for override action
+      const isJunior = state.operatorRole === 'JUNIOR_OPERATOR';
+      const isBlock = item.compositeStatus === 'BLOCK';
+      const overrideDisabled = isJunior && isBlock;
+
+      card.innerHTML = `
+        <div class="queue-item-header">
+          <div>
+            <div class="queue-item-title">${escapeHtml(item.queueId)}</div>
+            <div class="claim-detail-text">Flagged: ${escapeHtml(item.flaggedReasons.join(', '))}</div>
+          </div>
+          <span class="sla-countdown" data-deadline="${escapeHtml(item.slaDeadline)}">Calculating...</span>
+        </div>
+        <div class="queue-item-copy">"${escapeHtml(item.adCopyText)}"</div>
+        <div class="queue-actions-row">
+          <button type="button" class="btn btn-sm btn-confirm-block" data-action="CONFIRMED_BLOCK" data-queue-id="${escapeHtml(item.queueId)}">
+            Confirm Block
+          </button>
+          <button type="button" class="btn btn-sm btn-reextract" data-action="RE_EXTRACT_REQUESTED" data-queue-id="${escapeHtml(item.queueId)}">
+            Re-Extract
+          </button>
+          <button type="button" class="btn btn-sm btn-override" data-action="APPROVED_OVERRIDE" data-queue-id="${escapeHtml(item.queueId)}" ${overrideDisabled ? 'disabled title="Junior Operators cannot override factual BLOCKs (DEC-010)"' : ''}>
+            Approve Override
+          </button>
+        </div>
+        ${overrideDisabled ? '<span class="role-restriction-note">⚠️ Senior Compliance Officer required to override factual block (DEC-010).</span>' : ''}
+      `;
+
+      // Action Handlers
+      card.querySelectorAll('button[data-action]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const action = btn.getAttribute('data-action');
+          const queueId = btn.getAttribute('data-queue-id');
+          await resolveQueueItem(queueId, action);
+        });
+      });
+
+      elements.queueItemsList.appendChild(card);
+    });
+
+    updateSlaCountdowns();
+  }
+
+  /**
+   * Resolve an Item in the Review Queue
+   */
+  async function resolveQueueItem(queueId, action) {
+    if (action === 'APPROVED_OVERRIDE' && state.operatorRole === 'JUNIOR_OPERATOR') {
+      alert('Security Role Guard: Junior Operators cannot authorize overrides on factual BLOCKs (DEC-010). Escalation to Senior Compliance Officer required.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          queueId,
+          action,
+          operatorRole: state.operatorRole,
+          rationale: `Action executed via Web Portal by ${state.operatorRole}`,
+        }),
+      });
+
+      const data = await res.json();
+      if (!data.success) {
+        alert(`Authorization Blocked: ${data.error}`);
+        return;
+      }
+
+      await refreshQueue();
+      await refreshAuditStream();
+      await refreshTelemetry();
+    } catch (err) {
+      alert(`Review Action Error: ${err.message}`);
+    }
+  }
+
+  /**
+   * Update SLA countdown timers
+   */
+  function updateSlaCountdowns() {
+    document.querySelectorAll('.sla-countdown').forEach((el) => {
+      const deadlineStr = el.getAttribute('data-deadline');
+      if (!deadlineStr) return;
+
+      const diffMs = new Date(deadlineStr).getTime() - Date.now();
+      if (diffMs <= 0) {
+        el.textContent = 'SLA EXPIRED';
+        el.style.background = 'rgba(239, 68, 68, 0.4)';
+        return;
+      }
+
+      const totalSec = Math.floor(diffMs / 1000);
+      const mins = Math.floor(totalSec / 60);
+      const secs = totalSec % 60;
+      el.textContent = `${mins}m ${secs < 10 ? '0' : ''}${secs}s SLA`;
+    });
+  }
+
+  /**
+   * Refresh Audit Stream from Backend
+   */
+  async function refreshAuditStream() {
+    try {
+      const res = await fetch('/api/audit/stream');
+      const data = await res.json();
+      if (data.success) {
+        state.auditEvents = data.events || [];
+        renderAuditStream();
+      }
+    } catch (err) {
+      console.warn('Failed to refresh audit stream:', err);
+    }
+  }
+
+  /**
+   * Render Chained Audit Stream
+   */
+  function renderAuditStream() {
+    if (!elements.auditEmptyState || !elements.auditStreamList) return;
+    if (state.auditEvents.length === 0) {
+      elements.auditEmptyState.classList.remove('hidden');
+      elements.auditStreamList.innerHTML = '';
+      return;
+    }
+
+    elements.auditEmptyState.classList.add('hidden');
+    elements.auditStreamList.innerHTML = '';
+
+    // Render in reverse chronological order
+    const reversed = [...state.auditEvents].reverse();
+
+    reversed.forEach((ev) => {
+      const card = document.createElement('div');
+      card.className = 'audit-card';
+      card.innerHTML = `
+        <div class="audit-card-header">
+          <span class="seq-num">Block #${ev.sequenceNumber}</span>
+          <span>${escapeHtml(new Date(ev.timestamp).toLocaleTimeString())}</span>
+        </div>
+        <div class="hash-row">
+          <span class="hash-label">Chain Digest (SHA-256 Linkage):</span>
+          <span class="hash-value">${escapeHtml(ev.chainDigest)}</span>
+        </div>
+        <div class="hash-row">
+          <span class="hash-label">Replay Digest (Payload Hash):</span>
+          <span class="hash-value">${escapeHtml(ev.replayDigest)}</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary btn-replay" data-audit-id="${escapeHtml(ev.auditId)}">
+          ⚡ 1-Click Historical Replay
+        </button>
+      `;
+
+      card.querySelector('.btn-replay').addEventListener('click', async () => {
+        await runHistoricalReplay(ev.auditId);
+      });
+
+      elements.auditStreamList.appendChild(card);
+    });
+  }
+
+  /**
+   * 1-Click Historical Replay Verification
+   */
+  async function runHistoricalReplay(auditId) {
+    try {
+      const res = await fetch('/api/audit/replay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ auditId }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.replayResult) {
+        const r = data.replayResult;
+        if (elements.auditReplayResultBanner) elements.auditReplayResultBanner.classList.remove('hidden');
+        if (elements.replayDetailsText) {
+          if (r.isReproducible) {
+            elements.replayDetailsText.textContent = `✓ Bit-for-bit match verified for ${r.auditId}. Stored status "${r.originalCompositeStatus}" equals replayed status "${r.replayedCompositeStatus}". Zero logic drift.`;
+          } else {
+            elements.replayDetailsText.textContent = `⚠️ Discrepancy detected: ${r.discrepancies.join('; ')}`;
+          }
+        }
+      }
+    } catch (err) {
+      alert(`Replay failed: ${err.message}`);
+    }
+  }
+
+  /**
+   * Refresh Live Telemetry Metrics
+   */
+  async function refreshTelemetry() {
+    try {
+      const [healthRes, metricsRes] = await Promise.all([
+        fetch('/api/health'),
+        fetch('/metrics'),
+      ]);
+
+      if (!healthRes.ok) throw new Error(`Health check returned status ${healthRes.status}`);
+
+      const health = await healthRes.json();
+      const rawMetrics = await metricsRes.text();
+
+      // Clear network drop warning if health check recovered
+      hideNetworkErrorBanner();
+
+      if (health.amdInference && elements.amdStatusText && elements.amdStatusDot) {
+        const amd = health.amdInference;
+        const isHardware = amd.rocmAvailable && amd.deviceProof?.verified;
+        if (isHardware) {
+          elements.amdStatusText.textContent = 'ROCm 6.2 (Active)';
+          elements.amdStatusDot.className = 'status-dot pulse active';
+        } else {
+          elements.amdStatusText.textContent = 'ROCm / Fallback Mode';
+          elements.amdStatusDot.className = 'status-dot pulse fallback';
+        }
+      }
+
+      if (health.metrics) {
+        if (elements.metricTotalChecks) elements.metricTotalChecks.textContent = health.metrics.totalChecks;
+        if (elements.metricTotalPasses) elements.metricTotalPasses.textContent = health.metrics.totalPasses;
+        if (elements.metricTotalBlocks) elements.metricTotalBlocks.textContent = health.metrics.totalBlocks;
+        if (elements.metricTotalOverrides) elements.metricTotalOverrides.textContent = health.metrics.totalOverrides;
+        if (elements.queueDepthBadge) elements.queueDepthBadge.textContent = health.metrics.queueDepth;
+        if (elements.tabQueueBadge) elements.tabQueueBadge.textContent = health.metrics.queueDepth;
+
+        // Update real-time throughput and p95 latency
+        const total = health.metrics.totalChecks || 0;
+        if (elements.throughputText) {
+          elements.throughputText.textContent = total > 0 ? `${total} checks` : 'Active';
+        }
+        if (health.metrics.avgLatencyMs && elements.p95LatencyText) {
+          elements.p95LatencyText.textContent = `${health.metrics.avgLatencyMs.toFixed(2)}ms`;
+        }
+      }
+
+      if (elements.telemetryRawDisplay) {
+        elements.telemetryRawDisplay.textContent = rawMetrics;
+      }
+    } catch (err) {
+      console.warn('Telemetry refresh warning:', err);
+      if (elements.amdStatusText) elements.amdStatusText.textContent = 'Disconnected (Offline)';
+      if (elements.amdStatusDot) elements.amdStatusDot.className = 'status-dot offline';
+      showNetworkErrorBanner('Operational Telemetry Offline: Backend service unreachable. Background reconnection in progress...');
+    }
+  }
+
+  /**
+   * Reset Form to Clean Baseline
+   */
+  function resetForm() {
+    if (elements.adCopyInput) elements.adCopyInput.value = '';
+    if (elements.charCount) elements.charCount.textContent = '0 / 2000';
+    if (elements.skuSelect) elements.skuSelect.value = 'UNIVERSAL_AUTO';
+    if (elements.simulationModeSelect) elements.simulationModeSelect.value = 'COMPLIANT';
+    if (elements.productFactCard) elements.productFactCard.classList.add('hidden');
+    state.activePreset = null;
+    document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active-preset'));
+    if (elements.verdictBanner) elements.verdictBanner.classList.add('hidden');
+    if (elements.highlightedCopyContainer) elements.highlightedCopyContainer.classList.add('hidden');
+    if (elements.claimsContainer) elements.claimsContainer.classList.add('hidden');
+  }
+
+  /**
+   * Safe HTML Escaping utility
+   */
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return String(str || '');
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // Initialize on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

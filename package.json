@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node -e \"import('fs').then(fs => fs.cpSync('src/webapp/public', 'public', {recursive: true}))\"",
     "start": "node --import tsx src/server/index.ts",
     "start:dist": "node dist/server/index.js",
     "dev": "tsx watch src/server/index.ts",
