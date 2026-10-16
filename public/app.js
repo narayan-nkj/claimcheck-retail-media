@@ -127,6 +127,11 @@
 
     // Periodic telemetry refresh
     setInterval(refreshTelemetry, 5000);
+
+    // Lucien Hero, Nav Scroll Spy, Stat Rotator & Contact Dialog
+    setupHeaderScrollAndSpy();
+    setupStatRotator();
+    setupContactDialog();
   }
 
   /**
@@ -215,12 +220,318 @@
           mobileMenuBtn.setAttribute('aria-expanded', 'false');
         });
       });
+
+      // Mobile drawer close button
+      const btnCloseMobileNav = document.getElementById('btnCloseMobileNav');
+      if (btnCloseMobileNav) {
+        btnCloseMobileNav.addEventListener('click', () => {
+          mobileNav.classList.add('hidden');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
+      }
     }
 
     // Network Error Boundary Dismiss
     if (elements.btnDismissNetworkError) {
       elements.btnDismissNetworkError.addEventListener('click', hideNetworkErrorBanner);
     }
+  }
+
+  /**
+   * Header Scroll State & Scroll-Spy (Section 4)
+   */
+  function setupHeaderScrollAndSpy() {
+    const header = document.querySelector('.app-header');
+    const navItems = document.querySelectorAll('.header-nav-left .nav-item');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const allNavLinks = document.querySelectorAll('.header-nav-left .nav-item, .mobile-nav-links .mobile-nav-item');
+
+    const sections = [
+      { id: 'heroSection', el: document.getElementById('heroSection') },
+      { id: 'opsSection', el: document.getElementById('opsSection') },
+      { id: 'problemSection', el: document.getElementById('problemSection') },
+      { id: 'howItWorksSection', el: document.getElementById('howItWorksSection') },
+      { id: 'studioSection', el: document.getElementById('studioSection') },
+      { id: 'faqSection', el: document.getElementById('faqSection') },
+    ];
+
+    allNavLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          const target = document.getElementById(href.slice(1));
+          if (target) {
+            e.preventDefault();
+            const headerOffset = 76;
+            const targetPos = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+            window.scrollTo({
+              top: Math.max(0, targetPos),
+              behavior: 'smooth'
+            });
+            history.pushState(null, '', href);
+            navItems.forEach((item) => {
+              if (item.getAttribute('href') === href) {
+                item.classList.add('active');
+              } else {
+                item.classList.remove('active');
+              }
+            });
+            if (mobileNav && !mobileNav.classList.contains('hidden')) {
+              mobileNav.classList.add('hidden');
+              if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
+          }
+        }
+      });
+    });
+
+    function onScroll() {
+      if (header) {
+        if (window.scrollY > 24) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      }
+
+      // Scroll spy logic
+      const scrollPos = window.scrollY + 140;
+      let currentSectionId = 'heroSection';
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const s = sections[i];
+        if (s.el && s.el.offsetTop <= scrollPos) {
+          currentSectionId = s.id;
+          break;
+        }
+      }
+
+      navItems.forEach((link) => {
+        const href = link.getAttribute('href');
+        if (href === `#${currentSectionId}`) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /**
+   * Bottom-Right Stat Line Cycler with 3.5s interval (Section 5.2)
+   */
+  function setupStatRotator() {
+    const statTextEl = document.getElementById('heroStatText');
+    if (!statTextEl) return;
+
+    const facts = [
+      'AMD Instinct™ MI300X',
+      '< 5ms deterministic policy SLA',
+      'SHA-256 Merkle chain',
+      'FTC 16 CFR § 233',
+    ];
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      statTextEl.textContent = facts[0];
+      return;
+    }
+
+    let currentIndex = 0;
+    setInterval(() => {
+      statTextEl.classList.add('fading');
+      setTimeout(() => {
+        currentIndex = (currentIndex + 1) % facts.length;
+        statTextEl.textContent = facts[currentIndex];
+        statTextEl.classList.remove('fading');
+      }, 250);
+    }, 3500);
+  }
+
+  /**
+   * PhantomDeps Contact Dialog (Section 6)
+   */
+  function setupContactDialog() {
+    const dialog = document.getElementById('contactDialog');
+    const btnNav = document.getElementById('btnNavContact');
+    const btnMobile = document.getElementById('btnMobileContact');
+    const btnClose = document.getElementById('btnCloseContact');
+    const membersList = document.getElementById('dialogMembersList');
+    const teamLinks = document.getElementById('dialogTeamLinks');
+
+    if (!dialog) return;
+
+    // Resolve TEAM config
+    const teamData = (typeof window !== 'undefined' && window.TEAM) ? window.TEAM : {
+      name: "PhantomDeps",
+      description: "TypeScript fail-closed BLOCK / WARN / ALLOW engine with NDJSON audit logs.",
+      event: "AMD Developer Hackathon: ACT III · lablab.ai",
+      email: "contact@phantomdeps.ai",
+      repo: "https://github.com/narayan-nkj/claimcheck-retail-media",
+      members: [
+        {
+          name: "Narayan Kumar Jha",
+          role: "AMD Model Serving & Structured Extraction",
+          email: "narayan@phantomdeps.ai",
+          github: "https://github.com/narayan-nkj",
+          linkedin: "https://linkedin.com/in/narayanjha",
+        },
+        {
+          name: "Adi",
+          role: "Deterministic Policy Engine & Audit Chain",
+          email: "",
+          github: "",
+          linkedin: "",
+        },
+        {
+          name: "Roshan",
+          role: "Web Application & Validation Workflow",
+          email: "",
+          github: "",
+          linkedin: "",
+        },
+      ],
+    };
+
+    // Render Members (only render non-empty fields per section 6.3)
+    if (membersList && Array.isArray(teamData.members)) {
+      membersList.innerHTML = '';
+      teamData.members.forEach((m) => {
+        const row = document.createElement('div');
+        row.className = 'member-row';
+        row.setAttribute('role', 'listitem');
+
+        let linksHtml = '';
+        if (m.email) {
+          linksHtml += `
+            <button type="button" class="btn-copy-email" data-email="${escapeHtml(m.email)}" title="Copy email">
+              Copy email
+            </button>
+          `;
+        }
+        if (m.github) {
+          linksHtml += `
+            <a href="${escapeHtml(m.github)}" class="member-icon-link" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(m.name)} GitHub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+            </a>
+          `;
+        }
+        if (m.linkedin) {
+          linksHtml += `
+            <a href="${escapeHtml(m.linkedin)}" class="member-icon-link" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(m.name)} LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <rect x="2" y="9" width="4" height="12"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+            </a>
+          `;
+        }
+
+        row.innerHTML = `
+          <div class="member-info">
+            <span class="member-name">${escapeHtml(m.name)}</span>
+            ${m.role ? `<span class="member-role">${escapeHtml(m.role)}</span>` : ''}
+          </div>
+          <div class="member-links">
+            ${linksHtml}
+          </div>
+        `;
+
+        // Wire Copy email button
+        const copyBtn = row.querySelector('.btn-copy-email');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', async () => {
+            const email = copyBtn.getAttribute('data-email');
+            try {
+              await navigator.clipboard.writeText(email);
+              const originalText = copyBtn.textContent;
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => {
+                copyBtn.textContent = originalText;
+              }, 1500);
+            } catch {
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => { copyBtn.textContent = 'Copy email'; }, 1500);
+            }
+          });
+        }
+
+        membersList.appendChild(row);
+      });
+    }
+
+    // Render Team Links
+    if (teamLinks) {
+      teamLinks.innerHTML = '';
+      if (teamData.email) {
+        teamLinks.innerHTML += `<a href="mailto:${escapeHtml(teamData.email)}" class="btn-dialog-mail">Send Email</a>`;
+      }
+      if (teamData.repo) {
+        teamLinks.innerHTML += `<a href="${escapeHtml(teamData.repo)}" class="btn-dialog-repo" target="_blank" rel="noopener noreferrer">View Repository</a>`;
+      }
+    }
+
+    let lastFocusedElement = null;
+
+    function openDialog() {
+      lastFocusedElement = document.activeElement;
+      if (typeof dialog.showModal === 'function') {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute('open', '');
+      }
+      document.body.style.overflow = 'hidden';
+      if (btnClose) btnClose.focus();
+    }
+
+    function closeDialog() {
+      if (typeof dialog.close === 'function') {
+        dialog.close();
+      } else {
+        dialog.removeAttribute('open');
+      }
+      document.body.style.overflow = '';
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+    }
+
+    if (btnNav) btnNav.addEventListener('click', openDialog);
+    if (btnMobile) {
+      btnMobile.addEventListener('click', () => {
+        const mobileNav = document.getElementById('mobileNav');
+        if (mobileNav) mobileNav.classList.add('hidden');
+        openDialog();
+      });
+    }
+    if (btnClose) btnClose.addEventListener('click', closeDialog);
+
+    // Click backdrop to close
+    dialog.addEventListener('click', (e) => {
+      const rect = dialog.getBoundingClientRect();
+      const isInDialog = (
+        rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX && e.clientX <= rect.left + rect.width
+      );
+      if (!isInDialog) {
+        closeDialog();
+      }
+    });
+
+    // Escape key
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeDialog();
+      }
+    });
   }
 
   /**
