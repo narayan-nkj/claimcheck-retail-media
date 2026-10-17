@@ -361,7 +361,8 @@
           if (target) {
             e.preventDefault();
             const headerOffset = 96;
-            const targetPos = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+            const currentScrollY = window.scrollY ?? window.pageYOffset ?? document.documentElement.scrollTop ?? 0;
+            const targetPos = target.getBoundingClientRect().top + currentScrollY - headerOffset;
             window.scrollTo({
               top: Math.max(0, targetPos),
               behavior: 'smooth'
@@ -386,8 +387,9 @@
     });
 
     function onScroll() {
+      const currentScrollY = window.scrollY ?? window.pageYOffset ?? document.documentElement.scrollTop ?? 0;
       if (header) {
-        if (window.scrollY > 24) {
+        if (currentScrollY > 24) {
           header.classList.add('is-scrolled');
         } else {
           header.classList.remove('is-scrolled');
@@ -395,13 +397,13 @@
       }
 
       // Scroll spy logic: dynamic sort by document Y position
-      const scrollPos = window.scrollY + 140;
+      const scrollPos = currentScrollY + 140;
       const candidates = sections
         .filter((s) => s.el)
         .map((s) => ({
           id: s.id,
-          top: s.el.getBoundingClientRect().top + window.scrollY,
-          bottom: s.el.getBoundingClientRect().top + window.scrollY + s.el.offsetHeight
+          top: s.el.getBoundingClientRect().top + currentScrollY,
+          bottom: s.el.getBoundingClientRect().top + currentScrollY + s.el.offsetHeight
         }))
         .sort((a, b) => a.top - b.top);
 
@@ -423,7 +425,18 @@
       });
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
+    let isScrollTicking = false;
+    function handleScrollOptimized() {
+      if (!isScrollTicking) {
+        window.requestAnimationFrame(() => {
+          onScroll();
+          isScrollTicking = false;
+        });
+        isScrollTicking = true;
+      }
+    }
+
+    window.addEventListener('scroll', handleScrollOptimized, { passive: true });
     onScroll();
   }
 
@@ -556,7 +569,20 @@
           copyBtn.addEventListener('click', async () => {
             const email = copyBtn.getAttribute('data-email');
             try {
-              await navigator.clipboard.writeText(email);
+              if (navigator.clipboard && window.isSecureContext && typeof navigator.clipboard.writeText === 'function') {
+                await navigator.clipboard.writeText(email);
+              } else {
+                const ta = document.createElement('textarea');
+                ta.value = email;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+              }
               const originalText = copyBtn.textContent;
               copyBtn.textContent = 'Copied!';
               setTimeout(() => {
