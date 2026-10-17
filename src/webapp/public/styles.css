@@ -373,18 +373,33 @@ button {
 }
 
 .header-brand-center .brand-monogram {
-  font-family: var(--font-brand);
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: var(--accent);
-  text-transform: uppercase;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
+  color: #ffffff;
+  line-height: 1;
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;
   transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.brand-monogram-svg {
+  display: block;
+  width: 36px;
+  height: 18px;
+  overflow: visible;
+}
+
+.brand-monogram-svg path {
+  fill: #ffffff;
+  transition: fill 0.2s ease, filter 0.2s ease;
+}
+
+.brand-link:hover .brand-monogram-svg path {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
 }
 
 .app-header.is-scrolled .header-brand-center .brand-name {
