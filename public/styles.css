@@ -818,7 +818,9 @@ section[id],
 .hero,
 .hero-section {
   position: relative;
+  min-height: 100vh;
   min-height: 100svh;
+  height: 100vh;
   height: 100svh;
   background: var(--bg-0);
   overflow: hidden;
@@ -1251,8 +1253,14 @@ section[id],
 .dg__stage {
   position: absolute;
   inset: 0;
-  --u: calc(100cqw / 940);
+  --u: calc(min(79vw, 1360px) / 940);
   z-index: 2;
+}
+
+@supports (container-type: inline-size) and (width: 1cqw) {
+  .dg__stage {
+    --u: calc(100cqw / 940);
+  }
 }
 
 /* Glow behind center cluster - REMOVED per user instruction */
@@ -1928,6 +1936,7 @@ section[id],
    ========================================================================== */
 .workflow-section {
   scroll-margin-top: 88px;
+  min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -3621,6 +3630,7 @@ section[id],
 .app-footer {
   margin-top: auto;
   position: relative;
+  overflow: hidden;
   overflow: clip;
   width: 100%;
   padding-top: 100px;
@@ -4192,7 +4202,9 @@ section[id],
 
 @media (max-width: 768px) {
   .hero {
+    min-height: 100vh;
     min-height: 100svh;
+    height: 100vh;
     height: 100svh;
     padding: 0 16px;
     justify-content: center;
