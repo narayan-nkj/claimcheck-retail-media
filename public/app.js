@@ -175,10 +175,11 @@
     // Periodic telemetry refresh
     setInterval(refreshTelemetry, 5000);
 
-    // Lucien Hero, Nav Scroll Spy, Stat Rotator & Contact Dialog
+    // Lucien Hero, Nav Scroll Spy, Stat Rotator, Contact Dialog & Solution Diagram
     setupHeaderScrollAndSpy();
     setupStatRotator();
     setupContactDialog();
+    setupSolutionDiagram();
   }
 
   /**
@@ -631,6 +632,161 @@
         e.preventDefault();
         closeDialog();
       }
+    });
+  }
+
+  /**
+   * Solution Architecture Diagram Interactive Inspector (Section 07B)
+   */
+  function setupSolutionDiagram() {
+    const nodeDetailData = {
+      'copy': {
+        tag: 'EVIDENCE INPUT 01',
+        title: 'Ad Copy Promotional Statements',
+        desc: 'Multi-claim retail campaign copy ingested from programmatic auction streams or merchant inputs. PII, emails, credit cards, and private tokens are automatically sanitized prior to model inference.',
+        actionText: 'Test in Studio →',
+        actionHref: '#studioSection',
+        stageIndex: 1,
+        pathId: 'pathIn1'
+      },
+      'sku': {
+        tag: 'EVIDENCE INPUT 02',
+        title: 'Product SKU & Master Catalog',
+        desc: 'Authoritative regular price, product title, and category specifications resolved from master merchant catalogs to anchor compliance baselines.',
+        actionText: 'Inspect in Studio →',
+        actionHref: '#studioSection',
+        stageIndex: 3,
+        pathId: 'pathIn2'
+      },
+      'pricing': {
+        tag: 'EVIDENCE INPUT 03',
+        title: 'Dynamic Pricing & Promo Feeds',
+        desc: 'Active promotional discount schedules and flash-sale time windows. Evaluated against FTC 16 CFR § 233 deceptive strikethrough rules.',
+        actionText: 'Test Price Mismatch →',
+        actionHref: '#studioSection',
+        stageIndex: 3,
+        pathId: 'pathIn3'
+      },
+      'inventory': {
+        tag: 'EVIDENCE INPUT 04',
+        title: 'Warehouse Real-Time Inventory',
+        desc: 'Live stock quantities aggregated across regional fulfillment nodes. Eliminates zero-inventory ad spend and consumer stockout complaints.',
+        actionText: 'Test Out of Stock →',
+        actionHref: '#studioSection',
+        stageIndex: 3,
+        pathId: 'pathIn4'
+      },
+      'carrier': {
+        tag: 'EVIDENCE INPUT 05',
+        title: 'Carrier Transit SLAs & Delivery Models',
+        desc: 'Regional carrier transit models and delivery cutoff times. Claims asserting fast or next-day shipping are corroborated against carrier guarantees.',
+        actionText: 'Test Shipping SLA →',
+        actionHref: '#studioSection',
+        stageIndex: 3,
+        pathId: 'pathIn5'
+      },
+      'out-allow': {
+        tag: 'COMPLIANCE OUTCOME 01',
+        title: 'Verified Claims (ALLOW Clearance)',
+        desc: 'Instant programmatic publication clearance. All pricing, discounts, stock, and delivery promises are strictly corroborated by fresh catalog truth.',
+        actionText: 'Run Golden Pass →',
+        actionHref: '#studioSection',
+        stageIndex: 5,
+        pathId: 'pathOut1'
+      },
+      'out-block': {
+        tag: 'COMPLIANCE OUTCOME 02',
+        title: 'Blocked Claims (Factual Rejection)',
+        desc: 'Factual pre-publication rejection triggered by price contradictions, fake strikethroughs, or stockouts. Requires Senior Compliance Officer override.',
+        actionText: 'Test Block Scenario →',
+        actionHref: '#studioSection',
+        stageIndex: 5,
+        pathId: 'pathOut2'
+      },
+      'out-review': {
+        tag: 'COMPLIANCE OUTCOME 03',
+        title: 'Human Review Queue (Priority Escalation)',
+        desc: 'Priority queue with countdown SLAs for feed synchronization discrepancies and deal window expirations under role-based governance (DEC-010).',
+        actionText: 'Open Review Queue →',
+        actionHref: '#opsSection',
+        opsTab: 'review',
+        stageIndex: 5,
+        pathId: 'pathOut3'
+      },
+      'out-audit': {
+        tag: 'COMPLIANCE OUTCOME 04',
+        title: 'Chained Merkle Ledger (Audit Trail)',
+        desc: 'Forward-chained SHA-256 tamper-evident log linking each check to the previous block. Enables 1-click bit-for-bit historical replay verification.',
+        actionText: 'Explore Audit Ledger →',
+        actionHref: '#opsSection',
+        opsTab: 'audit',
+        stageIndex: 5,
+        pathId: 'pathOut4'
+      }
+    };
+
+    const detailTag = document.getElementById('diagramDetailTag');
+    const detailTitle = document.getElementById('diagramDetailTitle');
+    const detailDesc = document.getElementById('diagramDetailDesc');
+    const detailAction = document.getElementById('diagramDetailAction');
+    const allNodes = document.querySelectorAll('.diagram-node');
+    const allPaths = document.querySelectorAll('.diagram-path');
+    const allStages = document.querySelectorAll('.pipeline-stage-item');
+
+    function selectNode(nodeKey) {
+      const data = nodeDetailData[nodeKey];
+      if (!data) return;
+
+      // Update detail card
+      if (detailTag) detailTag.textContent = data.tag;
+      if (detailTitle) detailTitle.textContent = data.title;
+      if (detailDesc) detailDesc.textContent = data.desc;
+      if (detailAction) {
+        detailAction.textContent = data.actionText;
+        detailAction.setAttribute('href', data.actionHref);
+        if (data.opsTab) {
+          detailAction.setAttribute('data-ops-tab', data.opsTab);
+          detailAction.onclick = () => switchTab(data.opsTab);
+        } else {
+          detailAction.removeAttribute('data-ops-tab');
+          detailAction.onclick = null;
+        }
+      }
+
+      // Update node active class
+      allNodes.forEach((n) => {
+        const isCurrent = n.getAttribute('data-node') === nodeKey;
+        n.classList.toggle('active-node', isCurrent);
+        n.setAttribute('aria-expanded', isCurrent ? 'true' : 'false');
+      });
+
+      // Highlight path
+      allPaths.forEach((p) => p.classList.remove('path-highlighted'));
+      if (data.pathId) {
+        const pEl = document.getElementById(data.pathId);
+        if (pEl) pEl.classList.add('path-highlighted');
+      }
+
+      // Highlight stage
+      if (data.stageIndex) {
+        allStages.forEach((s) => {
+          const sIdx = Number(s.getAttribute('data-stage'));
+          s.classList.toggle('active-stage', sIdx === data.stageIndex);
+        });
+      }
+    }
+
+    allNodes.forEach((node) => {
+      const nodeKey = node.getAttribute('data-node');
+      node.addEventListener('mouseenter', () => selectNode(nodeKey));
+      node.addEventListener('focus', () => selectNode(nodeKey));
+      node.addEventListener('click', (e) => {
+        selectNode(nodeKey);
+        const data = nodeDetailData[nodeKey];
+        if (data && data.opsTab) {
+          switchTab(data.opsTab);
+        }
+      });
     });
   }
 
