@@ -7,7 +7,7 @@
   <title>ClaimCheck — Retail Media Evidence Gate</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;600;700&family=Michroma&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Michroma&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=3.1">
 </head>
 <body class="site-body">
@@ -17,26 +17,24 @@
   <!-- Lucien-Style 3-Column Fixed/Sticky Navbar (1fr auto 1fr, 88px) -->
   <header class="app-header" role="banner">
     <div class="header-container">
-      <!-- Left Cell: 6 Monospace Nav Links with → Prefix (NV-01) -->
+      <!-- Left Cell: 4 Monospace Nav Links with → Prefix (NV-01) -->
       <nav class="header-nav-left" id="desktopNav" aria-label="Main Navigation">
         <a href="#heroSection" class="nav-item active"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Overview</a>
-        <a href="#problemSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Why ClaimCheck</a>
         <a href="#howItWorksSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>How It Works</a>
         <a href="#studioSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
         <a href="#opsSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
-        <a href="#faqSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>FAQ</a>
       </nav>
 
       <!-- Center Cell: Centered Brand Wordmark (no subtitle per design) -->
       <div class="header-brand-center">
         <a href="#heroSection" class="brand-link" aria-label="ClaimCheck Home">
-          <span class="brand-name">ClaimCheck</span>
           <span class="brand-monogram" aria-hidden="true">
-            <svg class="brand-monogram-svg" width="36" height="18" viewBox="0 0 35 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <svg class="brand-monogram-svg" width="28" height="14" viewBox="0 0 35 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
               <path d="M15 0H0V18H15V13.5H4.5V4.5H15V0Z" fill="#ffffff"/>
               <path d="M35 0H20V18H35V13.5H24.5V4.5H35V0Z" fill="#ffffff"/>
             </svg>
           </span>
+          <span class="brand-name">ClaimCheck</span>
         </a>
       </div>
 
@@ -65,11 +63,9 @@
       </div>
       <div class="mobile-nav-links">
         <a href="#heroSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Overview</a>
-        <a href="#problemSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Why ClaimCheck</a>
         <a href="#howItWorksSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>How It Works</a>
         <a href="#studioSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
         <a href="#opsSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
-        <a href="#faqSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>FAQ</a>
       </div>
     </nav>
   </header>
@@ -148,7 +144,7 @@
         <div class="intro-grid">
           <!-- Left Column: Copy & Actions -->
           <div class="intro-copy-col">
-            <span class="intro-category-label">Retail media evidence gate</span>
+            <span class="intro-category-label">ClaimCheck &bull; Retail Media Evidence Gate</span>
             <h2 id="introTitle" class="intro-heading">Deterministic compliance across programmatic retail media.</h2>
             <p class="intro-description">
               Evaluate advertising claims against product catalogues, pricing information, inventory feeds,
@@ -182,11 +178,6 @@
                 <span class="trust-label">Integrity</span>
                 <strong class="trust-val">SHA-256 Merkle chain</strong>
               </div>
-              <div class="trust-divider" aria-hidden="true"></div>
-              <div class="trust-item">
-                <span class="trust-label">Governance</span>
-                <strong class="trust-val">FTC 16 CFR § 233</strong>
-              </div>
             </div>
           </div>
         </div>
@@ -201,7 +192,7 @@
       <div class="content-container">
         <!-- Section Header Stack (Section 5) -->
         <div class="dg-header-stack">
-          <span class="dg-chip">How it works</span>
+          <span class="dg-chip">ClaimCheck Architectural Pipeline</span>
           <div class="dg-rule" aria-hidden="true"></div>
           <h2 id="architectureTitle" class="dg-headline">
             Deterministic execution,<br>from copy to ledger.
@@ -212,64 +203,64 @@
           </p>
         </div>
 
-        <!-- 940u x 313u Interactive Stage (Section 6, 7, 8) -->
-        <div class="dg" id="solutionDiagram" role="region" aria-label="Interactive ClaimCheck Architecture Diagram">
-          <!-- Glowing Background behind center cluster (Section 8) -->
-          <div class="dg__glow" aria-hidden="true"></div>
+        <!-- Accessible summary for screen readers -->
+        <div class="sr-only">
+          <h3>ClaimCheck Architectural Flow</h3>
+          <p>The ClaimCheck deterministic pipeline ingests four evidence inputs: Ad Copy, Catalog and Pricing data, Warehouse Inventory, and Carrier Transit SLAs. Data passes into the central processing pipeline starting with Ingestion and Security Sanitization, progressing through Structured Claim Extraction (accelerated by AMD ROCm), Multi-Source Ground Truth Corroboration, and a sub-1.2 millisecond Deterministic Policy Gate, before reaching Cryptographic Tri-State Verdict sealing. Outbound verified outcomes produce Verified Allowed claims, Blocked claims, prioritized Human Review queues, and bit-for-bit Chained Merkle Audit Ledgers.</p>
+        </div>
 
-          <!-- SVG Overlay for curves, short links, and animated particles (Section 7 & 12) -->
-          <svg class="dg__svg" viewBox="0 0 940 313" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <filter id="dgDotGlow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
-                <feMerge>
-                  <feMergeNode in="blur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
+        <!-- 940u x 313u Architectural Diagram Stage -->
+        <div class="dg" id="solutionDiagram" aria-label="ClaimCheck Solution Architecture Diagram">
 
-            <!-- Short links between containers at y = 157 -->
-            <path class="dg__link" d="M 352.5,157 H 382.5" />
-            <path class="dg__link" d="M 557.5,157 H 587.5" />
+          <!-- SVG Flow Network: Sequential discrete verification cycle (4 in -> 1 center -> 4 out) -->
+          <svg class="dg__svg" id="solutionDiagramSvg" viewBox="0 0 940 313" preserveAspectRatio="none" aria-hidden="true">
+            <!-- Central Links between containers at midline y = 156.5 -->
+            <path id="curveLink0" class="dg__link" data-link="0" d="M 353.5,156.5 H 382.0" />
+            <path id="curveLink1" class="dg__link" data-link="1" d="M 557.5,156.5 H 587.0" />
+            <!-- Invisible Center Pipeline Track (from Sanitizer entrance 283.9 to Seal exit 656.5) -->
+            <path id="curveCenter" class="dg__center-path" d="M 283.9,156.5 H 656.5" fill="none" stroke="none" />
 
-            <!-- Left Curves (Pills -> Hub Left Edge at 283.5, 157) -->
-            <path id="pathIn1" class="dg__path" data-node="copy" d="M 130.5,17 C 222.3,17 222.3,157 283.5,157" />
-            <path id="pathIn2" class="dg__path" data-node="catalog-pricing" d="M 130.5,65.5 C 222.3,65.5 222.3,157 283.5,157" />
-            <path id="pathIn3" class="dg__path" data-node="inventory" d="M 130.5,248 C 222.3,248 222.3,157 283.5,157" />
-            <path id="pathIn4" class="dg__path" data-node="carrier" d="M 130.5,295.5 C 222.3,295.5 222.3,157 283.5,157" />
+            <!-- Left Curves (Pills -> Hub Left Edge at 283.9, 156.5) -->
+            <!-- Left 0: Ad Copy (y0 = 17.2) -->
+            <path id="curveIn0" class="dg__curve" data-side="in" data-index="0" data-node="adcopy" d="M 126.5,17.2 C 220.94,17.2 220.94,156.5 283.9,156.5" />
+            <!-- Left 1: Catalog (y0 = 65.9) -->
+            <path id="curveIn1" class="dg__curve" data-side="in" data-index="1" data-node="catalog" d="M 126.5,65.9 C 220.94,65.9 220.94,156.5 283.9,156.5" />
+            <!-- Left 2: Inventory (y0 = 247.7) -->
+            <path id="curveIn2" class="dg__curve" data-side="in" data-index="2" data-node="inventory" d="M 126.5,247.7 C 220.94,247.7 220.94,156.5 283.9,156.5" />
+            <!-- Left 3: Carrier SLA (y0 = 296.5) -->
+            <path id="curveIn3" class="dg__curve" data-side="in" data-index="3" data-node="carrier" d="M 126.5,296.5 C 220.94,296.5 220.94,156.5 283.9,156.5" />
 
-            <!-- Right Curves (Hub Right Edge at 656.5, 157 -> Pills) -->
-            <path id="pathOut1" class="dg__path" data-node="out-allow" d="M 656.5,157 C 717.7,157 717.7,17 809.5,17" />
-            <path id="pathOut2" class="dg__path" data-node="out-block" d="M 656.5,157 C 717.7,157 717.7,65.5 809.5,65.5" />
-            <path id="pathOut3" class="dg__path" data-node="out-review" d="M 656.5,157 C 717.7,157 717.7,248 809.5,248" />
-            <path id="pathOut4" class="dg__path" data-node="out-audit" d="M 656.5,157 C 717.7,157 717.7,295.5 809.5,295.5" />
+            <!-- Right Curves (Hub Right Edge at 656.5, 156.5 -> Pills at 813.5, y1) -->
+            <!-- Right 0: Allowed (y1 = 17.2) -->
+            <path id="curveOut0" class="dg__curve" data-side="out" data-index="0" data-node="allow" d="M 656.5,156.5 C 719.3,156.5 719.3,17.2 813.5,17.2" />
+            <!-- Right 1: Blocked (y1 = 65.9) -->
+            <path id="curveOut1" class="dg__curve" data-side="out" data-index="1" data-node="block" d="M 656.5,156.5 C 719.3,156.5 719.3,65.9 813.5,65.9" />
+            <!-- Right 2: Review Queue (y1 = 247.7) -->
+            <path id="curveOut2" class="dg__curve" data-side="out" data-index="2" data-node="review" d="M 656.5,156.5 C 719.3,156.5 719.3,247.7 813.5,247.7" />
+            <!-- Right 3: Audit Ledger (y1 = 296.5) -->
+            <path id="curveOut3" class="dg__curve" data-side="out" data-index="3" data-node="ledger" d="M 656.5,156.5 C 719.3,156.5 719.3,296.5 813.5,296.5" />
 
-            <!-- Traveling Dots along right curves (Section 12) -->
-            <circle class="dg__dot dot-allow" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
-              <animateMotion dur="3.4s" begin="0s" repeatCount="indefinite">
-                <mpath href="#pathOut1"/>
-              </animateMotion>
-            </circle>
-            <circle class="dg__dot dot-block" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
-              <animateMotion dur="3.4s" begin="0.85s" repeatCount="indefinite">
-                <mpath href="#pathOut2"/>
-              </animateMotion>
-            </circle>
-            <circle class="dg__dot dot-review" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
-              <animateMotion dur="3.4s" begin="1.70s" repeatCount="indefinite">
-                <mpath href="#pathOut3"/>
-              </animateMotion>
-            </circle>
-            <circle class="dg__dot dot-audit" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
-              <animateMotion dur="3.4s" begin="2.55s" repeatCount="indefinite">
-                <mpath href="#pathOut4"/>
-              </animateMotion>
-            </circle>          <!-- Interactive Nodes Stage Overlay (Section 6 & 13) -->
+            <!-- Phase 1: Exactly 4 dots coming from inputs (Ad Copy, Catalog, Inventory, Carrier SLA) -->
+            <circle id="dotIn0" class="dg__dot dg__dot--in" r="3.4" cx="126.5" cy="17.2" />
+            <circle id="dotIn1" class="dg__dot dg__dot--in" r="3.4" cx="126.5" cy="65.9" />
+            <circle id="dotIn2" class="dg__dot dg__dot--in" r="3.4" cx="126.5" cy="247.7" />
+            <circle id="dotIn3" class="dg__dot dg__dot--in" r="3.4" cx="126.5" cy="296.5" />
+
+            <!-- Phase 2: Exactly 1 dot moving through center pipeline (Sanitizer -> Evidence Gate -> Seal) -->
+            <circle id="dotCenter" class="dg__dot dg__dot--center" r="3.6" cx="283.9" cy="156.5" />
+
+            <!-- Phase 3: Exactly 4 dots splitting out from Seal to outputs (Allowed, Blocked, Review, Ledger) -->
+            <circle id="dotOut0" class="dg__dot dg__dot--out" r="3.4" cx="656.5" cy="156.5" />
+            <circle id="dotOut1" class="dg__dot dg__dot--out" r="3.4" cx="656.5" cy="156.5" />
+            <circle id="dotOut2" class="dg__dot dg__dot--out" r="3.4" cx="656.5" cy="156.5" />
+            <circle id="dotOut3" class="dg__dot dg__dot--out" r="3.4" cx="656.5" cy="156.5" />
+          </svg>
+
+          <!-- Nodes Stage Overlay -->
           <div class="dg__stage">
-            <!-- Inputs Group (Desktop: display: contents; Mobile < 900px: 2x2 grid) -->
+            <!-- Inputs Group -->
             <div class="dg__group dg__group--inputs">
-              <button type="button" class="dg__pill is-left is-selected" data-node="copy" id="nodeInputCopy" style="--px: 0; --py: 0;" aria-expanded="true" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-left" id="nodeInputCopy" style="--px: 0; --py: 0;">
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -279,9 +270,9 @@
                   </svg>
                 </span>
                 <span class="dg__pill-label">Ad Copy</span>
-              </button>
+              </div>
 
-              <button type="button" class="dg__pill is-left" data-node="catalog-pricing" id="nodeInputCatalog" style="--px: 0; --py: 48.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-left" id="nodeInputCatalog" style="--px: 0; --py: 48.7;">
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <ellipse cx="12" cy="5" rx="9" ry="3"/>
@@ -289,10 +280,10 @@
                     <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
                   </svg>
                 </span>
-                <span class="dg__pill-label">Catalog &amp; Pricing</span>
-              </button>
+                <span class="dg__pill-label">Catalog</span>
+              </div>
 
-              <button type="button" class="dg__pill is-left" data-node="inventory" id="nodeInputInventory" style="--px: 0; --py: 231;" aria-expanded="false" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-left" id="nodeInputInventory" style="--px: 0; --py: 230.5;">
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
@@ -301,9 +292,9 @@
                   </svg>
                 </span>
                 <span class="dg__pill-label">Inventory</span>
-              </button>
+              </div>
 
-              <button type="button" class="dg__pill is-left" data-node="carrier" id="nodeInputCarrier" style="--px: 0; --py: 278.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-left" id="nodeInputCarrier" style="--px: 0; --py: 279.3;">
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="1" y="3" width="15" height="13"/>
@@ -313,34 +304,34 @@
                   </svg>
                 </span>
                 <span class="dg__pill-label">Carrier SLA</span>
-              </button>
+              </div>
             </div>
 
-            <!-- Mobile Connector 1 (36px vertical line with traveling dot) -->
-            <div class="dg-mobile-connector" aria-hidden="true"></div>
+            <!-- Mobile Connector 1 -->
+            <div class="dg-mobile-connector dg-mobile-connector--in" aria-hidden="true"></div>
 
-            <!-- Center Cluster (3 Containers, Desktop midline y=157, Mobile horizontal row) -->
+            <!-- Center Cluster (3 Containers: Left 69.6u, Middle 175.5u, Right 69.6u; Midline y = 156.5) -->
             <div class="dg__group dg__group--cluster">
-              <!-- Left Container: Sanitize (width=69) -->
+              <!-- Left Container: Sanitizer (width = 69.6u, x = 283.9u) -->
               <div class="dg__cluster-unit">
-                <div class="dg__container" style="--cx: 283.5; --cw: 69;">
-                  <button type="button" class="dg__tile" data-node="stage-sanitize" id="tileSanitize" aria-label="Sanitize: Ingestion &amp; Security Sanitization" aria-controls="diagramDetailPanel">
+                <div class="dg__container" id="containerSanitize" style="--cx: 283.9; --cw: 69.6;">
+                  <div class="dg__tile" id="tileSanitize" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                       <polyline points="9 12 11 14 15 10"/>
                     </svg>
-                  </button>
+                  </div>
                 </div>
-                <span class="dg__container-label" style="--lx: 318;">Sanitize</span>
+                <span class="dg__container-label" style="--lx: 318.7;">Sanitizer</span>
               </div>
 
               <!-- Mobile short link 1 -->
               <div class="dg-mobile-cluster-link" aria-hidden="true"></div>
 
-              <!-- Middle Container: Evidence Gate (width=175) -->
+              <!-- Middle Container: Evidence Gate (width = 175.5u, x = 382u) -->
               <div class="dg__cluster-unit">
-                <div class="dg__container is-wide" style="--cx: 382.5; --cw: 175;">
-                  <button type="button" class="dg__tile" data-node="stage-extraction" id="tileExtraction" aria-label="Structured Claim Extraction, AMD ROCm™ 6.2" aria-controls="diagramDetailPanel">
+                <div class="dg__container is-wide" id="containerEvidence" style="--cx: 382; --cw: 175.5;">
+                  <div class="dg__tile" id="tileExtraction" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                       <rect x="4" y="4" width="16" height="16" rx="2"/>
                       <rect x="9" y="9" width="6" height="6"/>
@@ -353,51 +344,51 @@
                       <line x1="1" y1="9" x2="4" y2="9"/>
                       <line x1="1" y1="14" x2="4" y2="14"/>
                     </svg>
-                  </button>
-                  <button type="button" class="dg__tile" data-node="stage-corroboration" id="tileCorroboration" aria-label="Multi-Source Ground Truth Corroboration" aria-controls="diagramDetailPanel">
+                  </div>
+                  <div class="dg__tile" id="tileCorroboration" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                       <ellipse cx="12" cy="5" rx="9" ry="3"/>
                       <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
                       <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
                       <polyline points="8 12 10.5 14.5 16 9"/>
                     </svg>
-                  </button>
-                  <button type="button" class="dg__tile" data-node="stage-policy" id="tilePolicy" aria-label="Deterministic Policy Gate" aria-controls="diagramDetailPanel">
+                  </div>
+                  <div class="dg__tile" id="tilePolicy" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                       <polygon points="12 2 2 7 12 12 22 7 12 2"/>
                       <polyline points="2 17 12 22 22 17"/>
                       <polyline points="2 12 12 17 22 12"/>
                     </svg>
-                  </button>
+                  </div>
                 </div>
-                <span class="dg__container-label" style="--lx: 470;">Evidence Gate</span>
+                <span class="dg__container-label" style="--lx: 469.75;">Evidence Gate</span>
               </div>
 
               <!-- Mobile short link 2 -->
               <div class="dg-mobile-cluster-link" aria-hidden="true"></div>
 
-              <!-- Right Container: Seal (width=69) -->
+              <!-- Right Container: Seal (width = 69.6u, x = 587u) -->
               <div class="dg__cluster-unit">
-                <div class="dg__container" style="--cx: 587.5; --cw: 69;">
-                  <button type="button" class="dg__tile" data-node="stage-seal" id="tileSeal" aria-label="Seal: Cryptographic Tri-State Verdict" aria-controls="diagramDetailPanel">
+                <div class="dg__container" id="containerSeal" style="--cx: 587; --cw: 69.6;">
+                  <div class="dg__tile" id="tileSeal" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                       <line x1="4" y1="9" x2="20" y2="9"/>
                       <line x1="4" y1="15" x2="20" y2="15"/>
                       <line x1="10" y1="3" x2="8" y2="21"/>
                       <line x1="16" y1="3" x2="14" y2="21"/>
                     </svg>
-                  </button>
+                  </div>
                 </div>
-                <span class="dg__container-label" style="--lx: 622;">Seal</span>
+                <span class="dg__container-label" style="--lx: 621.8;">Seal</span>
               </div>
             </div>
 
-            <!-- Mobile Connector 2 (36px vertical line with traveling dot) -->
-            <div class="dg-mobile-connector" aria-hidden="true"></div>
+            <!-- Mobile Connector 2 -->
+            <div class="dg-mobile-connector dg-mobile-connector--out" aria-hidden="true"></div>
 
-            <!-- Outputs Group (Desktop: display: contents; Mobile < 900px: 2x2 grid) -->
+            <!-- Outputs Group -->
             <div class="dg__group dg__group--outputs">
-              <button type="button" class="dg__pill is-right" data-node="out-allow" id="nodeOutAllow" style="--px: 809.5; --py: 0;" aria-expanded="false" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-right" id="nodeOutAllow" style="--px: 813.5; --py: 0;">
                 <span class="dg__pill-dot dot-allow" aria-hidden="true"></span>
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -405,10 +396,10 @@
                     <polyline points="9 12 12 15 16 9"/>
                   </svg>
                 </span>
-                <span class="dg__pill-label">Verified Claims</span>
-              </button>
+                <span class="dg__pill-label">Allowed</span>
+              </div>
 
-              <button type="button" class="dg__pill is-right" data-node="out-block" id="nodeOutBlock" style="--px: 809.5; --py: 48.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-right" id="nodeOutBlock" style="--px: 813.5; --py: 48.7;">
                 <span class="dg__pill-dot dot-block" aria-hidden="true"></span>
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -417,10 +408,10 @@
                     <line x1="9" y1="9" x2="15" y2="15"/>
                   </svg>
                 </span>
-                <span class="dg__pill-label">Blocked Claims</span>
-              </button>
+                <span class="dg__pill-label">Blocked</span>
+              </div>
 
-              <button type="button" class="dg__pill is-right" data-node="out-review" id="nodeOutReview" style="--px: 809.5; --py: 231;" aria-expanded="false" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-right" id="nodeOutReview" style="--px: 813.5; --py: 230.5;">
                 <span class="dg__pill-dot dot-review" aria-hidden="true"></span>
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -431,9 +422,9 @@
                   </svg>
                 </span>
                 <span class="dg__pill-label">Review Queue</span>
-              </button>
+              </div>
 
-              <button type="button" class="dg__pill is-right" data-node="out-audit" id="nodeOutAudit" style="--px: 809.5; --py: 278.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+              <div class="dg__pill is-right" id="nodeOutAudit" style="--px: 813.5; --py: 279.3;">
                 <span class="dg__pill-dot dot-audit" aria-hidden="true"></span>
                 <span class="dg__pill-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -444,246 +435,13 @@
                   </svg>
                 </span>
                 <span class="dg__pill-label">Audit Ledger</span>
-              </button>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Detail Strip (Section 11) -->
-        <div class="dg-detail-strip" id="diagramDetailPanel" role="region" aria-live="polite">
-          <div class="dg-detail-header">
-            <span class="dg-detail-title" id="diagramDetailTitle">Ad Copy Statements</span>
-            <span class="dg-detail-tag" id="diagramDetailTag">EVIDENCE INPUT 01</span>
-          </div>
-          <p class="dg-detail-desc" id="diagramDetailDesc">
-            Promotional copy ingested directly from programmatic auction streams or merchant inputs. PII, payment cards, SSNs, and credentials redacted.
-          </p>
-          <div class="dg-detail-footer">
-            <a href="#studioSection" class="dg-detail-btn" id="diagramDetailAction">Test in Studio &rarr;</a>
-            <span class="dg-detail-caption">Simplified, schematic flow.</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- =====================================================================
-         SECTION 2: THE PROBLEM (WHY CLAIMCHECK)
-         ===================================================================== -->
-    <section class="section problem-section" id="problemSection" aria-labelledby="problemTitle">
-      <div class="content-container">
-        <div class="section-header">
-          <span class="section-label">The problem</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="problemTitle" class="section-title">
-            Retail advertising moves faster<br>than manual compliance.
-          </h2>
-          <p class="section-subtitle">
-            Millions of programmatic ad variants refresh every hour across sponsored search, product grids,
-            and retail network displays. Without deterministic automated verification, brands face severe regulatory penalties,
-            wasted budget, and damaged customer loyalty.
-          </p>
-        </div>
-
-        <div class="cards-grid-3">
-          <!-- Card 1 -->
-          <article class="feature-card problem-card">
-            <div class="card-glow" aria-hidden="true"></div>
-            <div class="card-icon-wrap" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-                <line x1="12" y1="1" x2="12" y2="23"/>
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-              </svg>
-            </div>
-            <div class="card-badge">FTC 16 CFR § 233 VIOLATION</div>
-            <h3 class="card-title">Deceptive Pricing &amp; Fake Strikethroughs</h3>
-            <p class="card-text">
-              Promotions claiming "50% off!" or "$899.99 only today" frequently contradict the merchant's real
-              pricing feed or regular price baseline, triggering regulatory scrutiny and FTC enforcement actions.
-            </p>
-            <div class="card-footer-metric">
-              <span class="metric-highlight">Frequent discount drift</span>
-              <span class="metric-sub">Observed in campaigns with stale merchant pricing feeds</span>
-            </div>
-          </article>
-
-          <!-- Card 2 -->
-          <article class="feature-card problem-card">
-            <div class="card-glow" aria-hidden="true"></div>
-            <div class="card-icon-wrap" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                <line x1="12" y1="22.08" x2="12" y2="12"/>
-              </svg>
-            </div>
-            <div class="card-badge">FTC 16 CFR § 240 VIOLATION</div>
-            <h3 class="card-title">Phantom Stock &amp; False Availability</h3>
-            <p class="card-text">
-              High-intent campaigns continue running after inventory exhausts across fulfillment nodes.
-              Shoppers arrive to see out-of-stock messages, burning ad spend and hurting publisher conversion rates.
-            </p>
-            <div class="card-footer-metric">
-              <span class="metric-highlight">Zero-inventory drift</span>
-              <span class="metric-sub">Violates merchant fulfillment SLAs</span>
-            </div>
-          </article>
-
-          <!-- Card 3 -->
-          <article class="feature-card problem-card">
-            <div class="card-glow" aria-hidden="true"></div>
-            <div class="card-icon-wrap" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-                <rect x="1" y="3" width="15" height="13"/>
-                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                <circle cx="5.5" cy="18.5" r="2.5"/>
-                <circle cx="18.5" cy="18.5" r="2.5"/>
-              </svg>
-            </div>
-            <div class="card-badge">SLA &amp; CONTRADICTION RISK</div>
-            <h3 class="card-title">Feed Inconsistencies &amp; Shipping Drift</h3>
-            <p class="card-text">
-              Dynamic multi-warehouse feeds routinely contradict carrier realities. Promising "Free Next-Day Delivery"
-              when regional transit models require 5 business days leads to chargebacks and consumer complaints.
-            </p>
-            <div class="card-footer-metric">
-              <span class="metric-highlight">Carrier transit drift</span>
-              <span class="metric-sub">Requires prioritized human review escalation</span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 3: THE SOLUTION (DETERMINISTIC EVIDENCE GATE)
-         ===================================================================== -->
-    <section class="section solution-section" id="solutionSection" aria-labelledby="solutionTitle">
-      <div class="content-container">
-        <div class="section-header">
-          <span class="section-label">The solution</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="solutionTitle" class="section-title">
-            One evidence gate.<br>Three clear decisions.
-          </h2>
-          <p class="section-subtitle">
-            ClaimCheck evaluates every ad copy statement against fresh merchant ground truth and configured
-            compliance rules. Decisions are mathematically deterministic, explainable, and logged to an immutable ledger.
-          </p>
-        </div>
-
-        <div class="solution-grid-3">
-          <!-- Allow Solution -->
-          <div class="decision-card decision-allow">
-            <div class="decision-header">
-              <div class="decision-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  <path d="m9 12 2 2 4-4"/>
-                </svg>
-              </div>
-              <span class="decision-badge">ALLOW</span>
-            </div>
-            <h3 class="decision-title">Instant Publication Clearance</h3>
-            <p class="decision-text">
-              All extracted factual claims—pricing, discounts, inventory levels, and delivery SLAs—are strictly
-              corroborated by fresh merchant catalog and logistics feeds within freshness thresholds.
-            </p>
-            <ul class="decision-checklist">
-              <li>
-                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Corroborated against master price record</span>
-              </li>
-              <li>
-                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Real-time stock verified &gt; 0 units</span>
-              </li>
-              <li>
-                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Carrier transit SLA confirmed</span>
-              </li>
-              <li>
-                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Cryptographically signed to Merkle audit stream</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Block Solution -->
-          <div class="decision-card decision-block">
-            <div class="decision-header">
-              <div class="decision-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="15" y1="9" x2="9" y2="15"/>
-                  <line x1="9" y1="9" x2="15" y2="15"/>
-                </svg>
-              </div>
-              <span class="decision-badge">BLOCK</span>
-            </div>
-            <h3 class="decision-title">Factual Pre-Publication Rejection</h3>
-            <p class="decision-text">
-              Direct factual contradictions between the ad copy and authoritative ground truth cause an immediate,
-              fail-closed block. Prevents deceptive claims from ever reaching the consumer.
-            </p>
-            <ul class="decision-checklist">
-              <li>
-                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                <span>Strikethrough price exceeds catalog regular price</span>
-              </li>
-              <li>
-                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                <span>Out-of-stock items rejected instantly</span>
-              </li>
-              <li>
-                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                <span>False delivery speed claims suppressed</span>
-              </li>
-              <li>
-                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                <span>Requires Senior Officer approval to override</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Review Solution -->
-          <div class="decision-card decision-review">
-            <div class="decision-header">
-              <div class="decision-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                  <line x1="12" y1="9" x2="12" y2="13"/>
-                  <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-              </div>
-              <span class="decision-badge">REVIEW</span>
-            </div>
-            <h3 class="decision-title">Human Review Escalation</h3>
-            <p class="decision-text">
-              Feed synchronization conflicts, warehouse inventory discrepancies, or borderline promotional qualifiers
-              are routed into the prioritized Human Review Queue with countdown SLAs.
-            </p>
-            <ul class="decision-checklist">
-              <li>
-                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>Multi-warehouse feed contradiction detected</span>
-              </li>
-              <li>
-                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>Expiring promotional pricing windows</span>
-              </li>
-              <li>
-                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>Prioritized by campaign spend and risk</span>
-              </li>
-              <li>
-                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>Re-extraction or confirmation workflow</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- =====================================================================
          SECTION 4: HOW IT WORKS (ENTERPRISE PIPELINE)
@@ -801,10 +559,10 @@
         </div>
 
         <div class="workflow-steps-list">
-          <div class="workflow-step-item">
+          <div class="workflow-step-item" tabindex="0">
             <div class="step-num-col">
               <span class="step-num">01</span>
-              <div class="step-line" aria-hidden="true"></div>
+              <span class="step-hover-hint">Hover &rarr;</span>
             </div>
             <div class="step-content">
               <h3 class="step-title">Ingestion &amp; Security Sanitization</h3>
@@ -816,13 +574,13 @@
             </div>
           </div>
 
-          <div class="workflow-step-item">
+          <div class="workflow-step-item" tabindex="0">
             <div class="step-num-col">
               <span class="step-num">02</span>
-              <div class="step-line" aria-hidden="true"></div>
+              <span class="step-hover-hint">Hover &rarr;</span>
             </div>
             <div class="step-content">
-              <h3 class="step-title">Structured Claim Extraction on AMD ROCm™</h3>
+              <h3 class="step-title">Structured Claim Extraction (ROCm™)</h3>
               <p class="step-text">
                 The open-weights Llama-3.1-8B-Instruct model, accelerated by AMD ROCm 6.2 on AMD Instinct™ MI300X
                 hardware (with CPU fallback), extracts precise character spans and classifies claims into 4 distinct commerce categories:
@@ -831,13 +589,13 @@
             </div>
           </div>
 
-          <div class="workflow-step-item">
+          <div class="workflow-step-item" tabindex="0">
             <div class="step-num-col">
               <span class="step-num">03</span>
-              <div class="step-line" aria-hidden="true"></div>
+              <span class="step-hover-hint">Hover &rarr;</span>
             </div>
             <div class="step-content">
-              <h3 class="step-title">Multi-Source Ground Truth Corroboration</h3>
+              <h3 class="step-title">Ground Truth Corroboration</h3>
               <p class="step-text">
                 The Target Product SKU is resolved against master merchant catalogs and real-time inventory feeds.
                 Freshness intervals ensure pricing baseline, stock quantities, and carrier transit SLAs reflect actual
@@ -846,13 +604,13 @@
             </div>
           </div>
 
-          <div class="workflow-step-item">
+          <div class="workflow-step-item" tabindex="0">
             <div class="step-num-col">
               <span class="step-num">04</span>
-              <div class="step-line" aria-hidden="true"></div>
+              <span class="step-hover-hint">Hover &rarr;</span>
             </div>
             <div class="step-content">
-              <h3 class="step-title">Fail-Closed Deterministic Policy Evaluation</h3>
+              <h3 class="step-title">Fail-Closed Policy Gate</h3>
               <p class="step-text">
                 Every extracted claim is evaluated in under 1.2ms by strict mathematical rules (FTC deceptive price checks,
                 stockout barriers, transit mismatch detection). If any mandatory claim fails or evidence is missing, the
@@ -861,13 +619,13 @@
             </div>
           </div>
 
-          <div class="workflow-step-item">
+          <div class="workflow-step-item" tabindex="0">
             <div class="step-num-col">
               <span class="step-num">05</span>
-              <div class="step-line" aria-hidden="true"></div>
+              <span class="step-hover-hint">Hover &rarr;</span>
             </div>
             <div class="step-content">
-              <h3 class="step-title">Forward-Chained SHA-256 Tamper-Evident Ledger</h3>
+              <h3 class="step-title">Tamper-Evident Ledger</h3>
               <p class="step-text">
                 Every check verdict, operator override, and re-evaluation is committed into a forward-chained Merkle
                 audit stream. Each block cryptographically seals the previous block's SHA-256 digest, providing mathematical
@@ -1259,259 +1017,34 @@
       </div>
     </section>
 
-    <!-- =====================================================================
-         SECTION 7: GOVERNANCE & FTC TRANSPARENCY
-         ===================================================================== -->
-    <section class="section governance-section" id="governanceSection" aria-labelledby="govTitle">
-      <div class="content-container">
-        <div class="governance-card">
-          <div class="gov-content">
-            <span class="section-label">Governance</span>
-            <div class="section-heading-dash hero-dash" aria-hidden="true"></div>
-            <h2 id="govTitle" class="gov-title">Designed for FTC Compliance &amp; Non-Repudiation</h2>
-            <p class="gov-text">
-              ClaimCheck enforces FTC 16 CFR § 233 (Deceptive Pricing Guides) and § 240 (Retail Advertising Allowances)
-              directly in code. Dual-operator separation of duties ensures junior operators cannot override factual blocks
-              without authorized senior officer cryptographic sign-off.
-            </p>
-            <div class="gov-badges">
-              <span class="gov-badge">FTC 16 CFR § 233</span>
-              <span class="gov-badge">FTC 16 CFR § 240</span>
-              <span class="gov-badge">SHA-256 Merkle Ledger</span>
-              <span class="gov-badge">Role-Based Access Control</span>
-              <span class="gov-badge">Fail-Closed Architecture</span>
-            </div>
-          </div>
-          <div class="gov-graphic" aria-hidden="true">
-            <div class="shield-circle">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <path d="m9 12 2 2 4-4"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 8: FAQ ACCORDION (LUCIEN-STYLE)
-         ===================================================================== -->
-    <section class="section faq-section" id="faqSection" aria-labelledby="faqTitle">
-      <div class="content-container">
-        <div class="section-header">
-          <span class="section-label">FAQ</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="faqTitle" class="section-title">Questions &amp; Architecture Details</h2>
-          <p class="section-subtitle">
-            Explore how ClaimCheck integrates with retail media networks, programmatic ad engines, and inventory feeds.
-          </p>
-        </div>
-
-        <div class="faq-accordion" role="region" aria-label="ClaimCheck Frequently Asked Questions">
-          <!-- FAQ 1 -->
-          <div class="faq-item">
-            <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
-              <span class="faq-question">How does ClaimCheck differ from generic LLM evaluation prompts?</span>
-              <span class="faq-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="faq-answer">
-              <p>
-                Generic LLMs suffer from probabilistic hallucinations and inconsistent rule enforcement. ClaimCheck uses
-                the AMD ROCm-accelerated Llama-3.1 model <em>strictly for structured claim extraction</em> (locating character spans).
-                The subsequent policy evaluation executes deterministic rule evaluation after model-assisted extraction, performing mathematical comparison against live merchant
-                inventory, pricing records, and FTC compliance thresholds in under 1.2 milliseconds.
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ 2 -->
-          <div class="faq-item">
-            <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
-              <span class="faq-question">What hardware is required to achieve the sub-5ms latency SLA?</span>
-              <span class="faq-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="faq-answer">
-              <p>
-                Production deployments target AMD Instinct™ MI300X accelerators running ROCm 6.2 with vLLM serving.
-                In environments where GPU acceleration is offline or transitioning, ClaimCheck seamlessly activates an
-                optimized CPU fallback engine without altering any API contracts or fail-closed security guarantees.
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ 3 -->
-          <div class="faq-item">
-            <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
-              <span class="faq-question">How does the forward-chained Merkle audit stream ensure non-repudiation?</span>
-              <span class="faq-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="faq-answer">
-              <p>
-                Every check result, human review action, or emergency override writes a discrete event to the audit stream.
-                Each event calculates a SHA-256 hash that links to the previous event's chain digest. Any attempt to alter historical
-                records breaks the cryptographic linkage, allowing legal and regulatory teams to prove exactly which ad copy was approved
-                and what catalog evidence existed at that exact second.
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ 4 -->
-          <div class="faq-item">
-            <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
-              <span class="faq-question">What prevents junior operators from erroneously overriding blocked ads?</span>
-              <span class="faq-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="faq-answer">
-              <p>
-                Under decision rule DEC-010, the platform enforces strict Role-Based Access Control (RBAC).
-                Junior Operators can triage the queue, confirm blocks, or trigger re-extractions, but are strictly
-                forbidden by backend validation (returning 403 Forbidden) from authorizing overrides on factual BLOCKs.
-                Only Senior Compliance Officers or Legal Counsel can authorize overrides, requiring recorded rationales.
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ 5 -->
-          <div class="faq-item">
-            <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
-              <span class="faq-question">Can ClaimCheck verify advertisements for products not yet in the catalog?</span>
-              <span class="faq-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="faq-answer">
-              <p>
-                Yes. In Universal Auto-Detect mode (SKU: <code>UNIVERSAL_AUTO</code>), the engine extracts brand entities and product categories,
-                synthesizing corroborating evidence from connected dynamic merchant feeds to verify prices, percentage savings, stock availability,
-                and transit times for any arbitrary retail product.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 9: ANIMATED CLOSING CTA SECTION (LUCIEN-INSPIRED SECTION 15)
-         ===================================================================== -->
-    <section class="section closing-section" id="closingSection" aria-labelledby="closingTitle">
-      <!-- Atmospheric Blue Radial Glow Horizon -->
-      <div class="closing-glow-horizon" aria-hidden="true"></div>
-      <!-- Fine Technical Line Grid Overlay -->
-      <div class="closing-grid-overlay" aria-hidden="true"></div>
-      <!-- Horizontal Flow Light Trace -->
-      <div class="closing-light-trace" aria-hidden="true"></div>
-
-      <div class="content-container closing-container">
-        <div class="closing-content">
-          <div class="closing-eyebrow">
-            <span class="eyebrow-dot"></span>
-            <span class="eyebrow-text">DETERMINISTIC COMPLIANCE // EVIDENCE GATE</span>
-          </div>
-
-          <h2 id="closingTitle" class="closing-headline">
-            Verify every claim.<br>Trust the evidence.
-          </h2>
-
-          <p class="closing-copy">
-            Bring pricing, inventory, product data, and compliance policies into
-            one explainable verification workflow. Eliminate deceptive claims before publication.
-          </p>
-
-          <div class="closing-cta-group">
-            <a href="#studioSection" class="btn btn-primary btn-lg">
-              <span class="btn-text">Open Verification Studio</span>
-              <span class="btn-arrow">&rarr;</span>
-            </a>
-            <a href="#opsSection" class="btn btn-secondary btn-lg" data-ops-tab="audit">
-              <span class="btn-text">Explore the Audit Trail</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- =====================================================================
        FOOTER: OVERSIZED TYPOGRAPHIC FOOTER (LUCIEN-INSPIRED SECTION 16)
        ===================================================================== -->
   <footer class="app-footer" role="contentinfo">
-    <div class="footer-container">
-      <!-- Top Row: Structured Navigation Links -->
-      <div class="footer-top-row">
-        <!-- Left Brand & Mission -->
-        <div class="footer-col-brand">
-          <div class="footer-brand-lockup">
-            <div class="brand-icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <path d="m9 12 2 2 4-4"/>
-              </svg>
-            </div>
-            <span class="brand-name-footer">ClaimCheck</span>
-          </div>
-          <p class="footer-tagline">
-            The deterministic retail media evidence gate. Powered by AMD ROCm™ and forward-chained Merkle auditability.
-          </p>
-          <div class="footer-quick-links">
-            <a href="#heroSection" class="footer-quick-link">&rarr; Overview</a>
-            <a href="#problemSection" class="footer-quick-link">&rarr; Why ClaimCheck</a>
-            <a href="#howItWorksSection" class="footer-quick-link">&rarr; How It Works</a>
-            <a href="#studioSection" class="footer-quick-link">&rarr; Verification Studio</a>
-          </div>
-        </div>
+    <div class="footer-bg-wrap" aria-hidden="true">
+      <div class="footer-bg-transition"></div>
+      <img src="footer_lucien_bg.png" alt="" class="footer-bg-img">
+    </div>
 
-        <!-- Right Columns: Operations & Governance -->
-        <div class="footer-nav-cols">
-          <div class="footer-links-group">
-            <h4 class="footer-group-heading">Operations</h4>
-            <ul class="footer-links-list">
-              <li><a href="#opsSection" data-ops-tab="review">Human Review Queue</a></li>
-              <li><a href="#opsSection" data-ops-tab="audit">Chained Audit Explorer</a></li>
-              <li><a href="#opsSection" data-ops-tab="telemetry">Live Telemetry</a></li>
-              <li><a href="/metrics" target="_blank" rel="noopener">Prometheus Metrics</a></li>
-              <li><a href="/api/health" target="_blank" rel="noopener">Health API</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-links-group">
-            <h4 class="footer-group-heading">Governance</h4>
-            <ul class="footer-links-list">
-              <li><a href="#governanceSection">FTC 16 CFR § 233</a></li>
-              <li><a href="#governanceSection">FTC 16 CFR § 240</a></li>
-              <li><a href="#governanceSection">Separation of Duties</a></li>
-              <li><a href="#governanceSection">Non-Repudiation</a></li>
-              <li><a href="https://github.com/narayan-nkj/claimcheck-retail-media/blob/main/docs/ACCESSIBILITY.md" target="_blank" rel="noopener">Accessibility (WCAG 2.1 AA)</a></li>
-              <li><a href="#faqSection">Frequently Asked Questions</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Second Row: Copyright & Legal Specifications -->
+    <div class="footer-inner">
       <div class="footer-meta-row">
-        <div class="footer-meta-left">
-          <span>&copy; 2026 ClaimCheck. All rights reserved.</span>
-          <span class="meta-sep" aria-hidden="true">&bull;</span>
-          <span>Fail-Closed Deterministic Governance (FTC 16 CFR § 233 / § 240 Compliant)</span>
-        </div>
-        <div class="footer-meta-right">
-          <span>AMD ROCm™ 6.2 &bull; Llama-3.1-8B-Instruct</span>
+        <ul class="footer-nav-links" aria-label="Footer Navigation">
+          <li><a href="#heroSection"><span class="arrow" aria-hidden="true">&rarr;</span>About</a></li>
+          <li><a href="#howItWorksSection"><span class="arrow" aria-hidden="true">&rarr;</span>How It Works</a></li>
+          <li><a href="#studioSection"><span class="arrow" aria-hidden="true">&rarr;</span>Studio</a></li>
+          <li><a href="#opsSection"><span class="arrow" aria-hidden="true">&rarr;</span>Operations</a></li>
+          <li><button type="button" class="footer-contact-link" id="btnFooterContact"><span class="arrow" aria-hidden="true">&rarr;</span>Contact</button></li>
+          <li><a href="https://github.com/narayan-nkj/claimcheck-retail-media/blob/main/docs/ACCESSIBILITY.md" target="_blank" rel="noopener"><span class="arrow" aria-hidden="true">&rarr;</span>Accessibility (WCAG 2.1 AA)</a></li>
+        </ul>
+        <div class="footer-copyright">
+          &copy; 2026 ClaimCheck Technologies, Inc. All rights reserved.
         </div>
       </div>
 
-      <!-- Final Visual: Heroic Oversized Typographic Wordmark (Section 16) -->
-      <div class="footer-oversized-wrap" aria-hidden="true">
-        <div class="footer-oversized-wordmark">CLAIMCHECK</div>
+      <div class="footer-brand-wrap" aria-hidden="true">
+        <div class="footer-brand-wordmark">CLAIMCHECK</div>
       </div>
     </div>
   </footer>

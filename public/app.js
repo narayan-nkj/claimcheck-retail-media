@@ -336,12 +336,10 @@
 
     const sections = [
       { id: 'heroSection', el: document.getElementById('heroSection') },
-      { id: 'problemSection', el: document.getElementById('problemSection') },
       { id: 'howItWorksSection', el: document.getElementById('howItWorksSection') },
       { id: 'studioSection', el: document.getElementById('studioSection') },
       { id: 'opsSection', el: document.getElementById('opsSection') },
-      { id: 'faqSection', el: document.getElementById('faqSection') },
-    ];
+    ].filter((s) => Boolean(s.el));
 
     // Check URL hash on initial load for deep tab links (NV-02)
     if (window.location.hash) {
@@ -397,12 +395,13 @@
       }
 
       // Scroll spy logic: dynamic sort by document Y position
-      const scrollPos = window.scrollY + 130;
+      const scrollPos = window.scrollY + 140;
       const candidates = sections
         .filter((s) => s.el)
         .map((s) => ({
           id: s.id,
-          top: s.el.getBoundingClientRect().top + window.scrollY
+          top: s.el.getBoundingClientRect().top + window.scrollY,
+          bottom: s.el.getBoundingClientRect().top + window.scrollY + s.el.offsetHeight
         }))
         .sort((a, b) => a.top - b.top);
 
@@ -414,9 +413,9 @@
         }
       }
 
-      navItems.forEach((link) => {
+      allNavLinks.forEach((link) => {
         const href = link.getAttribute('href');
-        if (href === `#${currentSectionId}` || (currentSectionId === 'architectureSection' && href === '#howItWorksSection')) {
+        if (href === `#${currentSectionId}` || ((currentSectionId === 'howItWorksSection' || currentSectionId === 'architectureSection') && (href === '#howItWorksSection' || href === '#architectureSection'))) {
           link.classList.add('active');
         } else {
           link.classList.remove('active');
@@ -610,7 +609,9 @@
       }
     }
 
+    const btnFooterContact = document.getElementById('btnFooterContact');
     if (btnNav) btnNav.addEventListener('click', openDialog);
+    if (btnFooterContact) btnFooterContact.addEventListener('click', openDialog);
     if (btnMobile) {
       btnMobile.addEventListener('click', () => {
         const mobileNav = document.getElementById('mobileNav');
@@ -642,225 +643,229 @@
   }
 
   /**
-   * Solution Architecture Diagram Interactive Inspector (Lucien Rebuild)
+   * Solution Architecture Diagram Motion Engine
+   * Intact static paths with flowing luminous dots only.
+   * Diagram is non-clickable with all descriptions removed.
    */
   function setupSolutionDiagram() {
-    const DIAGRAM_NODES = {
-      'copy': {
-        tag: 'Sanitized',
-        title: 'Ad Copy Promotional Statements',
-        desc: 'Ad Copy Statements: multi-claim promotional text & SKUs ingested directly from programmatic auction streams or merchant inputs. PII and private API tokens are automatically sanitized before model processing.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathIn1']
-      },
-      'catalog-pricing': {
-        tag: 'Ground Truth',
-        title: 'Catalog & Pricing Baseline',
-        desc: 'Master price, specs & regular baseline merged with active discounts and promotional windows. Evaluated against FTC 16 CFR § 233 deceptive strikethrough rules.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathIn2']
-      },
-      'inventory': {
-        tag: 'Real-time Stock',
-        title: 'Warehouse Real-Time Inventory',
-        desc: 'Warehouse Inventory: real-time stock across fulfillment nodes. Eliminates zero-inventory ad spend and consumer stockout complaints.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathIn3']
-      },
-      'carrier': {
-        tag: 'Transit Model',
-        title: 'Carrier Transit SLAs & Delivery Models',
-        desc: 'Carrier Transit SLA: transit time guarantees & postal zones. Claims asserting fast or next-day shipping are corroborated against carrier guarantees.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathIn4']
-      },
-      'stage-sanitize': {
-        tag: 'Sanitized',
-        title: '01 Ingestion & Security Sanitization',
-        desc: 'Promotional copy ingested via auction stream; PII, payment cards, SSNs, and credentials redacted.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathIn1', 'pathIn2', 'pathIn3', 'pathIn4']
-      },
-      'stage-extraction': {
-        tag: 'AMD ROCm™ 6.2',
-        title: '02 Structured Claim Extraction',
-        desc: 'Llama-3.1-8B-Instruct extracts exact character spans across pricing, stock, and shipping claims.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathIn1', 'pathIn2', 'pathIn3', 'pathIn4']
-      },
-      'stage-corroboration': {
-        tag: 'Ground Truth',
-        title: '03 Multi-Source Ground Truth Corroboration',
-        desc: 'Resolves SKU against master catalog, active price discounts, stock levels, and carrier transit models.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathIn2', 'pathIn3', 'pathIn4']
-      },
-      'stage-policy': {
-        tag: '< 1.2ms Gate',
-        title: '04 Deterministic Policy Gate',
-        desc: 'Strict fail-closed rules evaluate pricing deception (FTC 16 CFR § 233), stockouts, and shipping drift.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathOut1', 'pathOut2', 'pathOut3', 'pathOut4']
-      },
-      'stage-seal': {
-        tag: 'SHA-256 Sealed',
-        title: '05 Cryptographic Tri-State Verdict',
-        desc: 'ALLOW, BLOCK or REVIEW, sealed with SHA-256.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathOut1', 'pathOut2', 'pathOut3', 'pathOut4']
-      },
-      'out-allow': {
-        tag: 'ALLOW Clearance',
-        title: 'Verified Claims',
-        desc: 'ALLOW: Instant programmatic clearance; corroborated by catalog truth.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathOut1']
-      },
-      'out-block': {
-        tag: 'BLOCK Rejection',
-        title: 'Blocked Claims',
-        desc: 'BLOCK: Factual contradiction pre-pub rejection.',
-        actionText: 'Test in Studio →',
-        actionHref: '#studioSection',
-        pathIds: ['pathOut2']
-      },
-      'out-review': {
-        tag: 'REVIEW Queue',
-        title: 'Review Queue',
-        desc: 'REVIEW: Prioritized triage with countdown SLAs (DEC-010).',
-        actionText: 'Open Review Queue →',
-        actionHref: '#opsSection',
-        opsTab: 'review',
-        pathIds: ['pathOut3']
-      },
-      'out-audit': {
-        tag: 'SHA-256 Ledger',
-        title: 'Audit Ledger',
-        desc: 'Chained Merkle Ledger: 1-click bit-for-bit historical replay verification.',
-        actionText: 'Explore Audit Ledger →',
-        actionHref: '#opsSection',
-        opsTab: 'audit',
-        pathIds: ['pathOut4']
+    const nodeOutAllow = document.getElementById('nodeOutAllow');
+    const nodeOutBlock = document.getElementById('nodeOutBlock');
+    const nodeOutReview = document.getElementById('nodeOutReview');
+    const nodeOutAudit = document.getElementById('nodeOutAudit');
+
+    // Real-time verification hook (triggered from Verification Studio)
+    window.triggerDiagramVerification = function({ verdict }) {
+      const v = (verdict || 'ALLOW').toUpperCase();
+      let targetNode = nodeOutAllow;
+      if (v === 'BLOCK') targetNode = nodeOutBlock;
+      else if (v === 'REVIEW') targetNode = nodeOutReview;
+
+      if (targetNode) {
+        targetNode.classList.add('is-active-stage');
+        setTimeout(() => {
+          targetNode.classList.remove('is-active-stage');
+        }, 3500);
       }
     };
-    // Backward compatibility aliases
-    DIAGRAM_NODES['sku'] = DIAGRAM_NODES['catalog-pricing'];
-    DIAGRAM_NODES['pricing'] = DIAGRAM_NODES['catalog-pricing'];
 
-    const detailTag = document.getElementById('diagramDetailTag');
-    const detailTitle = document.getElementById('diagramDetailTitle');
-    const detailDesc = document.getElementById('diagramDetailDesc');
-    const detailAction = document.getElementById('diagramDetailAction');
-    const allNodes = document.querySelectorAll('.dg__pill, .dg__tile, .diagram-node');
-    const allPaths = document.querySelectorAll('.dg__path, .diagram-path');
+    // Sequential Discrete Cycle (3-Section Internal Transmitting):
+    // Stage 1: 4 dots arrive from input feeds and disappear inside Sanitizer
+    // Stage 2: Pause inside Sanitizer (processing)
+    // Stage 3: Dot leaves Sanitizer, travels to Evidence Gate, and disappears inside
+    // Stage 4: Transmitting through Evidence Gate (tiles active sequentially)
+    // Stage 5: Dot leaves Evidence Gate, travels to Seal, and disappears inside
+    // Stage 6: Pause inside Seal (signing)
+    // Stage 7: 4 dots leave Seal and split to the 4 verdict outputs
+    // Stage 8: Brief quiet pause, then repeat
+    const svg = document.getElementById('solutionDiagramSvg');
+    if (!svg) return;
 
-    let currentSelectedKey = 'copy';
+    const pathIn0 = document.getElementById('curveIn0');
+    const pathIn1 = document.getElementById('curveIn1');
+    const pathIn2 = document.getElementById('curveIn2');
+    const pathIn3 = document.getElementById('curveIn3');
+    const pathLink0 = document.getElementById('curveLink0');
+    const pathLink1 = document.getElementById('curveLink1');
+    const pathOut0 = document.getElementById('curveOut0');
+    const pathOut1 = document.getElementById('curveOut1');
+    const pathOut2 = document.getElementById('curveOut2');
+    const pathOut3 = document.getElementById('curveOut3');
 
-    function highlightPaths(pathIds) {
-      allPaths.forEach((p) => p.classList.remove('path-highlighted'));
-      if (Array.isArray(pathIds)) {
-        pathIds.forEach((pid) => {
-          const el = document.getElementById(pid);
-          if (el) el.classList.add('path-highlighted');
-        });
-      }
+    const dotIn0 = document.getElementById('dotIn0');
+    const dotIn1 = document.getElementById('dotIn1');
+    const dotIn2 = document.getElementById('dotIn2');
+    const dotIn3 = document.getElementById('dotIn3');
+    const dotCenter = document.getElementById('dotCenter');
+    const dotOut0 = document.getElementById('dotOut0');
+    const dotOut1 = document.getElementById('dotOut1');
+    const dotOut2 = document.getElementById('dotOut2');
+    const dotOut3 = document.getElementById('dotOut3');
+
+    const tileExtraction = document.getElementById('tileExtraction');
+    const tileCorroboration = document.getElementById('tileCorroboration');
+    const tilePolicy = document.getElementById('tilePolicy');
+
+    if (!pathIn0 || !pathLink0 || !pathLink1 || !pathOut0 || !dotIn0 || !dotCenter || !dotOut0) return;
+
+    const pathsIn = [pathIn0, pathIn1, pathIn2, pathIn3];
+    const dotsIn = [dotIn0, dotIn1, dotIn2, dotIn3];
+    const pathsOut = [pathOut0, pathOut1, pathOut2, pathOut3];
+    const dotsOut = [dotOut0, dotOut1, dotOut2, dotOut3];
+
+    let lensIn = [];
+    let lenLink0 = 0;
+    let lenLink1 = 0;
+    let lensOut = [];
+
+    try {
+      lensIn = pathsIn.map(p => p.getTotalLength());
+      lenLink0 = pathLink0.getTotalLength();
+      lenLink1 = pathLink1.getTotalLength();
+      lensOut = pathsOut.map(p => p.getTotalLength());
+    } catch (_) {
+      return;
     }
 
-    function selectNode(nodeKey) {
-      const data = DIAGRAM_NODES[nodeKey];
-      if (!data) return;
+    const CYCLE = 5600;
+    const S1_END = 1200; // 0..1200ms: 4 dots entering Sanitizer & disappearing inside
+    const S2_END = 1700; // 1200..1700ms: inside Sanitizer
+    const S3_END = 2400; // 1700..2400ms: dot leaves Sanitizer -> enters Evidence Gate & disappears inside
+    const S4_END = 3200; // 2400..3200ms: transmitting inside Evidence Gate
+    const S5_END = 3900; // 3200..3900ms: dot leaves Evidence Gate -> enters Seal & disappears inside
+    const S6_END = 4300; // 3900..4300ms: inside Seal
+    const S7_END = 5300; // 4300..5300ms: 4 dots leave Seal and split to outputs
+    // 5300..5600ms: quiet pause
 
-      currentSelectedKey = nodeKey;
+    function clearTransmittingTiles() {
+      if (tileExtraction) tileExtraction.style.borderColor = '';
+      if (tileCorroboration) tileCorroboration.style.borderColor = '';
+      if (tilePolicy) tilePolicy.style.borderColor = '';
+    }
 
-      // Update detail card
-      if (detailTag) detailTag.textContent = data.tag;
-      if (detailTitle) detailTitle.textContent = data.title;
-      if (detailDesc) detailDesc.textContent = data.desc;
-      if (detailAction) {
-        detailAction.textContent = data.actionText || 'Test in Studio →';
-        detailAction.setAttribute('href', data.actionHref || '#studioSection');
-        if (data.opsTab) {
-          detailAction.setAttribute('data-ops-tab', data.opsTab);
-          detailAction.onclick = (e) => {
-            e.preventDefault();
-            switchTab(data.opsTab);
-            const opsSec = document.getElementById('opsSection');
-            if (opsSec) {
-              const targetPos = opsSec.getBoundingClientRect().top + window.scrollY - 96;
-              window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
-            }
-          };
+    function renderDiagramMotion(now) {
+      const elapsed = now % CYCLE;
+
+      if (elapsed < S1_END) {
+        // Stage 1: 4 dots coming from inputs to Sanitizer, disappearing as they enter
+        const rawFrac = elapsed / S1_END;
+        const frac = 0.5 - 0.5 * Math.cos(Math.PI * rawFrac);
+        let op = 1;
+        if (rawFrac < 0.1) op = rawFrac / 0.1;
+        else if (rawFrac > 0.8) op = (1 - rawFrac) / 0.2; // disappears on entering Sanitizer
+
+        for (let i = 0; i < 4; i++) {
+          const pt = pathsIn[i].getPointAtLength(frac * lensIn[i]);
+          dotsIn[i].setAttribute('cx', pt.x.toFixed(2));
+          dotsIn[i].setAttribute('cy', pt.y.toFixed(2));
+          dotsIn[i].style.opacity = Math.max(0, op).toFixed(3);
+        }
+
+        dotCenter.style.opacity = '0';
+        for (let i = 0; i < 4; i++) dotsOut[i].style.opacity = '0';
+        clearTransmittingTiles();
+
+      } else if (elapsed < S2_END) {
+        // Stage 2: Inside Sanitizer (dots disappeared inside, brief pause)
+        for (let i = 0; i < 4; i++) dotsIn[i].style.opacity = '0';
+        dotCenter.style.opacity = '0';
+        for (let i = 0; i < 4; i++) dotsOut[i].style.opacity = '0';
+        clearTransmittingTiles();
+
+      } else if (elapsed < S3_END) {
+        // Stage 3: Leaves Sanitizer -> Enters Evidence Gate and disappears inside
+        const rawFrac = (elapsed - S2_END) / (S3_END - S2_END);
+        const frac = 0.5 - 0.5 * Math.cos(Math.PI * rawFrac);
+        let op = 1;
+        if (rawFrac < 0.15) op = rawFrac / 0.15;
+        else if (rawFrac > 0.8) op = (1 - rawFrac) / 0.2; // disappears on entering Evidence Gate
+
+        for (let i = 0; i < 4; i++) dotsIn[i].style.opacity = '0';
+
+        const pt = pathLink0.getPointAtLength(frac * lenLink0);
+        dotCenter.setAttribute('cx', pt.x.toFixed(2));
+        dotCenter.setAttribute('cy', pt.y.toFixed(2));
+        dotCenter.style.opacity = Math.max(0, op).toFixed(3);
+
+        for (let i = 0; i < 4; i++) dotsOut[i].style.opacity = '0';
+        clearTransmittingTiles();
+
+      } else if (elapsed < S4_END) {
+        // Stage 4: Transmitting inside Evidence Gate
+        for (let i = 0; i < 4; i++) dotsIn[i].style.opacity = '0';
+        dotCenter.style.opacity = '0';
+        for (let i = 0; i < 4; i++) dotsOut[i].style.opacity = '0';
+
+        const tSub = elapsed - S3_END;
+        if (tSub < 260) {
+          if (tileExtraction) tileExtraction.style.borderColor = '#70DFFF';
+          if (tileCorroboration) tileCorroboration.style.borderColor = '';
+          if (tilePolicy) tilePolicy.style.borderColor = '';
+        } else if (tSub < 520) {
+          if (tileExtraction) tileExtraction.style.borderColor = '';
+          if (tileCorroboration) tileCorroboration.style.borderColor = '#70DFFF';
+          if (tilePolicy) tilePolicy.style.borderColor = '';
         } else {
-          detailAction.removeAttribute('data-ops-tab');
-          detailAction.onclick = (e) => {
-            if (data.actionHref === '#studioSection') {
-              e.preventDefault();
-              const studioSec = document.getElementById('studioSection');
-              if (studioSec) {
-                const targetPos = studioSec.getBoundingClientRect().top + window.scrollY - 96;
-                window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
-              }
-            }
-          };
+          if (tileExtraction) tileExtraction.style.borderColor = '';
+          if (tileCorroboration) tileCorroboration.style.borderColor = '';
+          if (tilePolicy) tilePolicy.style.borderColor = '#70DFFF';
         }
+
+      } else if (elapsed < S5_END) {
+        // Stage 5: Leaves Evidence Gate -> Enters Seal and disappears inside
+        clearTransmittingTiles();
+        const rawFrac = (elapsed - S4_END) / (S5_END - S4_END);
+        const frac = 0.5 - 0.5 * Math.cos(Math.PI * rawFrac);
+        let op = 1;
+        if (rawFrac < 0.15) op = rawFrac / 0.15;
+        else if (rawFrac > 0.8) op = (1 - rawFrac) / 0.2; // disappears on entering Seal
+
+        for (let i = 0; i < 4; i++) dotsIn[i].style.opacity = '0';
+
+        const pt = pathLink1.getPointAtLength(frac * lenLink1);
+        dotCenter.setAttribute('cx', pt.x.toFixed(2));
+        dotCenter.setAttribute('cy', pt.y.toFixed(2));
+        dotCenter.style.opacity = Math.max(0, op).toFixed(3);
+
+        for (let i = 0; i < 4; i++) dotsOut[i].style.opacity = '0';
+
+      } else if (elapsed < S6_END) {
+        // Stage 6: Inside Seal (brief pause)
+        for (let i = 0; i < 4; i++) dotsIn[i].style.opacity = '0';
+        dotCenter.style.opacity = '0';
+        for (let i = 0; i < 4; i++) dotsOut[i].style.opacity = '0';
+        clearTransmittingTiles();
+
+      } else if (elapsed < S7_END) {
+        // Stage 7: 4 dots leave Seal and split to outputs
+        clearTransmittingTiles();
+        const rawFrac = (elapsed - S6_END) / (S7_END - S6_END);
+        const frac = 0.5 - 0.5 * Math.cos(Math.PI * rawFrac);
+        let op = 1;
+        if (rawFrac < 0.1) op = rawFrac / 0.1;
+        else if (rawFrac > 0.88) op = (1 - rawFrac) / 0.12;
+
+        for (let i = 0; i < 4; i++) dotsIn[i].style.opacity = '0';
+        dotCenter.style.opacity = '0';
+
+        for (let i = 0; i < 4; i++) {
+          const pt = pathsOut[i].getPointAtLength(frac * lensOut[i]);
+          dotsOut[i].setAttribute('cx', pt.x.toFixed(2));
+          dotsOut[i].setAttribute('cy', pt.y.toFixed(2));
+          dotsOut[i].style.opacity = Math.max(0, op).toFixed(3);
+        }
+
+      } else {
+        // Stage 8: Quiet pause before reset
+        for (let i = 0; i < 4; i++) dotsIn[i].style.opacity = '0';
+        dotCenter.style.opacity = '0';
+        for (let i = 0; i < 4; i++) dotsOut[i].style.opacity = '0';
+        clearTransmittingTiles();
       }
 
-      // Update node selection
-      allNodes.forEach((n) => {
-        const isCurrent = n.getAttribute('data-node') === nodeKey;
-        n.classList.toggle('is-selected', isCurrent);
-        n.classList.toggle('active-node', isCurrent);
-        n.setAttribute('aria-expanded', isCurrent ? 'true' : 'false');
-      });
-
-      // Highlight active paths
-      highlightPaths(data.pathIds);
+      requestAnimationFrame(renderDiagramMotion);
     }
 
-    // Attach listeners to nodes
-    allNodes.forEach((node) => {
-      const nodeKey = node.getAttribute('data-node');
-      if (!nodeKey) return;
-
-      // Hover: highlight curves
-      node.addEventListener('mouseenter', () => {
-        const data = DIAGRAM_NODES[nodeKey];
-        if (data && data.pathIds) {
-          highlightPaths(data.pathIds);
-        }
-      });
-
-      node.addEventListener('mouseleave', () => {
-        const currentData = DIAGRAM_NODES[currentSelectedKey];
-        if (currentData && currentData.pathIds) {
-          highlightPaths(currentData.pathIds);
-        }
-      });
-
-      // Focus
-      node.addEventListener('focus', () => {
-        selectNode(nodeKey);
-      });
-
-      // Click
-      node.addEventListener('click', (e) => {
-        e.preventDefault();
-        selectNode(nodeKey);
-      });
-    });
-
-    // Default selection on load: 'copy'
-    selectNode('copy');
+    requestAnimationFrame(renderDiagramMotion);
   }
 
   /**
@@ -1042,6 +1047,18 @@
   function renderCheckResult(result) {
     const verdict = result.verdict;
     const status = verdict.compositeStatus; // 'ALLOW', 'REVIEW', 'BLOCK'
+
+    // Trigger coordinated verification run on solution architecture diagram if visible
+    if (typeof window.triggerDiagramVerification === 'function') {
+      try {
+        window.triggerDiagramVerification({
+          verdict: status,
+          presetId: result.presetId
+        });
+      } catch (err) {
+        console.warn('Diagram verification trigger error:', err);
+      }
+    }
 
     // 1. Update Verdict Banner
     if (elements.verdictBanner) {
@@ -1298,9 +1315,11 @@
       const diffMs = new Date(deadlineStr).getTime() - Date.now();
       if (diffMs <= 0) {
         el.textContent = 'SLA EXPIRED';
-        el.style.background = 'rgba(239, 68, 68, 0.4)';
+        el.classList.add('is-expired');
+        el.style.background = '';
         return;
       }
+      el.classList.remove('is-expired');
 
       const totalSec = Math.floor(diffMs / 1000);
       const mins = Math.floor(totalSec / 60);
