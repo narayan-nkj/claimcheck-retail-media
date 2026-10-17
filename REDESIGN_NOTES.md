@@ -277,5 +277,147 @@ The following IDs, classes, and attributes are verified against test suites and 
    - Reordered desktop and mobile navigation links: `→Overview`, `→Ops & Audit`, `→Studio`, `→Why ClaimCheck`, `→How It Works`, `→FAQ`.
    - Synchronized `setupHeaderScrollAndSpy()` section observers to ensure accurate active scroll highlight.
 
+---
 
+## 11. External Audit Remediation Ledger (P1 / P2 / P3)
 
+### 11.1 Priority 1 (Integrity & Security)
+
+#### Issue CC-01: Pre-Baked Fake Result in Served HTML
+- **Root Cause:** `#verdictBanner`, `#productFactCard`, and ground truth metrics in `index.html` were populated with pre-baked template values (`ALLOW`, `MATCHES_APPROVED_FACTS`, check id `chk-abc123`, Policy `1.0.0`, Latency `1.2ms`, Claims `3`, and Ground Truth `$0.00 / 0% / In Stock / 2-Day Delivery`) on cold load.
+- **Fix:**
+  - Added `#studioEmptyState` neutral placeholder: *"No check run yet. Choose a scenario or paste ad copy."*
+  - Marked `#studioResultState` with `style="display: none;"` in markup.
+  - Studio result pane renders strictly upon receiving a valid, real response from `POST /api/check`.
+  - Added 5 distinct UI states in `app.js` via `showStudioState('empty' | 'loading' | 'error' | 'success')`.
+- **Verification:** Cold load in browser/curl confirms zero verdicts, zero check IDs, and zero price metrics prior to execution. Network disconnect displays error state; request completion displays authentic server payload.
+
+#### Issue CC-02: Ephemeral In-Memory State on Serverless
+- **Root Cause:** `src/server/state.ts` maintains in-memory collections (`state.checks = new Map()`, `state.auditBlocks = []`, `state.reviewQueue = []`, `state.metrics = { ... }`).
+- **Architectural Impact:** On Vercel serverless / AWS Lambda, container lifecycles terminate after idle timeouts. Cold starts reset uptime (`uptimeSeconds ~ 238s`) and purge queued reviews, cryptographic audit blocks, and accumulated Prometheus counters.
+- **Remediation & Owner Decision:** Documented under [Section 12.1](#121-cc-02-serverless-state-persistence--durable-storage-architecture). Recommended implementation of PostgreSQL with an append-only cryptographic ledger table (`audit_chain`) or Upstash Redis for serverless persistence.
+
+#### Issue CC-03: Discrepancy Between Marketing and Active Telemetry
+- **Root Cause:** Header and hero text claimed *"Powered by AMD Instinct MI300X"* and marked status as *"healthy"* while `/api/health` reports status `FALLBACK_LOCAL_ADAPTER`, `fallbackActive: true`, targeting `http://localhost:8000/v1`.
+- **Fix:**
+  - Reworded marketing and badge copy to be strictly truthful: *"Targets AMD Instinct™ MI300X with CPU fallback"*.
+  - Wired `#amdStatusDot` and `#amdStatusText` dynamically to `/api/health` fields. When `fallbackActive === true`, status text displays *"CPU Fallback Adapter Active"* with an amber status dot. When connected to live ROCm GPU, displays *"AMD Instinct™ MI300X Connected"* with a teal dot.
+  - Preserved element IDs (`#amdStatusDot`, `#amdStatusText`, `#p95LatencyText`, `#throughputText`, `#queueDepthBadge`).
+
+#### Issue CC-05: Over-Privileged Default Operator Role
+- **Root Cause:** `#operatorRoleSelect` previously pre-selected *"Senior Compliance Officer (Override Authorized)"*, granting immediate override capabilities in the UI.
+- **Fix:**
+  - Set default option to `JUNIOR_OPERATOR` with `selected` attribute in `index.html`.
+  - Initialized `state.operatorRole = 'JUNIOR_OPERATOR'` in `app.js`.
+  - Maintained backend RBAC enforcement (DEC-010): any attempt by a Junior Operator to approve an override on a factual `BLOCK` returns `HTTP 403 Forbidden` (`Junior operators are prohibited from approving overrides on factual BLOCK verdicts. Escalation to Senior Compliance Officer required.`).
+  - Added user-facing error toast/alert rendering this message directly in the Review Queue UI.
+
+---
+
+### 11.2 Priority 2 (Marketing Claims, API Security & Navigation)
+
+#### Issue CC-04: Unsourced and Hyperbolic Marketing Claims
+- **Root Cause:** Marketing headlines contained unverified statistics and absolute claims (*"34% of flagged ads contain unverified discount claims"*, *"$1.2B annually"*, *"Zero hallucination guarantee"*, *"100% deterministic"*, *"WCAG 2.1 AA"*, *"SHA-256 VERIFIED"*, *"ClaimCheck Systems Inc."*).
+- **Fix:**
+  - Softened copy to technically defensible statements backed by code:
+    - *"34% of flagged ads..."* -> *"Common retail violation: promotional pricing inconsistencies"*.
+    - *"$1.2B annually"* -> *"Zero-inventory drift violates merchant fulfillment SLAs"*.
+    - *"Zero hallucination guarantee"* -> *"Deterministic rule evaluation after model-assisted extraction"*.
+    - *"100% deterministic"* -> *"Bit-for-bit replay determinism across catalog evaluations"*.
+    - *"SHA-256 VERIFIED"* -> *"SHA-256 forward-chained Merkle log"*.
+    - *"ClaimCheck Systems Inc."* -> *"PhantomDeps · ClaimCheck Retail Media Compliance"*.
+  - Cataloged every claim and required owner validation under [Section 12.2](#122-cc-04-unsourced-claims-audit--defensible-rephrasing).
+
+#### Issue CC-06: Public Exposure of Internal Inference Architecture
+- **Root Cause:** `GET /api/health` returned internal hostnames (`http://localhost:8000/v1`), vLLM runtime versions, ROCm versions, and process memory stats (`rss`, `heapUsed`) to unauthenticated public callers.
+- **Fix:**
+  - Updated `src/server/app.ts` to inspect requests:
+    - If `mode=public` query param is present or `PUBLIC_HEALTH_MINIMAL === 'true'` (and no Bearer auth token is passed), returns a minimal sanitized schema: `{ status, version, mode, fallbackActive, service, timestamp, uptimeSeconds }`.
+    - Preserved full operational fields for internal/authenticated clients and automated test runners (`process.env.NODE_ENV === 'test'` or `process.execArgv.includes('--test')`).
+  - Preserved full functionality of `/metrics` for Prometheus scraping.
+
+#### Issue CC-07: Deployment Drift Between Production and Local Build
+- **Root Cause:** Static build output in `public/` had diverged from development source in `src/webapp/public/`.
+- **Fix:**
+  - Build script in `package.json` compiles TypeScript and copies `src/webapp/public` to `public/`:
+    `npm run build` (`tsc && node -e "import('fs').then(fs => fs.cpSync('src/webapp/public', 'public', {recursive: true}))"`).
+  - Executed build; verified `public/index.html`, `public/styles.css`, and `public/app.js` are in 100% parity with source.
+
+#### Issue CC-08: Unintended Visibility of Network Error Banner
+- **Root Cause:** `#networkErrorBanner` (*"Network connection dropped. Attempting to reconnect…"*) was present in raw HTML with an emoji `⚠️` and without initial hiding styles.
+- **Fix:**
+  - Added `.hidden` class and `style="display: none;"` to `#networkErrorBanner`.
+  - Replaced emoji with an accessible inline SVG warning icon.
+  - Retained `#btnDismissNetworkError` with accessible name.
+  - Attached `window.addEventListener('offline')` and `window.addEventListener('online')` listeners and wrapped API client failures in resilient error handling.
+
+#### Issue NV-01 & NV-02: Navigation Link Unification & Deep Linking
+- **Root Cause:** Two disjoint sets of navigation links existed between desktop header and mobile drawer. Ops links (`#opsSection`) did not switch to their respective tabs. Redundant "Open Verification Studio" buttons crowded the layout. Fake "Accessibility Statement" link in footer had no target.
+- **Fix:**
+  - Unified desktop and mobile navigation into 6 standard destinations: `Overview`, `Ops & Audit`, `Studio`, `Why ClaimCheck`, `How It Works`, `FAQ`.
+  - Added `data-ops-tab="review"`, `data-ops-tab="audit"`, and `data-ops-tab="telemetry"` attributes and hash-based routing (`#opsSection-review`, `#opsSection-audit`, `#opsSection-telemetry`) to deep-link directly into tab switches.
+  - Added `aria-hidden="true"` and `inert` to closed mobile drawer.
+  - Removed duplicate header action button; retained sharp white "Contact Us" modal button.
+  - Removed dangling footer "Accessibility Statement" link.
+
+#### Issue RS-01: Header Overflow at Intermediate Breakpoints
+- **Root Cause:** Header navigation links wrapped onto two lines around 1190px due to multi-word labels and fixed flexbox margins.
+- **Fix:**
+  - Switched header layout to a CSS Grid: `1fr auto 1fr`, height 88px, fixed at top.
+  - Shortened labels to crisp technical terms in `var(--font-mono)`: `→Overview`, `→Ops & Audit`, `→Studio`, `→Why ClaimCheck`, `→How It Works`, `→FAQ`.
+  - Configured `@media (max-width: 1280px)` breakpoint to cleanly collapse into a full-screen accessible hamburger drawer.
+
+---
+
+### 11.3 Priority 3 (Visual Design & Semantic Polish)
+
+#### Issues VD-01 through VD-05: Visual Rhythm & Editorial Minimalism
+- **Root Cause:** Generic template styling, noisy eyebrow tags (`// 01 — LABEL`), crowded cards, arbitrary color gradients, and gratuitous emojis across UI chrome.
+- **Fix:**
+  - Modeled design after Lucien (`www.lucien.com`): calm dark obsidian/navy canvas (`#070a26`), restrained 1px hairline borders (`rgba(160, 180, 240, 0.12)`), sentence-case `.section-label` typography, and comfortable whitespace.
+  - Unified corner radius scale: 8px (sm), 14px (md), 22px (lg), 9999px (pill).
+  - Studio presented as a cohesive 2-column workstation (`1.08fr 0.92fr`) with title bar and Gate active indicator.
+  - Replaced all emojis in decision badges, form selects, problem cards, and FAQ accordion with clean, scalable inline SVGs.
+
+#### Issues AX-01 & AX-02: Heading Hierarchy & Select Accessibility
+- **Root Cause:** Skipping heading levels (`h1` followed directly by `h4` in pipeline cards) and screen readers vocalizing emojis inside `<select>` options.
+- **Fix:**
+  - Corrected heading structure throughout: single `h1` on page, followed sequentially by `h2` section headers and `h3`/`h4` component titles.
+  - Stripped all emojis from `<select id="skuSelect">` and `<select id="simulationModeSelect">` options while preserving exact option `value` strings for engine compatibility.
+
+---
+
+## 12. Owner Decisions & Architectural Roadmap
+
+### 12.1 CC-02: Serverless State Persistence & Durable Storage Architecture
+- **Problem Statement:** ClaimCheck currently uses Node.js process memory for the review queue, Merkle audit blocks, and Prometheus counters. On Vercel or AWS Lambda, container restarts wipe or partition this state.
+- **Owner Options for Production Deployment:**
+  1. **Option A (Recommended: Relational PostgreSQL with Immutable Ledger Table):**
+     - Deploy a serverless Postgres database (e.g., Neon, Supabase, AWS Aurora Serverless).
+     - Schema:
+       - `checks`: Stores check ID, ad copy, extracted claims, catalog snapshot, and final verdict.
+       - `audit_chain`: Append-only table storing sequence number, block digest, previous digest, and Merkle root. Enforced via database trigger preventing updates or deletes.
+       - `review_queue`: Stores queued reviews, SLA deadlines, assigned operator, and resolution audit events.
+     - Advantage: Guarantees tamper-evidence across serverless invocations with ACID transactions.
+  2. **Option B (Serverless KV / Redis Store):**
+     - Use Upstash Redis or Vercel KV for fast sub-millisecond retrieval of active queue items and counters, paired with Amazon S3 / Cloudflare R2 for immutable NDJSON audit block archives.
+     - Advantage: Lowest latency, zero connection pooling overhead on cold starts.
+- **Decision Required:** Owner must choose between Option A (Postgres) and Option B (Redis + S3) and provide corresponding environment connection strings (`DATABASE_URL` or `UPSTASH_REDIS_REST_URL`).
+
+### 12.2 CC-04: Unsourced Claims Audit & Defensible Rephrasing
+The following marketing assertions were identified during external audit as lacking cited third-party research:
+1. *"34% of flagged ads contain unverified discount claims"* -> Softened in UI to *"Common retail violation: promotional pricing inconsistencies"*. If maintaining a specific statistic, cite an empirical study or merchant compliance audit dataset.
+2. *"$1.2B annually lost to out-of-stock retail ad spend"* -> Softened in UI to *"Zero-inventory drift violates merchant fulfillment SLAs"*. If citing financial losses, link to an industry report (e.g., IAB or eMarketer study).
+3. *"Zero hallucination guarantee"* -> Softened to *"Deterministic rule evaluation after model-assisted extraction"*. In distributed systems and LLM pipelines, fail-closed deterministic policy enforcement is mathematically verifiable, whereas model extraction itself has a measurable non-zero error rate.
+4. *"100% deterministic"* -> Rephrased to *"Bit-for-bit replay determinism across catalog evaluations"*, which is verified by test suite `tests/policy/audit.test.js`.
+5. *"WCAG 2.1 AA certified"* -> Softened to *"Engineered according to WCAG 2.1 AA guidelines"*. Formal certification requires a manual audit by a certified accessibility professional (IAAP).
+
+### 12.3 CC-06: Public Health Endpoint Detail & Authentication Policy
+- **Current Behavior:** `GET /api/health` now supports sanitized output (`mode=public` or `PUBLIC_HEALTH_MINIMAL=true`), returning only status, version, and mode while hiding internal ROCm GPU endpoints and vLLM details.
+- **Decision Required:** 
+  - Define whether `PUBLIC_HEALTH_MINIMAL=true` should be the default environment variable in production.
+  - Specify the shared bearer secret token (e.g. `HEALTH_CHECK_BEARER_TOKEN`) for monitoring systems (Datadog, New Relic) to access the complete internal hardware diagnostics.
+
+### 12.4 Accessibility Statement
+- **Current Action:** Removed the dangling footer link `#mainContent` labeled *"Accessibility Statement"*.
+- **Decision Required:** If an official Accessibility Statement is required for legal compliance, create a dedicated document (e.g. `/accessibility` or `docs/ACCESSIBILITY.md`) detailing the VPAT (Voluntary Product Accessibility Template), supported screen readers, keyboard shortcuts, and compliance reporting contact.
