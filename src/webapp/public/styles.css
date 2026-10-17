@@ -4302,3 +4302,69 @@ section[id],
   }
 }
 
+/* ==========================================================================
+   Windows High Contrast & Forced Colors Mode (WCAG 2.1 AA)
+   ========================================================================== */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid Highlight !important;
+    outline-offset: 3px !important;
+  }
+
+  .status-dot,
+  .dg__pill-dot {
+    forced-color-adjust: none;
+    border: 1px solid ButtonBorder !important;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-nav-contact,
+  .dg__pill,
+  .dg__container,
+  .dg__tile,
+  .feature-card,
+  .decision-card,
+  .contact-dialog-panel {
+    border: 1px solid ButtonBorder !important;
+  }
+
+  .dg__curve,
+  .dg__link,
+  .dg-rule {
+    stroke: LinkText !important;
+    background-color: LinkText !important;
+  }
+
+  .badge,
+  .card-badge,
+  .decision-badge,
+  .hero-category-pill,
+  .announcement-pill {
+    forced-color-adjust: none;
+    border: 1px solid ButtonBorder !important;
+  }
+}
+
+/* ==========================================================================
+   Windows Reduced Transparency & Non-GPU Fallbacks
+   ========================================================================== */
+@media (prefers-reduced-transparency: reduce) {
+  .app-header.is-scrolled {
+    background-color: var(--bg-0) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .contact-dialog-panel,
+  .feature-card,
+  .decision-card,
+  .dg__container {
+    background-color: var(--bg-1) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .dg__pill {
+    background-color: var(--pill-fill) !important;
+  }
+}
