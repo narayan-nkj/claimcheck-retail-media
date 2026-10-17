@@ -70,9 +70,9 @@
   --radius-lg: 22px;
   --radius-pill: 9999px;
 
-  --font-display: "Host Grotesk", "Hanken Grotesk", "Geist", "Inter Tight", system-ui, sans-serif;
-  --font-body:    "Host Grotesk", "Hanken Grotesk", "Geist", "Inter", system-ui, sans-serif;
-  --font-mono:    "IBM Plex Mono", "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Host Grotesk", "Hanken Grotesk", "Geist", "Inter Tight", "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, system-ui, sans-serif;
+  --font-body:    "Host Grotesk", "Hanken Grotesk", "Geist", "Inter", "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, system-ui, sans-serif;
+  --font-mono:    "IBM Plex Mono", "Geist Mono", "JetBrains Mono", "Cascadia Code", "Consolas", ui-monospace, monospace;
   --font-brand:   "Michroma", "Unbounded", var(--font-display);
 
   /* Legacy & Semantic Mappings for Backward Compatibility */
@@ -137,6 +137,9 @@ html {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
   overflow-x: hidden;
@@ -193,8 +196,11 @@ a:hover, a:focus {
   text-decoration: none;
 }
 
-button {
+button, input, select, textarea {
   font-family: inherit;
+}
+
+button {
   cursor: pointer;
 }
 
@@ -1213,7 +1219,7 @@ section[id],
   font-family: var(--font-display);
   font-weight: 300;
   font-size: max(32px, 2.8vw);
-  line-height: 1.0;
+  line-height: 1.15;
   letter-spacing: -0.01em;
   text-align: center;
   max-width: 40vw;
@@ -1226,7 +1232,7 @@ section[id],
   font-family: var(--font-body);
   font-weight: 400;
   font-size: max(16px, 1.05vw);
-  line-height: 1.39;
+  line-height: 1.45;
   color: var(--text-para);
   max-width: 37.5vw;
   text-align: center;
@@ -3737,7 +3743,8 @@ section[id],
   font-size: clamp(2.4rem, 8.4vw, 9.4rem);
   font-weight: 400;
   letter-spacing: 0.02em;
-  line-height: 0.85;
+  line-height: 1.0;
+  padding: 4px 0;
   text-align: center;
   white-space: nowrap;
   width: 100%;
