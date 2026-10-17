@@ -8,33 +8,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;600;700&family=Michroma&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3.0">
+  <link rel="stylesheet" href="styles.css?v=3.1">
 </head>
 <body class="site-body">
   <!-- Accessible Skip Navigation Link (WCAG 2.1 AA) -->
   <a href="#mainContent" class="skip-link">Skip to main content</a>
 
-  <!-- Lucien-Style 3-Column Fixed/Sticky Navbar (1fr auto 1fr) -->
+  <!-- Lucien-Style 3-Column Fixed/Sticky Navbar (1fr auto 1fr, 88px) -->
   <header class="app-header" role="banner">
     <div class="header-container">
-      <!-- Left Cell: 6 Monospace Nav Links with → Prefix -->
+      <!-- Left Cell: 6 Monospace Nav Links with → Prefix (NV-01) -->
       <nav class="header-nav-left" id="desktopNav" aria-label="Main Navigation">
         <a href="#heroSection" class="nav-item active"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Overview</a>
-        <a href="#opsSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
-        <a href="#studioSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
         <a href="#problemSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Why ClaimCheck</a>
         <a href="#howItWorksSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>How It Works</a>
+        <a href="#studioSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
+        <a href="#opsSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
         <a href="#faqSection" class="nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>FAQ</a>
       </nav>
 
-      <!-- Center Cell: Perfectly Centered Brand Wordmark -->
+      <!-- Center Cell: Centered Brand Wordmark (no subtitle per design) -->
       <div class="header-brand-center">
         <a href="#heroSection" class="brand-link" aria-label="ClaimCheck Home">
           <span class="brand-name">ClaimCheck</span>
         </a>
       </div>
 
-      <!-- Right Cell: Sharp White Rectangular Contact Us Button & Mobile Trigger -->
+      <!-- Right Cell: White Rectangular Contact Us Button & Mobile Trigger -->
       <div class="header-actions-right">
         <button type="button" id="btnNavContact" class="btn-nav-contact" aria-haspopup="dialog" aria-controls="contactDialog">
           Contact Us
@@ -42,7 +42,7 @@
 
         <!-- Mobile Menu Toggle Button (Visible below 1280px) -->
         <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle navigation menu">
-          <svg class="hamburger-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg class="hamburger-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -51,30 +51,31 @@
       </div>
     </div>
 
-    <!-- Mobile Navigation Drawer -->
-    <nav class="mobile-nav-drawer hidden" id="mobileNav" aria-label="Mobile Navigation">
+    <!-- Mobile Navigation Drawer (NV-01: matching unified link set, non-focusable when closed) -->
+    <nav class="mobile-nav-drawer hidden" id="mobileNav" aria-label="Mobile Navigation" aria-hidden="true" inert>
       <div class="mobile-nav-header">
         <span class="mobile-nav-brand">ClaimCheck</span>
         <button type="button" class="mobile-nav-close" id="btnCloseMobileNav" aria-label="Close navigation menu">&times;</button>
       </div>
       <div class="mobile-nav-links">
         <a href="#heroSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Overview</a>
-        <a href="#opsSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
-        <a href="#studioSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
         <a href="#problemSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Why ClaimCheck</a>
         <a href="#howItWorksSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>How It Works</a>
+        <a href="#studioSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Studio</a>
+        <a href="#opsSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>Ops &amp; Audit</a>
         <a href="#faqSection" class="mobile-nav-item"><span class="nav-arrow" aria-hidden="true">&rarr;</span>FAQ</a>
-      </div>
-      <div class="mobile-nav-footer">
-        <button type="button" id="btnMobileContact" class="btn btn-primary btn-block">Contact Team</button>
       </div>
     </nav>
   </header>
 
-  <!-- Global Network Error Boundary Banner (Phase 04 Observability) -->
+  <!-- Global Network Error Boundary Banner (CC-08: hidden on load, inline SVG, no emoji) -->
   <div id="networkErrorBanner" class="network-error-banner hidden" role="alert" aria-live="assertive">
     <div class="network-error-content">
-      <span class="network-error-icon" aria-hidden="true">⚠️</span>
+      <svg class="network-error-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
       <span id="networkErrorMessage" class="network-error-message">Network connection dropped. Attempting to reconnect...</span>
       <button type="button" id="btnDismissNetworkError" class="btn btn-sm btn-outline">Dismiss</button>
     </div>
@@ -84,13 +85,13 @@
   <main class="app-main" id="mainContent" role="main">
 
     <!-- =====================================================================
-         SECTION 1: HERO (LUCIEN-STYLE GRADIENT BOWL, CENTERED HEADLINE & STATS)
+         HERO SECTION: LUCIEN-STYLE GRADIENT BOWL, CENTERED HEADLINE & STATS
          ===================================================================== -->
     <section class="hero hero-section" id="heroSection" aria-labelledby="heroTitle">
-      <!-- Smile-shaped soft gradient glow arc -->
+      <!-- Decorative smile-shaped soft gradient glow arc -->
       <div class="hero__glow" aria-hidden="true"></div>
 
-      <!-- Centered Light-Weight Light-Reactive Headline (Exact 2 Lines, Dead Center) -->
+      <!-- Centered Light-Weight Light-Reactive Headline (2 Lines, Dead Center) -->
       <div class="hero-center-content">
         <h1 id="heroTitle" class="hero-headline">
           <span class="hero-line">Every retail claim.</span>
@@ -98,24 +99,24 @@
         </h1>
       </div>
 
-      <!-- Bottom-Left: Live Dynamic Status Chip -->
+      <!-- Bottom-Left: Live Dynamic Status Chip (CC-03: real /api/health fields) -->
       <div class="hero-bottom-left" id="headerTelemetry" role="region" aria-label="System Operational Status">
-        <div class="telemetry-chip amd-status" id="amdStatusBadge" title="AMD ROCm vLLM Serving Status">
+        <div class="telemetry-chip amd-status" id="amdStatusBadge" title="AMD ROCm / CPU Fallback Status">
           <span class="status-dot pulse" id="amdStatusDot"></span>
           <span class="chip-label">AMD Instinct™</span>
-          <span class="chip-val" id="amdStatusText">ROCm 6.2 / Fallback</span>
+          <span class="chip-val" id="amdStatusText">CPU fallback adapter active</span>
           <span class="chip-sep" aria-hidden="true">·</span>
           <span class="chip-sub" id="p95LatencyText">&lt; 1.2ms</span>
           <span class="chip-sep" aria-hidden="true">·</span>
-          <span class="chip-sub" id="throughputText">Active 0</span>
+          <span class="chip-sub" id="throughputText">Active</span>
           <span class="sr-only" id="queueDepthBadge">0</span>
         </div>
       </div>
 
-      <!-- Bottom-Right: Rotating Stat Line with Thin Vertical Rule -->
+      <!-- Bottom-Right: Rotating Stat Line with Thin Vertical Rule (CC-03 truthful wording) -->
       <div class="hero-bottom-right" role="region" aria-label="Key Performance Indicators">
         <div class="hero-stat-rotator" id="heroStatRotator" aria-hidden="true">
-          <span class="hero-stat-text" id="heroStatText">AMD Instinct™ MI300X</span>
+          <span class="hero-stat-text" id="heroStatText">Targets AMD Instinct™ MI300X with CPU fallback</span>
           <span class="hero-stat-arrow">&larr;</span>
         </div>
         <div class="hero-vertical-rule" aria-hidden="true"></div>
@@ -123,12 +124,782 @@
     </section>
 
     <!-- =====================================================================
-         SECTION 2: OPERATIONS & AUDIT TRAIL (COMMAND DECK)
+         INTRO SECTION DIRECTLY BELOW HERO (ACTIONS, TRUST ROW & 5-STAGE PIPELINE)
+         ===================================================================== -->
+    <section class="section intro-section" id="introSection" aria-labelledby="introTitle">
+      <div class="content-container">
+        <!-- Announcement Bar -->
+        <div class="intro-announcement-wrap">
+          <aside class="top-announcement-bar intro-announcement" aria-label="System Notice">
+            <div class="announcement-inner">
+              <span class="announcement-pill">Enterprise gate</span>
+              <span class="announcement-text">Deterministic retail media compliance — Targets AMD Instinct™ MI300X with CPU fallback &amp; forward-chained Merkle audit</span>
+              <a href="#studioSection" class="announcement-link">Test live workspace &rarr;</a>
+            </div>
+          </aside>
+        </div>
+
+        <div class="intro-grid">
+          <!-- Left Column: Copy & Actions -->
+          <div class="intro-copy-col">
+            <span class="intro-category-label">Retail media evidence gate</span>
+            <h2 id="introTitle" class="intro-heading">Deterministic compliance across programmatic retail media.</h2>
+            <p class="intro-description">
+              Evaluate advertising claims against product catalogues, pricing information, inventory feeds,
+              and configured compliance policies through a deterministic, explainable verification workflow.
+              Eliminate deceptive pricing, phantom stock, and regulatory liability before publication.
+            </p>
+
+            <div class="intro-cta-group">
+              <a href="#studioSection" class="btn btn-primary btn-lg">
+                <span class="btn-text">Open Verification Studio</span>
+                <span class="btn-arrow">&rarr;</span>
+              </a>
+              <a href="#opsSection" class="btn btn-secondary btn-lg" id="btnHeroAudit">
+                <span class="btn-text">Explore Audit Trail</span>
+              </a>
+            </div>
+
+            <!-- Trust Row -->
+            <div class="intro-trust-row" role="region" aria-label="Operational Specifications">
+              <div class="trust-item">
+                <span class="trust-label">Target hardware</span>
+                <strong class="trust-val">AMD Instinct™ MI300X / CPU</strong>
+              </div>
+              <div class="trust-divider" aria-hidden="true"></div>
+              <div class="trust-item">
+                <span class="trust-label">Policy SLA</span>
+                <strong class="trust-val">&lt; 5ms deterministic</strong>
+              </div>
+              <div class="trust-divider" aria-hidden="true"></div>
+              <div class="trust-item">
+                <span class="trust-label">Integrity</span>
+                <strong class="trust-val">SHA-256 Merkle chain</strong>
+              </div>
+              <div class="trust-divider" aria-hidden="true"></div>
+              <div class="trust-item">
+                <span class="trust-label">Governance</span>
+                <strong class="trust-val">FTC 16 CFR § 233</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: 5-Stage Architectural Pipeline (AX-01: proper heading levels) -->
+          <div class="intro-pipeline-col">
+            <div class="hero-visualisation" aria-label="ClaimCheck Evidence Engine Workflow Diagram">
+              <div class="vis-header">
+                <div class="vis-status-left">
+                  <span class="vis-pulse-dot"></span>
+                  <h3 class="vis-title">Evidence gate architectural pipeline flow</h3>
+                </div>
+                <span class="vis-pill">Sequence</span>
+              </div>
+
+              <!-- High-Precision Technical 5-Stage Diagram -->
+              <div class="pipeline-visual-stack">
+                <!-- Stage 1 -->
+                <div class="pipeline-stage-card stage-active">
+                  <div class="stage-badge-col">
+                    <span class="stage-tag">01</span>
+                    <div class="stage-step-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="stage-detail-col">
+                    <div class="stage-header-line">
+                      <h4 class="stage-title">Ad copy ingestion</h4>
+                      <span class="stage-sub-tag">PII &amp; secret redacted</span>
+                    </div>
+                    <p class="stage-desc">Multi-claim promotional copy &amp; SKU binding ingested via auction stream.</p>
+                  </div>
+                </div>
+
+                <!-- Stage 2 -->
+                <div class="pipeline-stage-card">
+                  <div class="stage-badge-col">
+                    <span class="stage-tag">02</span>
+                    <div class="stage-step-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <rect x="4" y="4" width="16" height="16" rx="2"/>
+                        <rect x="9" y="9" width="6" height="6"/>
+                        <line x1="9" y1="1" x2="9" y2="4"/>
+                        <line x1="15" y1="1" x2="15" y2="4"/>
+                        <line x1="9" y1="20" x2="9" y2="23"/>
+                        <line x1="15" y1="20" x2="15" y2="23"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="stage-detail-col">
+                    <div class="stage-header-line">
+                      <h4 class="stage-title">AMD model serving</h4>
+                      <span class="stage-sub-tag">ROCm 6.2 / CPU fallback</span>
+                    </div>
+                    <p class="stage-desc">Llama-3.1-8B-Instruct extracts exact character spans across 4 claim classes.</p>
+                  </div>
+                </div>
+
+                <!-- Stage 3 -->
+                <div class="pipeline-stage-card">
+                  <div class="stage-badge-col">
+                    <span class="stage-tag">03</span>
+                    <div class="stage-step-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="stage-detail-col">
+                    <div class="stage-header-line">
+                      <h4 class="stage-title">Evidence corroboration</h4>
+                      <span class="stage-sub-tag">Master catalog feeds</span>
+                    </div>
+                    <p class="stage-desc">Authoritative regular price, active promo discount, warehouse stock, carrier transit SLA.</p>
+                  </div>
+                </div>
+
+                <!-- Stage 4 -->
+                <div class="pipeline-stage-card">
+                  <div class="stage-badge-col">
+                    <span class="stage-tag">04</span>
+                    <div class="stage-step-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                        <polyline points="2 17 12 22 22 17"/>
+                        <polyline points="2 12 12 17 22 12"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="stage-detail-col">
+                    <div class="stage-header-line">
+                      <h4 class="stage-title">Deterministic policy gate</h4>
+                      <span class="stage-sub-tag">&lt; 1.2ms SLA</span>
+                    </div>
+                    <p class="stage-desc">Deterministic fail-closed rules evaluate pricing deception and stockouts.</p>
+                  </div>
+                </div>
+
+                <!-- Stage 5: Tri-State Verdict Output -->
+                <div class="pipeline-stage-card stage-verdict-card">
+                  <div class="stage-badge-col">
+                    <span class="stage-tag">05</span>
+                    <div class="stage-step-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="m9 12 2 2 4-4"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="stage-detail-col">
+                    <div class="stage-header-line">
+                      <h4 class="stage-title">Cryptographic tri-state verdict</h4>
+                      <span class="stage-sub-tag">SHA-256 sealed</span>
+                    </div>
+                    <div class="verdict-chips-row">
+                      <span class="chip-allow">ALLOW</span>
+                      <span class="chip-block">BLOCK</span>
+                      <span class="chip-review">REVIEW</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 2: THE PROBLEM (WHY CLAIMCHECK)
+         ===================================================================== -->
+    <section class="section problem-section" id="problemSection" aria-labelledby="problemTitle">
+      <div class="content-container">
+        <div class="section-header">
+          <span class="section-label">The problem</span>
+          <div class="section-heading-dash" aria-hidden="true"></div>
+          <h2 id="problemTitle" class="section-title">
+            Retail advertising moves faster<br>than manual compliance.
+          </h2>
+          <p class="section-subtitle">
+            Millions of programmatic ad variants refresh every hour across sponsored search, product grids,
+            and retail network displays. Without deterministic automated verification, brands face severe regulatory penalties,
+            wasted budget, and damaged customer loyalty.
+          </p>
+        </div>
+
+        <div class="cards-grid-3">
+          <!-- Card 1 -->
+          <article class="feature-card problem-card">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="card-icon-wrap" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div class="card-badge">FTC 16 CFR § 233 VIOLATION</div>
+            <h3 class="card-title">Deceptive Pricing &amp; Fake Strikethroughs</h3>
+            <p class="card-text">
+              Promotions claiming "50% off!" or "$899.99 only today" frequently contradict the merchant's real
+              pricing feed or regular price baseline, triggering regulatory scrutiny and FTC enforcement actions.
+            </p>
+            <div class="card-footer-metric">
+              <span class="metric-highlight">Frequent discount drift</span>
+              <span class="metric-sub">Observed in campaigns with stale merchant pricing feeds</span>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="feature-card problem-card">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="card-icon-wrap" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+            </div>
+            <div class="card-badge">FTC 16 CFR § 240 VIOLATION</div>
+            <h3 class="card-title">Phantom Stock &amp; False Availability</h3>
+            <p class="card-text">
+              High-intent campaigns continue running after inventory exhausts across fulfillment nodes.
+              Shoppers arrive to see out-of-stock messages, burning ad spend and hurting publisher conversion rates.
+            </p>
+            <div class="card-footer-metric">
+              <span class="metric-highlight">Zero-inventory drift</span>
+              <span class="metric-sub">Violates merchant fulfillment SLAs</span>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="feature-card problem-card">
+            <div class="card-glow" aria-hidden="true"></div>
+            <div class="card-icon-wrap" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <rect x="1" y="3" width="15" height="13"/>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            </div>
+            <div class="card-badge">SLA &amp; CONTRADICTION RISK</div>
+            <h3 class="card-title">Feed Inconsistencies &amp; Shipping Drift</h3>
+            <p class="card-text">
+              Dynamic multi-warehouse feeds routinely contradict carrier realities. Promising "Free Next-Day Delivery"
+              when regional transit models require 5 business days leads to chargebacks and consumer complaints.
+            </p>
+            <div class="card-footer-metric">
+              <span class="metric-highlight">Carrier transit drift</span>
+              <span class="metric-sub">Requires prioritized human review escalation</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 3: THE SOLUTION (DETERMINISTIC EVIDENCE GATE)
+         ===================================================================== -->
+    <section class="section solution-section" id="solutionSection" aria-labelledby="solutionTitle">
+      <div class="content-container">
+        <div class="section-header">
+          <span class="section-label">The solution</span>
+          <div class="section-heading-dash" aria-hidden="true"></div>
+          <h2 id="solutionTitle" class="section-title">
+            One evidence gate.<br>Three clear decisions.
+          </h2>
+          <p class="section-subtitle">
+            ClaimCheck evaluates every ad copy statement against fresh merchant ground truth and configured
+            compliance rules. Decisions are mathematically deterministic, explainable, and logged to an immutable ledger.
+          </p>
+        </div>
+
+        <div class="solution-grid-3">
+          <!-- Allow Solution -->
+          <div class="decision-card decision-allow">
+            <div class="decision-header">
+              <div class="decision-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+              </div>
+              <span class="decision-badge">ALLOW</span>
+            </div>
+            <h3 class="decision-title">Instant Publication Clearance</h3>
+            <p class="decision-text">
+              All extracted factual claims—pricing, discounts, inventory levels, and delivery SLAs—are strictly
+              corroborated by fresh merchant catalog and logistics feeds within freshness thresholds.
+            </p>
+            <ul class="decision-checklist">
+              <li>
+                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Corroborated against master price record</span>
+              </li>
+              <li>
+                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Real-time stock verified &gt; 0 units</span>
+              </li>
+              <li>
+                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Carrier transit SLA confirmed</span>
+              </li>
+              <li>
+                <svg class="check-svg-allow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Cryptographically signed to Merkle audit stream</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Block Solution -->
+          <div class="decision-card decision-block">
+            <div class="decision-header">
+              <div class="decision-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" y1="9" x2="9" y2="15"/>
+                  <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <span class="decision-badge">BLOCK</span>
+            </div>
+            <h3 class="decision-title">Factual Pre-Publication Rejection</h3>
+            <p class="decision-text">
+              Direct factual contradictions between the ad copy and authoritative ground truth cause an immediate,
+              fail-closed block. Prevents deceptive claims from ever reaching the consumer.
+            </p>
+            <ul class="decision-checklist">
+              <li>
+                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Strikethrough price exceeds catalog regular price</span>
+              </li>
+              <li>
+                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Out-of-stock items rejected instantly</span>
+              </li>
+              <li>
+                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>False delivery speed claims suppressed</span>
+              </li>
+              <li>
+                <svg class="check-svg-block" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>Requires Senior Officer approval to override</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Review Solution -->
+          <div class="decision-card decision-review">
+            <div class="decision-header">
+              <div class="decision-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <span class="decision-badge">REVIEW</span>
+            </div>
+            <h3 class="decision-title">Human Review Escalation</h3>
+            <p class="decision-text">
+              Feed synchronization conflicts, warehouse inventory discrepancies, or borderline promotional qualifiers
+              are routed into the prioritized Human Review Queue with countdown SLAs.
+            </p>
+            <ul class="decision-checklist">
+              <li>
+                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Multi-warehouse feed contradiction detected</span>
+              </li>
+              <li>
+                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Expiring promotional pricing windows</span>
+              </li>
+              <li>
+                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Prioritized by campaign spend and risk</span>
+              </li>
+              <li>
+                <svg class="check-svg-review" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Re-extraction or confirmation workflow</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 4: HOW IT WORKS (ENTERPRISE PIPELINE)
+         ===================================================================== -->
+    <section class="section workflow-section" id="howItWorksSection" aria-labelledby="workflowTitle">
+      <div class="content-container">
+        <div class="section-header">
+          <span class="section-label">How it works</span>
+          <div class="section-heading-dash" aria-hidden="true"></div>
+          <h2 id="workflowTitle" class="section-title">
+            Deterministic execution,<br>from copy to ledger.
+          </h2>
+          <p class="section-subtitle">
+            Unlike generative AI wrappers that hallucinate compliance assessments, ClaimCheck separates
+            model-assisted span extraction from deterministic, fail-closed rule verification.
+          </p>
+        </div>
+
+        <div class="workflow-steps-list">
+          <div class="workflow-step-item">
+            <div class="step-num-col">
+              <span class="step-num">01</span>
+              <div class="step-line" aria-hidden="true"></div>
+            </div>
+            <div class="step-content">
+              <h3 class="step-title">Ingestion &amp; Security Sanitization</h3>
+              <p class="step-text">
+                Incoming ad copy text from programmatic campaigns, merchant dashboards, or API webhooks is immediately
+                sanitized. Customer emails, credit cards, SSNs, phone numbers, and private API credentials are redacted
+                before persistence or model inference.
+              </p>
+            </div>
+          </div>
+
+          <div class="workflow-step-item">
+            <div class="step-num-col">
+              <span class="step-num">02</span>
+              <div class="step-line" aria-hidden="true"></div>
+            </div>
+            <div class="step-content">
+              <h3 class="step-title">Structured Claim Extraction on AMD ROCm™</h3>
+              <p class="step-text">
+                The open-weights Llama-3.1-8B-Instruct model, accelerated by AMD ROCm 6.2 on AMD Instinct™ MI300X
+                hardware (with CPU fallback), extracts precise character spans and classifies claims into 4 distinct commerce categories:
+                PRICING, AVAILABILITY, SHIPPING_PROMISE, and PRODUCT_ATTRIBUTE.
+              </p>
+            </div>
+          </div>
+
+          <div class="workflow-step-item">
+            <div class="step-num-col">
+              <span class="step-num">03</span>
+              <div class="step-line" aria-hidden="true"></div>
+            </div>
+            <div class="step-content">
+              <h3 class="step-title">Multi-Source Ground Truth Corroboration</h3>
+              <p class="step-text">
+                The Target Product SKU is resolved against master merchant catalogs and real-time inventory feeds.
+                Freshness intervals ensure pricing baseline, stock quantities, and carrier transit SLAs reflect actual
+                warehouse reality rather than stale cached data.
+              </p>
+            </div>
+          </div>
+
+          <div class="workflow-step-item">
+            <div class="step-num-col">
+              <span class="step-num">04</span>
+              <div class="step-line" aria-hidden="true"></div>
+            </div>
+            <div class="step-content">
+              <h3 class="step-title">Fail-Closed Deterministic Policy Evaluation</h3>
+              <p class="step-text">
+                Every extracted claim is evaluated in under 1.2ms by strict mathematical rules (FTC deceptive price checks,
+                stockout barriers, transit mismatch detection). If any mandatory claim fails or evidence is missing, the
+                system fails closed to protect the platform.
+              </p>
+            </div>
+          </div>
+
+          <div class="workflow-step-item">
+            <div class="step-num-col">
+              <span class="step-num">05</span>
+              <div class="step-line" aria-hidden="true"></div>
+            </div>
+            <div class="step-content">
+              <h3 class="step-title">Forward-Chained SHA-256 Tamper-Evident Ledger</h3>
+              <p class="step-text">
+                Every check verdict, operator override, and re-evaluation is committed into a forward-chained Merkle
+                audit stream. Each block cryptographically seals the previous block's SHA-256 digest, providing mathematical
+                non-repudiation and 1-click bit-for-bit historical replay.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 5: STUDIO (2-PANE APP WINDOW WORKSPACE)
+         ===================================================================== -->
+    <section class="section studio-section" id="studioSection" aria-labelledby="studioHeading">
+      <div class="content-container">
+        <div class="section-header">
+          <span class="section-label">Studio</span>
+          <div class="section-heading-dash" aria-hidden="true"></div>
+          <h2 class="section-title">Ad Copy Verification Studio</h2>
+          <p class="section-subtitle">
+            Test any retail advertisement live against master product catalogs and real-time inventory feeds.
+            Select a verified scenario or write custom retail copy to inspect real-time extraction and policy evaluation.
+          </p>
+        </div>
+
+        <!-- Studio App Window (2-Pane Desktop, Stacked Under 900px) -->
+        <div class="studio-workspace-container">
+          <div class="studio-window" aria-labelledby="studioHeading">
+            <!-- Window Title Bar -->
+            <div class="studio-window-titlebar">
+              <div class="titlebar-left">
+                <span class="window-dot active" aria-hidden="true"></span>
+                <h3 id="studioHeading" class="window-title">Verification Studio</h3>
+                <span class="window-subtitle">Deterministic check against master catalog &amp; live inventory feeds</span>
+              </div>
+              <div class="studio-status-badge">
+                <span class="status-dot active"></span>
+                <span>Gate active</span>
+              </div>
+            </div>
+
+            <!-- Window Body: 2 Panes on Desktop -->
+            <div class="studio-window-body">
+              <!-- Left Pane: Input Controls & Presets -->
+              <div class="studio-pane studio-pane-left">
+                <!-- Preset Scenarios -->
+                <div class="presets-container" role="region" aria-label="One-Click Compliance Scenarios">
+                  <div class="presets-label">
+                    <span class="label-text">Compliance scenarios</span>
+                    <span class="presets-hint">1-click to test compliance rules</span>
+                  </div>
+                  <div class="preset-buttons" role="group" aria-label="Preset Selection Buttons">
+                    <button type="button" class="preset-btn btn-golden" id="presetGoldenPass" data-preset="golden_pass" aria-label="Load Golden Pass scenario">
+                      <span class="preset-indicator pass" aria-hidden="true"></span>
+                      <span class="preset-title">Golden Pass</span>
+                      <span class="preset-badge">ALLOW</span>
+                    </button>
+                    <button type="button" class="preset-btn btn-block" id="presetDeceptivePrice" data-preset="deceptive_price" aria-label="Load Deceptive Price scenario">
+                      <span class="preset-indicator block" aria-hidden="true"></span>
+                      <span class="preset-title">Deceptive Price</span>
+                      <span class="preset-badge">BLOCK</span>
+                    </button>
+                    <button type="button" class="preset-btn btn-block" id="presetOutOfStock" data-preset="out_of_stock" aria-label="Load Out of Stock scenario">
+                      <span class="preset-indicator block" aria-hidden="true"></span>
+                      <span class="preset-title">Out of Stock</span>
+                      <span class="preset-badge">BLOCK</span>
+                    </button>
+                    <button type="button" class="preset-btn btn-review" id="presetContradiction" data-preset="warehouse_contradiction" aria-label="Load Feed Contradiction scenario">
+                      <span class="preset-indicator review" aria-hidden="true"></span>
+                      <span class="preset-title">Feed Conflict</span>
+                      <span class="preset-badge">REVIEW</span>
+                    </button>
+                    <button type="button" class="preset-btn btn-universal" id="presetUniversal" data-preset="universal_demo" aria-label="Load Universal Custom Ad scenario">
+                      <span class="preset-indicator universal" aria-hidden="true"></span>
+                      <span class="preset-title">Universal Ad</span>
+                      <span class="preset-badge">ANY AD</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Input Form -->
+                <form id="checkForm" class="check-form" novalidate>
+                  <div class="form-row">
+                    <div class="form-group flex-2">
+                      <label for="adCopyInput" class="form-label">
+                        Ad Copy Submission Text
+                        <span class="label-info">(Multi-claim retail promotion for any product or brand)</span>
+                      </label>
+                      <div class="textarea-wrapper">
+                        <textarea 
+                          id="adCopyInput" 
+                          class="form-control copy-textarea" 
+                          rows="4" 
+                          placeholder="Enter retail ad copy text, e.g.: Nike Air Zoom Pegasus 40 running shoes now $129.99 (save 25%)! In stock now with Free Next-Day Delivery."
+                          maxlength="2000"
+                          required
+                          aria-describedby="charCount"
+                        ></textarea>
+                        <div class="textarea-footer">
+                          <span class="hint-key">Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run check</span>
+                          <span id="charCount" class="char-counter">0 / 2000</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-row grid-cols-3">
+                    <div class="form-group">
+                      <label for="skuSelect" class="form-label">Target Product SKU</label>
+                      <div class="select-wrapper">
+                        <!-- AX-02: Emojis removed from select options -->
+                        <select id="skuSelect" class="form-control form-select">
+                          <option value="UNIVERSAL_AUTO" selected>Universal Auto-Detect (Works for any ad)</option>
+                          <option value="SKU-VISION-55-OLED">SKU-VISION-55-OLED (VisionView 55" 4K OLED TV)</option>
+                          <option value="SKU-CHAIR-ERG">SKU-CHAIR-ERG (ErgoComfort Pro Mesh Chair)</option>
+                          <option value="SKU-MILK-ORG">SKU-MILK-ORG (FarmFresh Organic Whole Milk Gallon)</option>
+                          <option value="SKU-RUN-SHOE">SKU-RUN-SHOE (Apex Carbon Road Running Shoes)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="simulationModeSelect" class="form-label">Evidence Policy Mode</label>
+                      <div class="select-wrapper">
+                        <!-- AX-02: Clean text without emojis; keep values intact -->
+                        <select id="simulationModeSelect" class="form-control form-select">
+                          <option value="COMPLIANT" selected>Auto-corroborate (Compliant ALLOW)</option>
+                          <option value="PRICE_MISMATCH">Demo simulation: Price mismatch (BLOCK)</option>
+                          <option value="OUT_OF_STOCK">Demo simulation: Stockout (BLOCK)</option>
+                          <option value="SHIPPING_DELAY">Demo simulation: Shipping delay (BLOCK)</option>
+                          <option value="FEED_CONTRADICTION">Demo simulation: Feed conflict (REVIEW)</option>
+                          <option value="EXPIRED_PROMO">Demo simulation: Expired promo (REVIEW)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="operatorRoleSelect" class="form-label">Active Operator Role</label>
+                      <div class="select-wrapper">
+                        <!-- CC-05: Default to Junior Operator -->
+                        <select id="operatorRoleSelect" class="form-control form-select">
+                          <option value="JUNIOR_OPERATOR" selected>Junior Operator (Triage &amp; Confirmation)</option>
+                          <option value="SENIOR_COMPLIANCE_OFFICER">Senior Compliance Officer (Override Authorized)</option>
+                          <option value="LEGAL_COUNSEL">Legal Counsel (Regulatory Adjudication)</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="submit" id="btnRunCheck" class="btn btn-primary btn-run">
+                      <span class="btn-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <circle cx="12" cy="12" r="10"/>
+                          <polygon points="10 8 16 12 10 16 10 8"/>
+                        </svg>
+                      </span>
+                      <span class="btn-text">Verify Ad Copy with Evidence Gate</span>
+                    </button>
+                    <button type="button" id="btnReset" class="btn btn-secondary">Reset Form</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Right Pane: Evaluation Results (CC-01: neutral empty state on cold load, no pre-baked verdict/prices) -->
+              <div class="studio-pane studio-pane-right" id="studioResultPane">
+                <!-- State 1: Studio Empty State (Shown initially before check runs) -->
+                <div id="studioEmptyState" class="studio-empty-state">
+                  <div class="empty-state-box">
+                    <div class="empty-state-icon" aria-hidden="true">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                      </svg>
+                    </div>
+                    <h4 class="empty-state-title">No check run yet</h4>
+                    <p class="empty-state-text">Choose a compliance scenario or paste retail ad copy to evaluate claims against authoritative catalog truth.</p>
+                  </div>
+                </div>
+
+                <!-- State 2: Studio Loading State (Progress Indicator) -->
+                <div id="studioLoadingState" class="studio-loading-state hidden" role="status" aria-live="polite">
+                  <div class="loading-state-box">
+                    <div class="spinner-ring" aria-hidden="true"></div>
+                    <h4 class="loading-state-title">Evaluating Deterministic Policy</h4>
+                    <p class="loading-state-text">Extracting claims on AMD ROCm™ and corroborating against merchant feeds...</p>
+                  </div>
+                </div>
+
+                <!-- State 3: Studio Error State -->
+                <div id="studioErrorState" class="studio-error-state hidden" role="alert">
+                  <div class="error-state-box">
+                    <div class="error-state-icon" aria-hidden="true">
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                    </div>
+                    <h4 class="error-state-title">Evaluation Error</h4>
+                    <p class="error-state-text" id="studioErrorMessage">Service unreachable or connection dropped.</p>
+                    <button type="button" id="btnStudioRetry" class="btn btn-sm btn-outline">Retry Check</button>
+                  </div>
+                </div>
+
+                <!-- State 4: Tri-State Verdict Banner (Populated strictly by real API responses) -->
+                <div id="verdictBanner" class="verdict-banner hidden" role="alert" aria-live="polite">
+                  <div class="verdict-main">
+                    <div class="verdict-icon" id="verdictIcon"></div>
+                    <div class="verdict-content">
+                      <div class="verdict-status-row">
+                        <span class="verdict-badge" id="verdictBadge"></span>
+                        <span class="verdict-reason-badge" id="verdictReasonBadge"></span>
+                        <span class="verdict-check-id" id="verdictCheckId"></span>
+                      </div>
+                      <p class="verdict-summary" id="verdictSummary"></p>
+                    </div>
+                  </div>
+                  <div class="verdict-meta" id="verdictMeta">
+                    <span class="meta-item">Policy: <strong id="metaPolicyVer"></strong></span>
+                    <span class="meta-item">Latency: <strong id="metaLatency"></strong></span>
+                    <span class="meta-item">Claims: <strong id="metaClaimCount"></strong></span>
+                  </div>
+                </div>
+
+                <!-- Universal Ground Truth Fact Card -->
+                <div id="productFactCard" class="product-fact-card hidden" role="region" aria-label="Detected Merchant Ground Truth Facts">
+                  <div class="fact-card-header">
+                    <div class="fact-card-badge-row">
+                      <span class="product-badge" id="factProductCategory"></span>
+                      <span class="product-sku" id="factProductSku"></span>
+                    </div>
+                    <h3 class="product-title" id="factProductTitle">Ground Truth Product Facts</h3>
+                  </div>
+                  <div class="product-fact-grid">
+                    <div class="fact-item">
+                      <span class="fact-label">Authoritative Price</span>
+                      <span class="fact-value" id="factPrice"></span>
+                    </div>
+                    <div class="fact-item">
+                      <span class="fact-label">Active Discount</span>
+                      <span class="fact-value" id="factDiscount"></span>
+                    </div>
+                    <div class="fact-item">
+                      <span class="fact-label">Inventory Feeds</span>
+                      <span class="fact-value" id="factStock"></span>
+                    </div>
+                    <div class="fact-item">
+                      <span class="fact-label">Carrier SLA</span>
+                      <span class="fact-value" id="factShipping"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Interactive Highlighted Ad Copy Span Viewer -->
+                <div id="highlightedCopyContainer" class="highlighted-copy-card hidden">
+                  <h3 class="card-subtitle">Extracted Claim Spans</h3>
+                  <div id="highlightedText" class="highlighted-text-view" aria-label="Visual ad copy text with highlighted claim spans"></div>
+                </div>
+
+                <!-- Extracted Claims Detail Cards (scrolls inside container on small screens) -->
+                <div id="claimsContainer" class="claims-container hidden">
+                  <h3 class="card-subtitle">Factual Claims Breakdown (4 Categories)</h3>
+                  <div id="claimsGrid" class="claims-grid" role="list"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 6: OPERATIONS & AUDIT TRAIL (COMMAND DECK)
          ===================================================================== -->
     <section class="section ops-section" id="opsSection" aria-labelledby="opsTitle">
       <div class="content-container">
         <div class="section-header">
-          <span class="tech-eyebrow">// 02 — OPERATIONS &amp; AUDIT</span>
+          <span class="section-label">Operations</span>
           <div class="section-heading-dash" aria-hidden="true"></div>
           <h2 id="opsTitle" class="section-title">Operations Command Deck</h2>
           <p class="section-subtitle">
@@ -158,7 +929,7 @@
             <div id="viewReview" class="tab-view active" role="tabpanel" aria-labelledby="tabReview">
               <div class="queue-toolbar">
                 <div class="role-indicator">
-                  Role: <strong id="activeRoleLabel">Senior Compliance Officer</strong>
+                  Role: <strong id="activeRoleLabel">Junior Operator</strong>
                 </div>
                 <button type="button" id="btnRefreshQueue" class="btn btn-sm btn-secondary">Refresh</button>
               </div>
@@ -169,7 +940,7 @@
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
                 </svg>
                 <p class="empty-title">Review Queue is Clear</p>
-                <p class="empty-text">No ad copy items currently require human resolution. Test "Deceptive Price" or "Out of Stock" to trigger queue escalation.</p>
+                <p class="empty-text">No ad copy items currently require human resolution. Test "Deceptive Price" or "Out of Stock" in Studio to trigger queue escalation.</p>
               </div>
 
               <div id="queueItemsList" class="queue-list" role="list"></div>
@@ -179,7 +950,7 @@
             <div id="viewAudit" class="tab-view hidden" role="tabpanel" aria-labelledby="tabAudit">
               <div class="audit-toolbar">
                 <div class="chain-status">
-                  Chain: <span class="badge-status-valid" id="chainStatusBadge">✓ Linked</span>
+                  Chain: <span class="badge-status-valid" id="chainStatusBadge">Linked</span>
                 </div>
                 <button type="button" id="btnRefreshAudit" class="btn btn-sm btn-secondary">Refresh</button>
               </div>
@@ -195,7 +966,9 @@
 
               <div id="auditReplayResultBanner" class="replay-result-banner hidden" role="status">
                 <div class="replay-header">
-                  <span class="replay-icon">✓</span>
+                  <span class="replay-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
                   <span class="replay-title">1-Click Historical Replay Determinism Verified</span>
                 </div>
                 <p class="replay-details" id="replayDetailsText">Original digest equals replayed digest. Zero logic drift detected.</p>
@@ -235,473 +1008,6 @@
       </div>
     </section>
 
-
-         SECTION 5: OPERATIONAL VERIFICATION STUDIO (2-COLUMN BALANCED WORKSPACE)
-         ===================================================================== -->
-    <section class="section studio-section" id="studioSection" aria-labelledby="studioHeading">
-      <div class="content-container">
-        <div class="section-header">
-          <span class="tech-eyebrow">// 03 — INTERACTIVE OPERATOR STUDIO</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 class="section-title">Ad Copy Verification Studio</h2>
-          <p class="section-subtitle">
-            Test any retail advertisement live against master product catalogs and real-time inventory feeds.
-            Select a verified scenario or write custom retail copy to inspect real-time extraction and policy evaluation.
-          </p>
-        </div>
-
-        <!-- Professional Studio Workspace Container -->
-        <div class="studio-workspace-container">
-          <div class="panel studio-panel" aria-labelledby="studioHeading">
-              <div class="panel-header">
-                <div>
-                  <h3 id="studioHeading" class="panel-title">Verification Studio</h3>
-                  <span class="panel-subtitle">Deterministic check against master catalog &amp; live inventory feeds</span>
-                </div>
-                <div class="studio-status-badge">
-                  <span class="status-dot active"></span>
-                  <span>GATE ACTIVE</span>
-                </div>
-              </div>
-
-              <!-- Preset Scenarios -->
-              <div class="presets-container" role="region" aria-label="One-Click Compliance Scenarios">
-                <div class="presets-label">
-                  <span class="label-text">Compliance Scenarios</span>
-                  <span class="presets-hint">1-click to test compliance rules</span>
-                </div>
-                <div class="preset-buttons" role="group" aria-label="Preset Selection Buttons">
-                  <button type="button" class="preset-btn btn-golden" id="presetGoldenPass" data-preset="golden_pass" aria-label="Load Golden Pass scenario">
-                    <span class="preset-indicator pass"></span>
-                    <span class="preset-title">Golden Pass</span>
-                    <span class="preset-badge">ALLOW</span>
-                  </button>
-                  <button type="button" class="preset-btn btn-block" id="presetDeceptivePrice" data-preset="deceptive_price" aria-label="Load Deceptive Price scenario">
-                    <span class="preset-indicator block"></span>
-                    <span class="preset-title">Deceptive Price</span>
-                    <span class="preset-badge">BLOCK</span>
-                  </button>
-                  <button type="button" class="preset-btn btn-block" id="presetOutOfStock" data-preset="out_of_stock" aria-label="Load Out of Stock scenario">
-                    <span class="preset-indicator block"></span>
-                    <span class="preset-title">Out of Stock</span>
-                    <span class="preset-badge">BLOCK</span>
-                  </button>
-                  <button type="button" class="preset-btn btn-review" id="presetContradiction" data-preset="warehouse_contradiction" aria-label="Load Feed Contradiction scenario">
-                    <span class="preset-indicator review"></span>
-                    <span class="preset-title">Feed Conflict</span>
-                    <span class="preset-badge">REVIEW</span>
-                  </button>
-                  <button type="button" class="preset-btn btn-universal" id="presetUniversal" data-preset="universal_demo" aria-label="Load Universal Custom Ad scenario">
-                    <span class="preset-indicator universal"></span>
-                    <span class="preset-title">Universal Ad</span>
-                    <span class="preset-badge">ANY AD</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Input Form -->
-              <form id="checkForm" class="check-form" novalidate>
-                <div class="form-row">
-                  <div class="form-group flex-2">
-                    <label for="adCopyInput" class="form-label">
-                      Ad Copy Submission Text
-                      <span class="label-info">(Multi-claim retail promotion for any product or brand)</span>
-                    </label>
-                    <div class="textarea-wrapper">
-                      <textarea 
-                        id="adCopyInput" 
-                        class="form-control copy-textarea" 
-                        rows="4" 
-                        placeholder="Enter ANY retail ad copy text, e.g.: Nike Air Zoom Pegasus 40 running shoes now $129.99 (save 25%)! In stock now with Free Next-Day Delivery."
-                        maxlength="2000"
-                        required
-                        aria-describedby="charCount"
-                      ></textarea>
-                      <div class="textarea-footer">
-                        <span class="hint-key">Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run check</span>
-                        <span id="charCount" class="char-counter">0 / 2000</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-row grid-cols-3">
-                  <div class="form-group">
-                    <label for="skuSelect" class="form-label">Target Product SKU</label>
-                    <div class="select-wrapper">
-                      <select id="skuSelect" class="form-control form-select">
-                        <option value="UNIVERSAL_AUTO" selected>✨ Universal Auto-Detect (Works for ANY Ad)</option>
-                        <option value="SKU-VISION-55-OLED">SKU-VISION-55-OLED (VisionView 55" 4K OLED TV)</option>
-                        <option value="SKU-CHAIR-ERG">SKU-CHAIR-ERG (ErgoComfort Pro Mesh Chair)</option>
-                        <option value="SKU-MILK-ORG">SKU-MILK-ORG (FarmFresh Organic Whole Milk Gallon)</option>
-                        <option value="SKU-RUN-SHOE">SKU-RUN-SHOE (Apex Carbon Road Running Shoes)</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="simulationModeSelect" class="form-label">Evidence Policy Mode</label>
-                    <div class="select-wrapper">
-                      <select id="simulationModeSelect" class="form-control form-select">
-                        <option value="COMPLIANT" selected>🟢 Auto-Corroborate (Clean ALLOW)</option>
-                        <option value="PRICE_MISMATCH">🔴 Simulate Price Mismatch (BLOCK)</option>
-                        <option value="OUT_OF_STOCK">🔴 Simulate Stockout (BLOCK)</option>
-                        <option value="SHIPPING_DELAY">🔴 Simulate Shipping Delay (BLOCK)</option>
-                        <option value="FEED_CONTRADICTION">🟡 Simulate Feed Conflict (REVIEW)</option>
-                        <option value="EXPIRED_PROMO">🟡 Simulate Expired Promo (REVIEW)</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="operatorRoleSelect" class="form-label">Active Operator Role</label>
-                    <div class="select-wrapper">
-                      <select id="operatorRoleSelect" class="form-control form-select">
-                        <option value="JUNIOR_OPERATOR">Junior Operator (Triage &amp; Confirmation)</option>
-                        <option value="SENIOR_COMPLIANCE_OFFICER" selected>Senior Compliance Officer (Override Authorized)</option>
-                        <option value="LEGAL_COUNSEL">Legal Counsel (Regulatory Adjudication)</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="submit" id="btnRunCheck" class="btn btn-primary btn-run">
-                    <span class="btn-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polygon points="10 8 16 12 10 16 10 8"/>
-                      </svg>
-                    </span>
-                    <span class="btn-text">Verify Ad Copy with Evidence Gate</span>
-                  </button>
-                  <button type="button" id="btnReset" class="btn btn-secondary">Reset Form</button>
-                </div>
-              </form>
-
-              <!-- Tri-State Verdict Banner -->
-              <div id="verdictBanner" class="verdict-banner hidden" role="alert" aria-live="polite">
-                <div class="verdict-main">
-                  <div class="verdict-icon" id="verdictIcon"></div>
-                  <div class="verdict-content">
-                    <div class="verdict-status-row">
-                      <span class="verdict-badge" id="verdictBadge">ALLOW</span>
-                      <span class="verdict-reason-badge" id="verdictReasonBadge">MATCHES_APPROVED_FACTS</span>
-                      <span class="verdict-check-id" id="verdictCheckId">chk-abc123</span>
-                    </div>
-                    <p class="verdict-summary" id="verdictSummary">Publication cleared: All claims corroborated by fresh merchant evidence.</p>
-                  </div>
-                </div>
-                <div class="verdict-meta" id="verdictMeta">
-                  <span class="meta-item">Policy: <strong id="metaPolicyVer">1.0.0</strong></span>
-                  <span class="meta-item">Latency: <strong id="metaLatency">1.2ms</strong></span>
-                  <span class="meta-item">Claims: <strong id="metaClaimCount">3</strong></span>
-                </div>
-              </div>
-
-              <!-- Universal Ground Truth Fact Card -->
-              <div id="productFactCard" class="product-fact-card hidden" role="region" aria-label="Detected Merchant Ground Truth Facts">
-                <div class="fact-card-header">
-                  <div class="fact-card-badge-row">
-                    <span class="product-badge" id="factProductCategory">Consumer Electronics</span>
-                    <span class="product-sku" id="factProductSku">SKU-AUTO</span>
-                  </div>
-                  <h3 class="product-title" id="factProductTitle">Ground Truth Product Facts</h3>
-                </div>
-                <div class="product-fact-grid">
-                  <div class="fact-item">
-                    <span class="fact-label">Authoritative Price</span>
-                    <span class="fact-value" id="factPrice">$0.00</span>
-                  </div>
-                  <div class="fact-item">
-                    <span class="fact-label">Active Discount</span>
-                    <span class="fact-value" id="factDiscount">0%</span>
-                  </div>
-                  <div class="fact-item">
-                    <span class="fact-label">Inventory Feeds</span>
-                    <span class="fact-value" id="factStock">In Stock</span>
-                  </div>
-                  <div class="fact-item">
-                    <span class="fact-label">Carrier SLA</span>
-                    <span class="fact-value" id="factShipping">2-Day Delivery</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Interactive Highlighted Ad Copy Span Viewer -->
-              <div id="highlightedCopyContainer" class="highlighted-copy-card hidden">
-                <h3 class="card-subtitle">Extracted Claim Spans</h3>
-                <div id="highlightedText" class="highlighted-text-view" aria-label="Visual ad copy text with highlighted claim spans"></div>
-              </div>
-
-              <!-- Extracted Claims Detail Cards -->
-              <div id="claimsContainer" class="claims-container hidden">
-                <h3 class="card-subtitle">Factual Claims Breakdown (4 Categories)</h3>
-                <div id="claimsGrid" class="claims-grid" role="list"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 4: THE PROBLEM (COMPLIANCE CRISIS - 3 BALANCED CARDS)
-         ===================================================================== -->
-    <section class="section problem-section" id="problemSection" aria-labelledby="problemTitle">
-      <div class="content-container">
-        <div class="section-header">
-          <span class="tech-eyebrow">// 04 — THE COMPLIANCE CRISIS</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="problemTitle" class="section-title">
-            Retail advertising moves faster<br>than manual compliance.
-          </h2>
-          <p class="section-subtitle">
-            Millions of programmatic ad variants refresh every hour across sponsored search, product grids,
-            and retail network displays. Without deterministic automated verification, brands face severe regulatory penalties,
-            wasted budget, and damaged customer loyalty.
-          </p>
-        </div>
-
-        <div class="cards-grid-3">
-          <!-- Card 1 -->
-          <article class="feature-card problem-card">
-            <div class="card-glow"></div>
-            <div class="card-badge">FTC 16 CFR § 233 VIOLATION</div>
-            <h3 class="card-title">Deceptive Pricing &amp; Fake Strikethroughs</h3>
-            <p class="card-text">
-              Promotions claiming "50% off!" or "$899.99 only today" frequently contradict the merchant's real
-              pricing feed or regular price baseline, triggering severe regulatory scrutiny and FTC enforcement actions.
-            </p>
-            <div class="card-footer-metric">
-              <span class="metric-highlight">34% of flagged ads</span>
-              <span class="metric-sub">contain unverified discount claims</span>
-            </div>
-          </article>
-
-          <!-- Card 2 -->
-          <article class="feature-card problem-card">
-            <div class="card-glow"></div>
-            <div class="card-badge">FTC 16 CFR § 240 VIOLATION</div>
-            <h3 class="card-title">Phantom Stock &amp; False Availability</h3>
-            <p class="card-text">
-              High-intent campaigns continue running for hours after inventory exhausts across fulfillment nodes.
-              Shoppers arrive to see out-of-stock messages, burning ad spend and destroying publisher conversion rates.
-            </p>
-            <div class="card-footer-metric">
-              <span class="metric-highlight">Zero-inventory drift</span>
-              <span class="metric-sub">violates merchant fulfillment SLAs</span>
-            </div>
-          </article>
-
-          <!-- Card 3 -->
-          <article class="feature-card problem-card">
-            <div class="card-glow"></div>
-            <div class="card-badge">SLA &amp; CONTRADICTION RISK</div>
-            <h3 class="card-title">Feed Inconsistencies &amp; Shipping Drift</h3>
-            <p class="card-text">
-              Dynamic multi-warehouse feeds routinely contradict carrier realities. Promising "Free Next-Day Delivery"
-              when regional transit models require 5 business days leads to chargebacks and consumer complaints.
-            </p>
-            <div class="card-footer-metric">
-              <span class="metric-highlight">Carrier SLA drift</span>
-              <span class="metric-sub">requires human review escalation</span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 5: THE SOLUTION (ONE EVIDENCE GATE, THREE DECISIONS)
-         ===================================================================== -->
-    <section class="section solution-section" id="solutionSection" aria-labelledby="solutionTitle">
-      <div class="content-container">
-        <div class="section-header">
-          <span class="tech-eyebrow">// 05 — DETERMINISTIC EVIDENCE GATE</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="solutionTitle" class="section-title">
-            One evidence gate.<br>Three clear decisions.
-          </h2>
-          <p class="section-subtitle">
-            ClaimCheck evaluates every ad copy statement against fresh merchant ground truth and configured
-            compliance rules. Decisions are mathematically deterministic, explainable, and logged to an immutable ledger.
-          </p>
-        </div>
-
-        <div class="solution-grid-3">
-          <!-- Allow Solution -->
-          <div class="decision-card decision-allow">
-            <div class="decision-header">
-              <div class="decision-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  <path d="m9 12 2 2 4-4"/>
-                </svg>
-              </div>
-              <span class="decision-badge">ALLOW</span>
-            </div>
-            <h3 class="decision-title">Instant Publication Clearance</h3>
-            <p class="decision-text">
-              All extracted factual claims—pricing, discounts, inventory levels, and delivery SLAs—are strictly
-              corroborated by fresh merchant catalog and logistics feeds within freshness thresholds.
-            </p>
-            <ul class="decision-checklist">
-              <li>✓ Corroborated against master price record</li>
-              <li>✓ Real-time stock verified &gt; 0 units</li>
-              <li>✓ Carrier transit SLA confirmed</li>
-              <li>✓ Automatically cryptographically signed</li>
-            </ul>
-          </div>
-
-          <!-- Block Solution -->
-          <div class="decision-card decision-block">
-            <div class="decision-header">
-              <div class="decision-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="15" y1="9" x2="9" y2="15"/>
-                  <line x1="9" y1="9" x2="15" y2="15"/>
-                </svg>
-              </div>
-              <span class="decision-badge">BLOCK</span>
-            </div>
-            <h3 class="decision-title">Factual Pre-Publication Rejection</h3>
-            <p class="decision-text">
-              Direct factual contradictions between the ad copy and authoritative ground truth cause an immediate,
-              fail-closed block. Prevents deceptive claims from ever reaching the consumer.
-            </p>
-            <ul class="decision-checklist">
-              <li>✗ Strikethrough price exceeds catalog regular price</li>
-              <li>✗ Out-of-stock items rejected instantly</li>
-              <li>✗ False delivery speed claims suppressed</li>
-              <li>✗ Requires Senior Officer approval to override</li>
-            </ul>
-          </div>
-
-          <!-- Review Solution -->
-          <div class="decision-card decision-review">
-            <div class="decision-header">
-              <div class="decision-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                  <line x1="12" y1="9" x2="12" y2="13"/>
-                  <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-              </div>
-              <span class="decision-badge">REVIEW</span>
-            </div>
-            <h3 class="decision-title">Human Review Escalation</h3>
-            <p class="decision-text">
-              Feed synchronization conflicts, warehouse inventory discrepancies, or borderline promotional qualifiers
-              are routed into the prioritized Human Review Queue with countdown SLAs.
-            </p>
-            <ul class="decision-checklist">
-              <li>⚡ Multi-warehouse feed contradiction detected</li>
-              <li>⚡ Expiring promotional pricing windows</li>
-              <li>⚡ Prioritized by campaign spend and risk</li>
-              <li>⚡ Re-extraction or confirmation workflow</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =====================================================================
-         SECTION 6: HOW IT WORKS (PIPELINE BREAKDOWN)
-         ===================================================================== -->
-    <section class="section workflow-section" id="howItWorksSection" aria-labelledby="workflowTitle">
-      <div class="content-container">
-        <div class="section-header">
-          <span class="tech-eyebrow">// 06 — ENTERPRISE ARCHITECTURE</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="workflowTitle" class="section-title">
-            Deterministic execution,<br>from copy to ledger.
-          </h2>
-          <p class="section-subtitle">
-            Unlike generative AI wrappers that hallucinate compliance assessments, ClaimCheck separates
-            model-assisted span extraction from 100% deterministic, fail-closed rule verification.
-          </p>
-        </div>
-
-        <div class="workflow-steps-list">
-          <div class="workflow-step-item">
-            <div class="step-num-col">
-              <span class="step-num">01</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-content">
-              <h3 class="step-title">Ingestion &amp; Security Sanitization</h3>
-              <p class="step-text">
-                Incoming ad copy text from programmatic campaigns, merchant dashboards, or API webhooks is immediately
-                sanitized. Customer emails, credit cards, SSNs, phone numbers, and private API credentials are redacted
-                before persistence or model inference.
-              </p>
-            </div>
-          </div>
-
-          <div class="workflow-step-item">
-            <div class="step-num-col">
-              <span class="step-num">02</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-content">
-              <h3 class="step-title">Structured Claim Extraction on AMD ROCm™</h3>
-              <p class="step-text">
-                The open-weights Llama-3.1-8B-Instruct model, accelerated by AMD ROCm 6.2 on AMD Instinct™ MI300X
-                hardware, extracts precise character spans and classifies claims into 4 distinct commerce categories:
-                PRICING, AVAILABILITY, SHIPPING_PROMISE, and PRODUCT_ATTRIBUTE.
-              </p>
-            </div>
-          </div>
-
-          <div class="workflow-step-item">
-            <div class="step-num-col">
-              <span class="step-num">03</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-content">
-              <h3 class="step-title">Multi-Source Ground Truth Corroboration</h3>
-              <p class="step-text">
-                The Target Product SKU is resolved against master merchant catalogs and real-time inventory feeds.
-                Freshness intervals ensure pricing baseline, stock quantities, and carrier transit SLAs reflect actual
-                warehouse reality rather than stale cached data.
-              </p>
-            </div>
-          </div>
-
-          <div class="workflow-step-item">
-            <div class="step-num-col">
-              <span class="step-num">04</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-content">
-              <h3 class="step-title">Fail-Closed Deterministic Policy Evaluation</h3>
-              <p class="step-text">
-                Every extracted claim is evaluated in &lt; 1.2ms by strict mathematical rules (FTC deceptive price checks,
-                stockout barriers, transit mismatch detection). If any mandatory claim fails or evidence is missing, the
-                system fails closed to protect the platform.
-              </p>
-            </div>
-          </div>
-
-          <div class="workflow-step-item">
-            <div class="step-num-col">
-              <span class="step-num">05</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-content">
-              <h3 class="step-title">Forward-Chained SHA-256 Tamper-Evident Ledger</h3>
-              <p class="step-text">
-                Every check verdict, operator override, and re-evaluation is committed into a forward-chained Merkle
-                audit stream. Each block cryptographically seals the previous block's SHA-256 digest, providing mathematical
-                non-repudiation and 1-click bit-for-bit historical replay.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- =====================================================================
          SECTION 7: GOVERNANCE & FTC TRANSPARENCY
          ===================================================================== -->
@@ -709,7 +1015,7 @@
       <div class="content-container">
         <div class="governance-card">
           <div class="gov-content">
-            <span class="tech-eyebrow">// 07 — REGULATORY GOVERNANCE</span>
+            <span class="section-label">Governance</span>
             <div class="section-heading-dash hero-dash" aria-hidden="true"></div>
             <h2 id="govTitle" class="gov-title">Designed for FTC Compliance &amp; Non-Repudiation</h2>
             <p class="gov-text">
@@ -743,7 +1049,7 @@
     <section class="section faq-section" id="faqSection" aria-labelledby="faqTitle">
       <div class="content-container">
         <div class="section-header">
-          <span class="tech-eyebrow">// 08 — FREQUENTLY ASKED QUESTIONS</span>
+          <span class="section-label">FAQ</span>
           <div class="section-heading-dash" aria-hidden="true"></div>
           <h2 id="faqTitle" class="section-title">Questions &amp; Architecture Details</h2>
           <p class="section-subtitle">
@@ -756,13 +1062,15 @@
           <div class="faq-item">
             <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
               <span class="faq-question">How does ClaimCheck differ from generic LLM evaluation prompts?</span>
-              <span class="faq-icon" aria-hidden="true">+</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
             </button>
             <div class="faq-answer">
               <p>
                 Generic LLMs suffer from probabilistic hallucinations and inconsistent rule enforcement. ClaimCheck uses
                 the AMD ROCm-accelerated Llama-3.1 model <em>strictly for structured claim extraction</em> (locating character spans).
-                The subsequent policy evaluation is 100% deterministic, executing hardcoded mathematical comparison against live merchant
+                The subsequent policy evaluation executes deterministic rule evaluation after model-assisted extraction, performing mathematical comparison against live merchant
                 inventory, pricing records, and FTC compliance thresholds in under 1.2 milliseconds.
               </p>
             </div>
@@ -772,7 +1080,9 @@
           <div class="faq-item">
             <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
               <span class="faq-question">What hardware is required to achieve the sub-5ms latency SLA?</span>
-              <span class="faq-icon" aria-hidden="true">+</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
             </button>
             <div class="faq-answer">
               <p>
@@ -787,7 +1097,9 @@
           <div class="faq-item">
             <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
               <span class="faq-question">How does the forward-chained Merkle audit stream ensure non-repudiation?</span>
-              <span class="faq-icon" aria-hidden="true">+</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
             </button>
             <div class="faq-answer">
               <p>
@@ -803,12 +1115,14 @@
           <div class="faq-item">
             <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
               <span class="faq-question">What prevents junior operators from erroneously overriding blocked ads?</span>
-              <span class="faq-icon" aria-hidden="true">+</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
             </button>
             <div class="faq-answer">
               <p>
                 Under decision rule DEC-010, the platform enforces strict Role-Based Access Control (RBAC).
-                Junior Operators can triage the queue, confirm blocks, or trigger re-extractions, but are cryptographically
+                Junior Operators can triage the queue, confirm blocks, or trigger re-extractions, but are strictly
                 forbidden by backend validation (returning 403 Forbidden) from authorizing overrides on factual BLOCKs.
                 Only Senior Compliance Officers or Legal Counsel can authorize overrides, requiring recorded rationales.
               </p>
@@ -819,7 +1133,9 @@
           <div class="faq-item">
             <button type="button" class="faq-trigger" aria-expanded="false" data-accordion="toggle">
               <span class="faq-question">Can ClaimCheck verify advertisements for products not yet in the catalog?</span>
-              <span class="faq-icon" aria-hidden="true">+</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
             </button>
             <div class="faq-answer">
               <p>
@@ -834,13 +1150,13 @@
     </section>
 
     <!-- =====================================================================
-         SECTION 8: CALL TO ACTION (LUCIEN-STYLE BOTTOM BANNER)
+         SECTION 9: CALL TO ACTION (LUCIEN-STYLE BOTTOM BANNER)
          ===================================================================== -->
     <section class="section cta-section">
       <div class="content-container">
         <div class="cta-card">
           <div class="cta-inner">
-            <span class="tech-eyebrow">// DETERMINISTIC EVIDENCE VERIFICATION</span>
+            <span class="section-label">Verification gate</span>
             <div class="section-heading-dash" aria-hidden="true"></div>
             <h2 class="cta-title">Deploy with certainty.<br>Publish with mathematical proof.</h2>
             <p class="cta-text">
@@ -862,7 +1178,7 @@
   </main>
 
   <!-- =====================================================================
-       SECTION 9: LUCIEN-STYLE REFINED FOOTER
+       FOOTER: REFINED & MINIMAL (NV-02: real links only, deep-links to ops tabs)
        ===================================================================== -->
   <footer class="app-footer" role="contentinfo">
     <div class="footer-container">
@@ -883,9 +1199,9 @@
             The deterministic retail media evidence gate. Powered by AMD ROCm™ and forward-chained Merkle auditability.
           </p>
           <div class="footer-compliance-badges">
-            <span class="compliance-badge">WCAG 2.1 AA</span>
             <span class="compliance-badge">FTC 16 CFR § 233</span>
-            <span class="compliance-badge">SHA-256 VERIFIED</span>
+            <span class="compliance-badge">FTC 16 CFR § 240</span>
+            <span class="compliance-badge">SHA-256 Merkle Chained</span>
           </div>
         </div>
 
@@ -893,19 +1209,19 @@
           <h4 class="footer-heading">Platform</h4>
           <ul class="footer-links">
             <li><a href="#heroSection">Overview</a></li>
-            <li><a href="#studioSection">Verification Studio</a></li>
-            <li><a href="#problemSection">Compliance Crisis</a></li>
-            <li><a href="#solutionSection">Tri-State Decisions</a></li>
+            <li><a href="#problemSection">Why ClaimCheck</a></li>
             <li><a href="#howItWorksSection">How It Works</a></li>
+            <li><a href="#studioSection">Verification Studio</a></li>
+            <li><a href="#opsSection">Ops Command Deck</a></li>
           </ul>
         </div>
 
         <div class="footer-links-col">
           <h4 class="footer-heading">Operations</h4>
           <ul class="footer-links">
-            <li><a href="#opsSection">Human Review Queue</a></li>
-            <li><a href="#opsSection">Chained Audit Explorer</a></li>
-            <li><a href="#opsSection">Live Telemetry</a></li>
+            <li><a href="#opsSection" data-ops-tab="review">Human Review Queue</a></li>
+            <li><a href="#opsSection" data-ops-tab="audit">Chained Audit Explorer</a></li>
+            <li><a href="#opsSection" data-ops-tab="telemetry">Live Telemetry</a></li>
             <li><a href="/metrics" target="_blank" rel="noopener">Prometheus Metrics</a></li>
             <li><a href="/api/health" target="_blank" rel="noopener">Health API</a></li>
           </ul>
@@ -917,8 +1233,7 @@
             <li><a href="#governanceSection">FTC Deceptive Pricing</a></li>
             <li><a href="#governanceSection">Separation of Duties</a></li>
             <li><a href="#governanceSection">Non-Repudiation</a></li>
-            <li><a href="#faqSection">FAQ &amp; Docs</a></li>
-            <li><a href="#mainContent">Accessibility Statement</a></li>
+            <li><a href="#faqSection">Frequently Asked Questions</a></li>
           </ul>
         </div>
       </div>
@@ -927,16 +1242,16 @@
         <div class="footer-legal">
           <span>ClaimCheck v0.1.0 • AMD ROCm™ &amp; Llama-3.1-8B-Instruct</span>
           <span class="separator">•</span>
-          <span>Strict Fail-Closed Deterministic Governance (FTC 16 CFR § 233 / § 240 Compliant)</span>
+          <span>Fail-Closed Deterministic Governance (FTC 16 CFR § 233 / § 240 Compliant)</span>
         </div>
         <div class="footer-copyright">
-          &copy; 2026 ClaimCheck Systems Inc. All rights reserved.
+          &copy; 2026 PhantomDeps / ClaimCheck Project. All rights reserved.
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- Contact Us / PhantomDeps Team Modal Dialog (Section 6) -->
+  <!-- Contact Us / PhantomDeps Team Modal Dialog -->
   <dialog id="contactDialog" class="contact-dialog" aria-labelledby="contactDialogTitle">
     <div class="contact-dialog-panel">
       <!-- Soft cobalt glow in top-right corner -->
@@ -976,6 +1291,6 @@
   </dialog>
 
   <script src="team.js"></script>
-  <script src="app.js?v=3.0"></script>
+  <script src="app.js?v=3.1"></script>
 </body>
 </html>

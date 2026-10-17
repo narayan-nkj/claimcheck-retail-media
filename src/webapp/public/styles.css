@@ -32,6 +32,12 @@
 
   --allow: #34d399; --block: #f87171; --review: #fbbf24;  /* verdicts only */
 
+  /* Radius scale (8 / 14 / 22 / pill per design system) */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 9999px;
+
   --font-display: "Host Grotesk", "Geist", "Inter Tight", system-ui, sans-serif; /* weight 300 for hero */
   --font-body:    "Geist", "Inter", system-ui, sans-serif;
   --font-mono:    "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
@@ -178,15 +184,16 @@ button {
   border: 0;
 }
 
-/* Monospaced Technical Eyebrow & Dash */
+/* Sentence-Case Section Label (replaces // 0X — LABEL eyebrows per design rules) */
+.section-label,
 .tech-eyebrow {
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--accent);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: normal;
+  text-transform: none;
   margin-bottom: 6px;
 }
 
@@ -1326,6 +1333,27 @@ section[id] {
   margin-top: auto;
 }
 
+.decision-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.check-svg-allow {
+  color: var(--allow);
+  flex-shrink: 0;
+}
+
+.check-svg-block {
+  color: var(--block);
+  flex-shrink: 0;
+}
+
+.check-svg-review {
+  color: var(--review);
+  flex-shrink: 0;
+}
+
 /* ==========================================================================
    SECTION 4: HOW IT WORKS (PIPELINE STEPS)
    ========================================================================== */
@@ -1410,11 +1438,161 @@ section[id] {
   width: 100%;
 }
 
-.ops-deck-wrapper,
-.studio-workspace-container {
+.ops-deck-wrapper {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
+}
+
+.studio-workspace-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Studio App Window (2-Pane Desktop, Stacked Under 900px)
+   ========================================================================== */
+.studio-window {
+  background: var(--bg-1);
+  border: 1px solid var(--line-1);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.studio-window-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(11, 16, 51, 0.95);
+  border-bottom: 1px solid var(--line-1);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.window-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--allow);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+}
+
+.window-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-0);
+  letter-spacing: -0.01em;
+}
+
+.window-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-2);
+}
+
+.studio-window-body {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 24px;
+  padding: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .studio-window-body {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 16px;
+  }
+}
+
+.studio-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+/* Studio 5-State Containers (CC-01) */
+.studio-empty-state,
+.studio-loading-state,
+.studio-error-state {
+  border: 1px dashed var(--line-2);
+  border-radius: var(--radius-md);
+  background: rgba(11, 16, 51, 0.5);
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.empty-state-box,
+.loading-state-box,
+.error-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.empty-state-icon {
+  color: var(--text-2);
+}
+
+.empty-state-title,
+.loading-state-title,
+.error-state-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-0);
+}
+
+.empty-state-text,
+.loading-state-text,
+.error-state-text {
+  font-size: 0.85rem;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.error-state-box .error-state-icon {
+  color: var(--block);
+}
+
+.spinner-ring {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--line-2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.claims-container {
+  overflow-x: auto;
+}
+
+.claims-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 100%;
 }
 
 .workspace-split-layout {
