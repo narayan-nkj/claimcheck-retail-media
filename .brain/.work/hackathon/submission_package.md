@@ -62,12 +62,12 @@ ClaimCheck is built from the ground up to leverage AMD's AI hardware platform:
 
 ## 7. Submission Artifacts & Verification Matrix
 
-- [x] **Working Prototype:** Served locally via `npm start` (`http://localhost:3000`)
+- [x] **Working Prototype:** Live deployed on Vercel (`https://claimcheck-ruddy-nu.vercel.app`) and local (`http://localhost:3000` via `npm start` / `launch.bat`)
 - [x] **Public GitHub Repository:** `https://github.com/narayan-nkj/claimcheck-retail-media`
-- [x] **Synthetic Evaluation Corpus:** 52 campaigns across 6 retail verticals (`docs/evaluation/EVALUATION_REPORT.md`)
+- [x] **Synthetic Evaluation Corpus:** 52 campaigns across 6 retail verticals (`docs/evaluation/EVALUATION_REPORT.md` - 100% Policy Accuracy)
 - [x] **Demo Runbook:** Step-by-step walkthrough (`docs/demo/DEMO_SCRIPT.md`)
 - [x] **Slide Deck Outline:** 8-slide presentation runbook (`docs/demo/SLIDES_OUTLINE.md`)
 - [x] **Judge Walkthrough:** 60-second evaluation guide (`docs/demo/JUDGE_WALKTHROUGH.md`)
-- [x] **AMD Instinct MI300X Proof Bundle:** Verifiable execution proof (`docs/amd_execution_proof.md`)
-- [x] **Accessibility & Security Standards:** WCAG 2.1 AA certified, PII redacted, DEC-010 role enforced
-- [x] **Test Verification:** 159/159 automated tests passing
+- [x] **AMD Instinct MI300X Proof Bundle:** Verifiable execution proof (`docs/amd/AMD_EXECUTION_PROOF.md`)
+- [x] **Accessibility & Security Standards:** WCAG 2.1 AA engineered, automated PII redaction, DEC-010 role enforced
+- [x] **Test Verification:** 178/178 automated tests passing across 57 test suites
