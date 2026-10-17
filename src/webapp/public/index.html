@@ -184,129 +184,333 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- Right Column: 5-Stage Architectural Pipeline (AX-01: proper heading levels) -->
-          <div class="intro-pipeline-col">
-            <div class="hero-visualisation" aria-label="ClaimCheck Evidence Engine Workflow Diagram">
-              <div class="vis-header">
-                <div class="vis-status-left">
-                  <span class="vis-pulse-dot"></span>
-                  <h3 class="vis-title">Evidence gate architectural pipeline flow</h3>
-                </div>
-                <span class="vis-pill">Sequence</span>
+    <!-- =====================================================================
+         SECTION 1B: ANIMATED CLAIMCHECK SOLUTION ARCHITECTURE DIAGRAM (SECTION 07)
+         ===================================================================== -->
+    <section class="section architecture-section" id="architectureSection" aria-labelledby="architectureTitle">
+      <div class="content-container">
+        <div class="section-header text-center">
+          <span class="section-label">Solution architecture</span>
+          <div class="section-heading-dash" aria-hidden="true"></div>
+          <h2 id="architectureTitle" class="section-title">
+            Evidence inputs to verified outcomes.
+          </h2>
+          <p class="section-subtitle">
+            A real-time deterministic verification gate connecting ad copy with master catalogs, pricing data,
+            and warehouse inventory feeds to produce explainable, mathematically auditable outcomes.
+          </p>
+        </div>
+
+        <!-- 3-Column Diagram Canvas with Curved Connection Paths and Animated Particles -->
+        <div class="diagram-canvas" id="solutionDiagram" role="region" aria-label="Interactive ClaimCheck Architecture Diagram">
+          <div class="diagram-grid">
+            <!-- Left Column: 5 Evidence Input Nodes -->
+            <div class="diagram-column diagram-col-inputs">
+              <div class="diagram-col-header">
+                <span class="col-kicker">01 // EVIDENCE INPUTS</span>
+                <span class="col-count">5 Feeds</span>
               </div>
+              <div class="nodes-list nodes-inputs">
+                <!-- Input Node 1 -->
+                <button type="button" class="diagram-node input-node active-node" data-node="copy" id="nodeInputCopy" aria-expanded="true" aria-controls="diagramDetailPanel">
+                  <div class="node-indicator" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <span class="node-tag">AD COPY</span>
+                    <strong class="node-title">Ad Copy Statements</strong>
+                    <span class="node-sub">Multi-claim promotional text &amp; SKUs</span>
+                  </div>
+                  <div class="node-port port-right" aria-hidden="true"></div>
+                </button>
 
-              <!-- High-Precision Technical 5-Stage Diagram -->
-              <div class="pipeline-visual-stack">
-                <!-- Stage 1 -->
-                <div class="pipeline-stage-card stage-active">
-                  <div class="stage-badge-col">
-                    <span class="stage-tag">01</span>
-                    <div class="stage-step-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                      </svg>
+                <!-- Input Node 2 -->
+                <button type="button" class="diagram-node input-node" data-node="sku" id="nodeInputSku" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-indicator" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <span class="node-tag">CATALOG</span>
+                    <strong class="node-title">Product SKU / Catalog</strong>
+                    <span class="node-sub">Master price, specs &amp; regular baseline</span>
+                  </div>
+                  <div class="node-port port-right" aria-hidden="true"></div>
+                </button>
+
+                <!-- Input Node 3 -->
+                <button type="button" class="diagram-node input-node" data-node="pricing" id="nodeInputPricing" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-indicator" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <span class="node-tag">PRICING FEED</span>
+                    <strong class="node-title">Dynamic Pricing Data</strong>
+                    <span class="node-sub">Active discounts &amp; promotional windows</span>
+                  </div>
+                  <div class="node-port port-right" aria-hidden="true"></div>
+                </button>
+
+                <!-- Input Node 4 -->
+                <button type="button" class="diagram-node input-node" data-node="inventory" id="nodeInputInventory" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-indicator" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <span class="node-tag">INVENTORY</span>
+                    <strong class="node-title">Warehouse Inventory</strong>
+                    <span class="node-sub">Real-time stock across fulfillment nodes</span>
+                  </div>
+                  <div class="node-port port-right" aria-hidden="true"></div>
+                </button>
+
+                <!-- Input Node 5 -->
+                <button type="button" class="diagram-node input-node" data-node="carrier" id="nodeInputCarrier" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-indicator" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <span class="node-tag">LOGISTICS</span>
+                    <strong class="node-title">Carrier Transit SLA</strong>
+                    <span class="node-sub">Transit time guarantees &amp; postal zones</span>
+                  </div>
+                  <div class="node-port port-right" aria-hidden="true"></div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Center Column: Core Processing Pipeline (Stages 01 - 05) -->
+            <div class="diagram-column diagram-col-pipeline">
+              <div class="diagram-col-header center-header">
+                <span class="col-kicker">02 // DETERMINISTIC PIPELINE</span>
+                <span class="col-count">&lt; 1.2ms SLA</span>
+              </div>
+              <div class="pipeline-engine-box">
+                <!-- Atmospheric Blue Glow Backdrop -->
+                <div class="pipeline-atmospheric-glow" aria-hidden="true"></div>
+
+                <!-- Stages List -->
+                <div class="nodes-list nodes-pipeline">
+                  <!-- Stage 01 -->
+                  <div class="pipeline-stage-item active-stage" data-stage="1" id="stageIngestion">
+                    <div class="stage-left-badge">
+                      <span class="stage-seq">01</span>
+                      <span class="stage-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="stage-body">
+                      <div class="stage-top">
+                        <strong class="stage-name">Ingestion &amp; Security Sanitization</strong>
+                        <span class="stage-pill">Sanitized</span>
+                      </div>
+                      <p class="stage-desc">Promotional copy ingested via auction stream; PII, payment cards, SSNs, and credentials redacted.</p>
                     </div>
                   </div>
-                  <div class="stage-detail-col">
-                    <div class="stage-header-line">
-                      <h4 class="stage-title">Ad copy ingestion</h4>
-                      <span class="stage-sub-tag">PII &amp; secret redacted</span>
+
+                  <!-- Stage 02 -->
+                  <div class="pipeline-stage-item" data-stage="2" id="stageModel">
+                    <div class="stage-left-badge">
+                      <span class="stage-seq">02</span>
+                      <span class="stage-dot" aria-hidden="true"></span>
                     </div>
-                    <p class="stage-desc">Multi-claim promotional copy &amp; SKU binding ingested via auction stream.</p>
+                    <div class="stage-body">
+                      <div class="stage-top">
+                        <strong class="stage-name">Structured Claim Extraction</strong>
+                        <span class="stage-pill pill-amd">AMD ROCm™ 6.2</span>
+                      </div>
+                      <p class="stage-desc">Llama-3.1-8B-Instruct extracts exact character spans across pricing, stock, and shipping claims.</p>
+                    </div>
+                  </div>
+
+                  <!-- Stage 03 -->
+                  <div class="pipeline-stage-item" data-stage="3" id="stageCorroboration">
+                    <div class="stage-left-badge">
+                      <span class="stage-seq">03</span>
+                      <span class="stage-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="stage-body">
+                      <div class="stage-top">
+                        <strong class="stage-name">Multi-Source Ground Truth Corroboration</strong>
+                        <span class="stage-pill">Ground Truth</span>
+                      </div>
+                      <p class="stage-desc">Resolves SKU against master catalog, active price discounts, stock levels, and carrier transit models.</p>
+                    </div>
+                  </div>
+
+                  <!-- Stage 04 -->
+                  <div class="pipeline-stage-item" data-stage="4" id="stagePolicy">
+                    <div class="stage-left-badge">
+                      <span class="stage-seq">04</span>
+                      <span class="stage-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="stage-body">
+                      <div class="stage-top">
+                        <strong class="stage-name">Deterministic Policy Gate</strong>
+                        <span class="stage-pill">&lt; 1.2ms Gate</span>
+                      </div>
+                      <p class="stage-desc">Strict fail-closed rules evaluate pricing deception (FTC 16 CFR § 233), stockouts, and shipping drift.</p>
+                    </div>
+                  </div>
+
+                  <!-- Stage 05 -->
+                  <div class="pipeline-stage-item" data-stage="5" id="stageVerdict">
+                    <div class="stage-left-badge">
+                      <span class="stage-seq">05</span>
+                      <span class="stage-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="stage-body">
+                      <div class="stage-top">
+                        <strong class="stage-name">Cryptographic Tri-State Verdict</strong>
+                        <span class="stage-pill pill-sealed">SHA-256 Sealed</span>
+                      </div>
+                      <div class="stage-chips-wrap">
+                        <span class="chip-outcome allow">ALLOW</span>
+                        <span class="chip-outcome block">BLOCK</span>
+                        <span class="chip-outcome review">REVIEW</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <!-- Stage 2 -->
-                <div class="pipeline-stage-card">
-                  <div class="stage-badge-col">
-                    <span class="stage-tag">02</span>
-                    <div class="stage-step-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <rect x="4" y="4" width="16" height="16" rx="2"/>
-                        <rect x="9" y="9" width="6" height="6"/>
-                        <line x1="9" y1="1" x2="9" y2="4"/>
-                        <line x1="15" y1="1" x2="15" y2="4"/>
-                        <line x1="9" y1="20" x2="9" y2="23"/>
-                        <line x1="15" y1="20" x2="15" y2="23"/>
-                      </svg>
+            <!-- Right Column: 4 Compliance Outcomes -->
+            <div class="diagram-column diagram-col-outputs">
+              <div class="diagram-col-header">
+                <span class="col-kicker">03 // COMPLIANCE OUTCOMES</span>
+                <span class="col-count">4 Targets</span>
+              </div>
+              <div class="nodes-list nodes-outputs">
+                <!-- Output Node 1: ALLOW -->
+                <button type="button" class="diagram-node output-node node-allow" data-node="out-allow" id="nodeOutAllow" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-port port-left" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <div class="node-badge-row">
+                      <span class="node-tag">DECISION</span>
+                      <span class="badge-outcome allow">ALLOW</span>
                     </div>
+                    <strong class="node-title">Verified Claims</strong>
+                    <span class="node-sub">Instant clearance; corroborated by catalog truth</span>
                   </div>
-                  <div class="stage-detail-col">
-                    <div class="stage-header-line">
-                      <h4 class="stage-title">AMD model serving</h4>
-                      <span class="stage-sub-tag">ROCm 6.2 / CPU fallback</span>
-                    </div>
-                    <p class="stage-desc">Llama-3.1-8B-Instruct extracts exact character spans across 4 claim classes.</p>
-                  </div>
-                </div>
+                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
+                </button>
 
-                <!-- Stage 3 -->
-                <div class="pipeline-stage-card">
-                  <div class="stage-badge-col">
-                    <span class="stage-tag">03</span>
-                    <div class="stage-step-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-                      </svg>
+                <!-- Output Node 2: BLOCK -->
+                <button type="button" class="diagram-node output-node node-block" data-node="out-block" id="nodeOutBlock" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-port port-left" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <div class="node-badge-row">
+                      <span class="node-tag">DECISION</span>
+                      <span class="badge-outcome block">BLOCK</span>
                     </div>
+                    <strong class="node-title">Blocked Claims</strong>
+                    <span class="node-sub">Factual contradiction pre-pub rejection</span>
                   </div>
-                  <div class="stage-detail-col">
-                    <div class="stage-header-line">
-                      <h4 class="stage-title">Evidence corroboration</h4>
-                      <span class="stage-sub-tag">Master catalog feeds</span>
-                    </div>
-                    <p class="stage-desc">Authoritative regular price, active promo discount, warehouse stock, carrier transit SLA.</p>
-                  </div>
-                </div>
+                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
+                </button>
 
-                <!-- Stage 4 -->
-                <div class="pipeline-stage-card">
-                  <div class="stage-badge-col">
-                    <span class="stage-tag">04</span>
-                    <div class="stage-step-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-                        <polyline points="2 17 12 22 22 17"/>
-                        <polyline points="2 12 12 17 22 12"/>
-                      </svg>
+                <!-- Output Node 3: REVIEW -->
+                <button type="button" class="diagram-node output-node node-review" data-node="out-review" id="nodeOutReview" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-port port-left" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <div class="node-badge-row">
+                      <span class="node-tag">ESCALATION</span>
+                      <span class="badge-outcome review">REVIEW</span>
                     </div>
+                    <strong class="node-title">Human Review Queue</strong>
+                    <span class="node-sub">Prioritized triage with countdown SLAs (DEC-010)</span>
                   </div>
-                  <div class="stage-detail-col">
-                    <div class="stage-header-line">
-                      <h4 class="stage-title">Deterministic policy gate</h4>
-                      <span class="stage-sub-tag">&lt; 1.2ms SLA</span>
-                    </div>
-                    <p class="stage-desc">Deterministic fail-closed rules evaluate pricing deception and stockouts.</p>
-                  </div>
-                </div>
+                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
+                </button>
 
-                <!-- Stage 5: Tri-State Verdict Output -->
-                <div class="pipeline-stage-card stage-verdict-card">
-                  <div class="stage-badge-col">
-                    <span class="stage-tag">05</span>
-                    <div class="stage-step-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <path d="m9 12 2 2 4-4"/>
-                      </svg>
+                <!-- Output Node 4: AUDIT -->
+                <button type="button" class="diagram-node output-node node-audit" data-node="out-audit" id="nodeOutAudit" aria-expanded="false" aria-controls="diagramDetailPanel">
+                  <div class="node-port port-left" aria-hidden="true"></div>
+                  <div class="node-main">
+                    <div class="node-badge-row">
+                      <span class="node-tag">INTEGRITY</span>
+                      <span class="badge-outcome audit">SHA-256</span>
                     </div>
+                    <strong class="node-title">Chained Merkle Ledger</strong>
+                    <span class="node-sub">1-click bit-for-bit historical replay verification</span>
                   </div>
-                  <div class="stage-detail-col">
-                    <div class="stage-header-line">
-                      <h4 class="stage-title">Cryptographic tri-state verdict</h4>
-                      <span class="stage-sub-tag">SHA-256 sealed</span>
-                    </div>
-                    <div class="verdict-chips-row">
-                      <span class="chip-allow">ALLOW</span>
-                      <span class="chip-block">BLOCK</span>
-                      <span class="chip-review">REVIEW</span>
-                    </div>
-                  </div>
-                </div>
+                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SVG Flow Connection Layer with Flowing Particles (Desktop Only) -->
+          <svg class="diagram-svg-bridge" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="curveGradientLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4F8FFF" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#70A7FF" stop-opacity="0.85" />
+              </linearGradient>
+              <linearGradient id="curveGradientRight" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#70A7FF" stop-opacity="0.85" />
+                <stop offset="100%" stop-color="#4F8FFF" stop-opacity="0.3" />
+              </linearGradient>
+              <filter id="particleGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Left to Center Paths (5 Paths) -->
+            <path id="pathIn1" class="diagram-path path-input" d="M 270 52 C 345 52, 345 52, 420 52" stroke="url(#curveGradientLeft)" />
+            <path id="pathIn2" class="diagram-path path-input" d="M 270 144 C 345 144, 345 144, 420 144" stroke="url(#curveGradientLeft)" />
+            <path id="pathIn3" class="diagram-path path-input" d="M 270 236 C 345 236, 345 236, 420 236" stroke="url(#curveGradientLeft)" />
+            <path id="pathIn4" class="diagram-path path-input" d="M 270 328 C 345 328, 345 328, 420 328" stroke="url(#curveGradientLeft)" />
+            <path id="pathIn5" class="diagram-path path-input" d="M 270 420 C 345 420, 345 420, 420 420" stroke="url(#curveGradientLeft)" />
+
+            <!-- Center to Right Paths (4 Diverging Paths from Verdict Engine) -->
+            <path id="pathOut1" class="diagram-path path-output path-allow" d="M 780 440 C 840 440, 860 76, 930 76" stroke="url(#curveGradientRight)" />
+            <path id="pathOut2" class="diagram-path path-output path-block" d="M 780 440 C 840 440, 860 196, 930 196" stroke="url(#curveGradientRight)" />
+            <path id="pathOut3" class="diagram-path path-output path-review" d="M 780 440 C 840 440, 860 316, 930 316" stroke="url(#curveGradientRight)" />
+            <path id="pathOut4" class="diagram-path path-output path-audit" d="M 780 440 C 840 440, 860 436, 930 436" stroke="url(#curveGradientRight)" />
+
+            <!-- Flowing Luminous Particles Traveling Along Paths -->
+            <!-- Left Inputs Particles -->
+            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
+              <animateMotion dur="2.4s" repeatCount="indefinite" path="M 270 52 C 345 52, 345 52, 420 52" />
+            </circle>
+            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
+              <animateMotion dur="2.8s" begin="0.4s" repeatCount="indefinite" path="M 270 144 C 345 144, 345 144, 420 144" />
+            </circle>
+            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
+              <animateMotion dur="3.1s" begin="0.8s" repeatCount="indefinite" path="M 270 236 C 345 236, 345 236, 420 236" />
+            </circle>
+            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
+              <animateMotion dur="2.6s" begin="1.2s" repeatCount="indefinite" path="M 270 328 C 345 328, 345 328, 420 328" />
+            </circle>
+            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
+              <animateMotion dur="3.0s" begin="0.6s" repeatCount="indefinite" path="M 270 420 C 345 420, 345 420, 420 420" />
+            </circle>
+
+            <!-- Right Outputs Particles -->
+            <circle class="diagram-particle particle-allow" r="3.5" fill="#34D399" filter="url(#particleGlow)">
+              <animateMotion dur="2.2s" begin="0.2s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 76, 930 76" />
+            </circle>
+            <circle class="diagram-particle particle-block" r="3.5" fill="#F87171" filter="url(#particleGlow)">
+              <animateMotion dur="2.6s" begin="0.7s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 196, 930 196" />
+            </circle>
+            <circle class="diagram-particle particle-review" r="3.5" fill="#FBBF24" filter="url(#particleGlow)">
+              <animateMotion dur="2.9s" begin="1.1s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 316, 930 316" />
+            </circle>
+            <circle class="diagram-particle particle-audit" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
+              <animateMotion dur="2.5s" begin="0.5s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 436, 930 436" />
+            </circle>
+          </svg>
+
+          <!-- Interactive Node Detail Inspection Card (Reveals details on hover/click) -->
+          <div class="diagram-detail-panel" id="diagramDetailPanel" role="region" aria-live="polite">
+            <div class="panel-inner">
+              <div class="panel-header-line">
+                <span class="panel-status-dot active"></span>
+                <span class="panel-tag" id="diagramDetailTag">COMPONENT DETAIL</span>
+                <strong class="panel-name" id="diagramDetailTitle">Ad Copy Statements</strong>
+              </div>
+              <p class="panel-desc" id="diagramDetailDesc">
+                Multi-claim retail campaign promotions ingested directly from programmatic auction streams or merchant inputs. PII and private API tokens are automatically sanitized before model processing.
+              </p>
+              <div class="panel-actions">
+                <a href="#studioSection" class="btn btn-sm btn-primary" id="diagramDetailAction">Test in Studio &rarr;</a>
               </div>
             </div>
           </div>
@@ -538,16 +742,114 @@
          ===================================================================== -->
     <section class="section workflow-section" id="howItWorksSection" aria-labelledby="workflowTitle">
       <div class="content-container">
-        <div class="section-header">
-          <span class="section-label">How it works</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="workflowTitle" class="section-title">
-            Deterministic execution,<br>from copy to ledger.
-          </h2>
-          <p class="section-subtitle">
-            Unlike generative AI wrappers that hallucinate compliance assessments, ClaimCheck separates
-            model-assisted span extraction from deterministic, fail-closed rule verification.
-          </p>
+        <!-- 2-Column Technical Storytelling Showcase (Section 09) -->
+        <div class="how-it-works-hero-grid">
+          <!-- Left Column -->
+          <div class="how-hero-copy">
+            <span class="section-label">How it works</span>
+            <div class="section-heading-dash" aria-hidden="true"></div>
+            <h2 id="workflowTitle" class="section-title">
+              A verification gate for retail claims,<br>not just another content filter.
+            </h2>
+            <p class="section-subtitle">
+              ClaimCheck evaluates advertising claims against evidence and configured compliance policies
+              before publication, producing an explainable verdict and an auditable record.
+            </p>
+            <div class="how-hero-cta">
+              <a href="#studioSection" class="btn btn-primary">
+                <span class="btn-text">See how verification works</span>
+                <span class="btn-arrow">&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Minimal Animated Technical Illustration -->
+          <div class="how-hero-graphic" aria-label="Illustrative verification workflow: Advertisement to Evidence Gate to Verdict">
+            <div class="flow-mini-card">
+              <div class="flow-mini-header">
+                <span class="flow-mini-title">ILLUSTRATIVE VERIFICATION WORKFLOW</span>
+                <span class="flow-mini-badge">DETERMINISTIC GATE</span>
+              </div>
+              
+              <div class="flow-mini-track">
+                <!-- Step 1: Ad Input -->
+                <div class="flow-mini-node node-step-ad">
+                  <div class="mini-node-box">
+                    <span class="mini-node-seq">01</span>
+                    <strong class="mini-node-text">Ad Copy</strong>
+                  </div>
+                  <span class="mini-node-caption">Promotional Claim</span>
+                </div>
+
+                <!-- Connector 1 -->
+                <div class="flow-mini-connector">
+                  <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
+                    <path class="flow-track-bg" d="M 0 12 L 36 12" />
+                    <path class="flow-track-active" d="M 0 12 L 36 12" />
+                    <circle class="flow-dot" r="3" fill="#70A7FF">
+                      <animateMotion dur="2.4s" repeatCount="indefinite" path="M 0 12 L 36 12" />
+                    </circle>
+                  </svg>
+                </div>
+
+                <!-- Step 2: Evidence Gate -->
+                <div class="flow-mini-node node-step-gate">
+                  <div class="mini-node-box gate-glow">
+                    <span class="mini-node-seq">02</span>
+                    <strong class="mini-node-text">Evidence Gate</strong>
+                  </div>
+                  <span class="mini-node-caption">Catalog &amp; Feeds</span>
+                </div>
+
+                <!-- Connector 2 -->
+                <div class="flow-mini-connector">
+                  <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
+                    <path class="flow-track-bg" d="M 0 12 L 36 12" />
+                    <path class="flow-track-active" d="M 0 12 L 36 12" />
+                    <circle class="flow-dot" r="3" fill="#70A7FF">
+                      <animateMotion dur="2.4s" begin="0.8s" repeatCount="indefinite" path="M 0 12 L 36 12" />
+                    </circle>
+                  </svg>
+                </div>
+
+                <!-- Step 3: Tri-State Verdict -->
+                <div class="flow-mini-node node-step-verdict">
+                  <div class="mini-node-box verdict-cycle-box">
+                    <span class="mini-node-seq">03</span>
+                    <strong class="mini-node-text verdict-cycle-text">Verdict</strong>
+                  </div>
+                  <span class="mini-node-caption">ALLOW / BLOCK / REVIEW</span>
+                </div>
+
+                <!-- Connector 3 -->
+                <div class="flow-mini-connector">
+                  <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
+                    <path class="flow-track-bg" d="M 0 12 L 36 12" />
+                    <path class="flow-track-active" d="M 0 12 L 36 12" />
+                    <circle class="flow-dot" r="3" fill="#70A7FF">
+                      <animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite" path="M 0 12 L 36 12" />
+                    </circle>
+                  </svg>
+                </div>
+
+                <!-- Step 4: Outcome -->
+                <div class="flow-mini-node node-step-output">
+                  <div class="mini-node-box">
+                    <span class="mini-node-seq">04</span>
+                    <strong class="mini-node-text">Ledger</strong>
+                  </div>
+                  <span class="mini-node-caption">Publish / Escalation</span>
+                </div>
+              </div>
+
+              <!-- Live Outcome Status Strip -->
+              <div class="flow-mini-verdict-strip">
+                <span class="verdict-pill-mini allow">ALLOW: Clear</span>
+                <span class="verdict-pill-mini block">BLOCK: Contradiction</span>
+                <span class="verdict-pill-mini review">REVIEW: Escalation</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="workflow-steps-list">
@@ -1151,27 +1453,40 @@
     </section>
 
     <!-- =====================================================================
-         SECTION 9: CALL TO ACTION (LUCIEN-STYLE BOTTOM BANNER)
+         SECTION 9: ANIMATED CLOSING CTA SECTION (LUCIEN-INSPIRED SECTION 15)
          ===================================================================== -->
-    <section class="section cta-section">
-      <div class="content-container">
-        <div class="cta-card">
-          <div class="cta-inner">
-            <span class="section-label">Verification gate</span>
-            <div class="section-heading-dash" aria-hidden="true"></div>
-            <h2 class="cta-title">Deploy with certainty.<br>Publish with mathematical proof.</h2>
-            <p class="cta-text">
-              Verify every retail promotional statement against live catalog truth and inventory feeds with fail-closed deterministic policy enforcement.
-            </p>
-            <div class="cta-buttons">
-              <a href="#studioSection" class="btn btn-primary btn-lg">
-                <span class="btn-text">Start Verifying Ad Copy</span>
-                <span class="btn-arrow">&rarr;</span>
-              </a>
-              <a href="#opsSection" class="btn btn-secondary btn-lg">
-                <span class="btn-text">View Live Telemetry</span>
-              </a>
-            </div>
+    <section class="section closing-section" id="closingSection" aria-labelledby="closingTitle">
+      <!-- Atmospheric Blue Radial Glow Horizon -->
+      <div class="closing-glow-horizon" aria-hidden="true"></div>
+      <!-- Fine Technical Line Grid Overlay -->
+      <div class="closing-grid-overlay" aria-hidden="true"></div>
+      <!-- Horizontal Flow Light Trace -->
+      <div class="closing-light-trace" aria-hidden="true"></div>
+
+      <div class="content-container closing-container">
+        <div class="closing-content">
+          <div class="closing-eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span class="eyebrow-text">DETERMINISTIC COMPLIANCE // EVIDENCE GATE</span>
+          </div>
+
+          <h2 id="closingTitle" class="closing-headline">
+            Verify every claim.<br>Trust the evidence.
+          </h2>
+
+          <p class="closing-copy">
+            Bring pricing, inventory, product data, and compliance policies into
+            one explainable verification workflow. Eliminate deceptive claims before publication.
+          </p>
+
+          <div class="closing-cta-group">
+            <a href="#studioSection" class="btn btn-primary btn-lg">
+              <span class="btn-text">Open Verification Studio</span>
+              <span class="btn-arrow">&rarr;</span>
+            </a>
+            <a href="#opsSection" class="btn btn-secondary btn-lg" data-ops-tab="audit">
+              <span class="btn-text">Explore the Audit Trail</span>
+            </a>
           </div>
         </div>
       </div>
@@ -1179,75 +1494,75 @@
   </main>
 
   <!-- =====================================================================
-       FOOTER: REFINED & MINIMAL (NV-02: real links only, deep-links to ops tabs)
+       FOOTER: OVERSIZED TYPOGRAPHIC FOOTER (LUCIEN-INSPIRED SECTION 16)
        ===================================================================== -->
   <footer class="app-footer" role="contentinfo">
     <div class="footer-container">
-      <div class="footer-watermark" aria-hidden="true">CLAIMCHECK</div>
-
-      <div class="footer-grid">
-        <div class="footer-brand-col">
-          <div class="footer-brand">
-            <div class="brand-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <!-- Top Row: Structured Navigation Links -->
+      <div class="footer-top-row">
+        <!-- Left Brand & Mission -->
+        <div class="footer-col-brand">
+          <div class="footer-brand-lockup">
+            <div class="brand-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 <path d="m9 12 2 2 4-4"/>
               </svg>
             </div>
-            <span class="brand-name">ClaimCheck</span>
+            <span class="brand-name-footer">ClaimCheck</span>
           </div>
-          <p class="footer-mission">
+          <p class="footer-tagline">
             The deterministic retail media evidence gate. Powered by AMD ROCm™ and forward-chained Merkle auditability.
           </p>
-          <div class="footer-compliance-badges">
-            <span class="compliance-badge">FTC 16 CFR § 233</span>
-            <span class="compliance-badge">FTC 16 CFR § 240</span>
-            <span class="compliance-badge">SHA-256 Merkle Chained</span>
+          <div class="footer-quick-links">
+            <a href="#heroSection" class="footer-quick-link">&rarr; Overview</a>
+            <a href="#problemSection" class="footer-quick-link">&rarr; Why ClaimCheck</a>
+            <a href="#howItWorksSection" class="footer-quick-link">&rarr; How It Works</a>
+            <a href="#studioSection" class="footer-quick-link">&rarr; Verification Studio</a>
           </div>
         </div>
 
-        <div class="footer-links-col">
-          <h4 class="footer-heading">Platform</h4>
-          <ul class="footer-links">
-            <li><a href="#heroSection">Overview</a></li>
-            <li><a href="#problemSection">Why ClaimCheck</a></li>
-            <li><a href="#howItWorksSection">How It Works</a></li>
-            <li><a href="#studioSection">Verification Studio</a></li>
-            <li><a href="#opsSection">Ops Command Deck</a></li>
-          </ul>
-        </div>
+        <!-- Right Columns: Operations & Governance -->
+        <div class="footer-nav-cols">
+          <div class="footer-links-group">
+            <h4 class="footer-group-heading">Operations</h4>
+            <ul class="footer-links-list">
+              <li><a href="#opsSection" data-ops-tab="review">Human Review Queue</a></li>
+              <li><a href="#opsSection" data-ops-tab="audit">Chained Audit Explorer</a></li>
+              <li><a href="#opsSection" data-ops-tab="telemetry">Live Telemetry</a></li>
+              <li><a href="/metrics" target="_blank" rel="noopener">Prometheus Metrics</a></li>
+              <li><a href="/api/health" target="_blank" rel="noopener">Health API</a></li>
+            </ul>
+          </div>
 
-        <div class="footer-links-col">
-          <h4 class="footer-heading">Operations</h4>
-          <ul class="footer-links">
-            <li><a href="#opsSection" data-ops-tab="review">Human Review Queue</a></li>
-            <li><a href="#opsSection" data-ops-tab="audit">Chained Audit Explorer</a></li>
-            <li><a href="#opsSection" data-ops-tab="telemetry">Live Telemetry</a></li>
-            <li><a href="/metrics" target="_blank" rel="noopener">Prometheus Metrics</a></li>
-            <li><a href="/api/health" target="_blank" rel="noopener">Health API</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-links-col">
-          <h4 class="footer-heading">Governance</h4>
-          <ul class="footer-links">
-            <li><a href="#governanceSection">FTC Deceptive Pricing</a></li>
-            <li><a href="#governanceSection">Separation of Duties</a></li>
-            <li><a href="#governanceSection">Non-Repudiation</a></li>
-            <li><a href="#faqSection">Frequently Asked Questions</a></li>
-          </ul>
+          <div class="footer-links-group">
+            <h4 class="footer-group-heading">Governance</h4>
+            <ul class="footer-links-list">
+              <li><a href="#governanceSection">FTC 16 CFR § 233</a></li>
+              <li><a href="#governanceSection">FTC 16 CFR § 240</a></li>
+              <li><a href="#governanceSection">Separation of Duties</a></li>
+              <li><a href="#governanceSection">Non-Repudiation</a></li>
+              <li><a href="#faqSection">Frequently Asked Questions</a></li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div class="footer-bottom-bar">
-        <div class="footer-legal">
-          <span>ClaimCheck v0.1.0 • AMD ROCm™ &amp; Llama-3.1-8B-Instruct</span>
-          <span class="separator">•</span>
+      <!-- Second Row: Copyright & Legal Specifications -->
+      <div class="footer-meta-row">
+        <div class="footer-meta-left">
+          <span>&copy; 2026 ClaimCheck. All rights reserved.</span>
+          <span class="meta-sep" aria-hidden="true">&bull;</span>
           <span>Fail-Closed Deterministic Governance (FTC 16 CFR § 233 / § 240 Compliant)</span>
         </div>
-        <div class="footer-copyright">
-          &copy; 2026 PhantomDeps / ClaimCheck Project. All rights reserved.
+        <div class="footer-meta-right">
+          <span>AMD ROCm™ 6.2 &bull; Llama-3.1-8B-Instruct</span>
         </div>
+      </div>
+
+      <!-- Final Visual: Heroic Oversized Typographic Wordmark (Section 16) -->
+      <div class="footer-oversized-wrap" aria-hidden="true">
+        <div class="footer-oversized-wordmark">CLAIMCHECK</div>
       </div>
     </div>
   </footer>
