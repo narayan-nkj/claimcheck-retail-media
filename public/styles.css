@@ -4368,3 +4368,18 @@ section[id],
     background-color: var(--pill-fill) !important;
   }
 }
+
+/* ==========================================================================
+   Windows Touch & Stylus Optimization (Eliminate 300ms Tap Delay)
+   ========================================================================== */
+button,
+a,
+input,
+select,
+textarea,
+.btn,
+.nav-item,
+.dg__pill,
+.preset-chip {
+  touch-action: manipulation;
+}
