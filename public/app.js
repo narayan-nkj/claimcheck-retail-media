@@ -175,11 +175,12 @@
     // Periodic telemetry refresh
     setInterval(refreshTelemetry, 5000);
 
-    // Lucien Hero, Nav Scroll Spy, Stat Rotator, Contact Dialog & Solution Diagram
+    // Lucien Hero, Nav Scroll Spy, Stat Rotator, Contact Dialog, Diagram & Typography Autofit
     setupHeaderScrollAndSpy();
     setupStatRotator();
     setupContactDialog();
     setupSolutionDiagram();
+    setupHeroTypographyAutofit();
   }
 
   /**
@@ -666,6 +667,97 @@
         closeDialog();
       }
     });
+  }
+
+  /**
+   * Precision Auto-Fit for Full-Width CLAIMCHECK Hero Typography
+   * Dynamically measures container width and rendered text metrics to guarantee
+   * the complete word stretches edge-to-edge without right-side clipping.
+   */
+  function setupHeroTypographyAutofit() {
+    const wordmark = document.querySelector('.hero-brand-wordmark, .footer-brand-wordmark');
+    if (!wordmark) return;
+
+    const wrap = wordmark.parentElement;
+    if (!wrap) return;
+
+    // Use a hidden off-screen measuring span to get exact rendered text width at reference font-size
+    let measureSpan = document.getElementById('claimcheckMeasureSpan');
+    if (!measureSpan) {
+      measureSpan = document.createElement('span');
+      measureSpan.id = 'claimcheckMeasureSpan';
+      measureSpan.style.position = 'absolute';
+      measureSpan.style.top = '-9999px';
+      measureSpan.style.left = '-9999px';
+      measureSpan.style.visibility = 'hidden';
+      measureSpan.style.whiteSpace = 'nowrap';
+      measureSpan.style.pointerEvents = 'none';
+      measureSpan.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(measureSpan);
+    }
+
+    let isTicking = false;
+
+    function fitTypography() {
+      if (isTicking) return;
+      isTicking = true;
+
+      window.requestAnimationFrame(() => {
+        try {
+          const wrapWidth = wrap.clientWidth;
+          if (wrapWidth <= 0) return;
+
+          const computed = window.getComputedStyle(wordmark);
+          const fontFamily = computed.fontFamily;
+          const fontWeight = computed.fontWeight || '400';
+          const letterSpacing = computed.letterSpacing || 'normal';
+
+          // Measure rendered width of "CLAIMCHECK" at reference 100px font size
+          measureSpan.style.fontFamily = fontFamily;
+          measureSpan.style.fontWeight = fontWeight;
+          measureSpan.style.letterSpacing = letterSpacing;
+          measureSpan.style.fontSize = '100px';
+          measureSpan.textContent = wordmark.textContent.trim();
+
+          const refWidth = measureSpan.getBoundingClientRect().width;
+          if (refWidth <= 0) return;
+
+          // Target 98% of available container width for edge-to-edge alignment
+          // with a safe 1% margin on each side to prevent subpixel font clipping
+          const targetWidth = wrapWidth * 0.98;
+          const idealFontSize = (targetWidth / refWidth) * 100;
+
+          // Enforce bounds across devices
+          const minFontSize = 24; // 1.5rem
+          const maxFontSize = 240; // 15rem
+          const finalFontSize = Math.max(minFontSize, Math.min(maxFontSize, idealFontSize));
+
+          wordmark.style.fontSize = `${finalFontSize.toFixed(1)}px`;
+        } finally {
+          isTicking = false;
+        }
+      });
+    }
+
+    // 1. Initial calculation
+    fitTypography();
+
+    // 2. Recalculate as soon as web fonts finish loading
+    if (document.fonts && typeof document.fonts.ready?.then === 'function') {
+      document.fonts.ready.then(() => {
+        fitTypography();
+      });
+    }
+
+    // 3. ResizeObserver on parent container for continuous precision
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(() => {
+        fitTypography();
+      });
+      ro.observe(wrap);
+    } else {
+      window.addEventListener('resize', fitTypography, { passive: true });
+    }
   }
 
   /**
