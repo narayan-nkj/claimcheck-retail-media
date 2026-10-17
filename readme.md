@@ -3,13 +3,15 @@
 > **A deterministic, evidence-backed pre-publication verification gate for factual claims in retail advertising copy.**
 
 [![CI](https://github.com/narayan-nkj/claimcheck-retail-media/actions/workflows/ci.yml/badge.svg)](https://github.com/narayan-nkj/claimcheck-retail-media/actions)
+[![Live Demo](https://img.shields.io/badge/live%20demo-claimcheck.vercel.app-brightgreen.svg)](https://claimcheck-ruddy-nu.vercel.app)
 [![Tests](https://img.shields.io/badge/tests-178%20passed-success.svg)](#testing)
+[![Signoff](https://img.shields.io/badge/production%20signoff-Tester%2001%20%26%2002%20PASSED-success.svg)](#production-validation--signoff-reports)
 [![Evaluation](https://img.shields.io/badge/evaluation-52%20campaigns%20100%25-brightgreen.svg)](docs/evaluation/EVALUATION_REPORT.md)
 [![Accessibility](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-blueviolet.svg)](#6-operator-web-application--portal-srcserver-srcwebapppublic)
 [![AMD ROCm](https://img.shields.io/badge/AMD%20ROCm-6.2%20%7C%20MI300X-red.svg)](docs/amd/AMD_EXECUTION_PROOF.md)
-[![Policy Latency](https://img.shields.io/badge/policy%20p95-29.4%20µs-brightgreen.svg)](#performance--benchmarks)
+[![Policy Latency](https://img.shields.io/badge/policy%20p95-18.9%20µs-brightgreen.svg)](#performance--benchmarks)
 [![AMD Latency](https://img.shields.io/badge/AMD%20p95-0.24%20ms-brightgreen.svg)](#performance--benchmarks)
-[![Throughput](https://img.shields.io/badge/throughput-53k%2B%20ops%2Fsec-blue.svg)](#performance--benchmarks)
+[![Throughput](https://img.shields.io/badge/throughput-77k%2B%20ops%2Fsec-blue.svg)](#performance--benchmarks)
 [![Node.js](https://img.shields.io/badge/node.js-v24%2B-blue.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Hackathon](https://img.shields.io/badge/AMD%20Developer%20Hackathon-ACT%20III-orange.svg)](https://lablab.ai/ai-hackathons/amd-developer-hackathon-act-iii)
@@ -197,7 +199,7 @@ Measures local policy evaluation, audit chaining, and historical check replay ov
 
 | Engine Component | Target SLA (p95) | Measured (p95) | Measured Avg | Throughput | Status |
 |---|---|---|---|---|---|
-| **Policy Engine (Multi-Claim)** | < 5,000 µs (5ms) | **29.4 µs** | **18.4 µs** | **53,231 ops/sec** | **PASS** (170x faster) |
+| **Policy Engine (Multi-Claim)** | < 5,000 µs (5ms) | **18.9 µs** | **11.2 µs** | **77,780 ops/sec** | **PASS** (260x faster) |
 | **Audit Stream Chaining** | < 1,000 µs (1ms) | **175.1 µs** | **89.7 µs** | **11,089 ops/sec** | **PASS** |
 | **Historical Check Replay** | < 2,000 µs (2ms) | **435.1 µs** | **223.5 µs** | **4,464 ops/sec** | **PASS** |
 
@@ -255,7 +257,13 @@ npm run build
 
 ### Launching the Operator Web Portal
 
-**Windows 1-Click Launch (Recommended for Windows):**
+**Live Production Cloud Deployment (Instant Zero-Install Access):**
+The web application is deployed and live in production on Vercel:
+👉 **[https://claimcheck-ruddy-nu.vercel.app](https://claimcheck-ruddy-nu.vercel.app)**
+- Production Health Check: [`https://claimcheck-ruddy-nu.vercel.app/api/health`](https://claimcheck-ruddy-nu.vercel.app/api/health)
+- Prometheus Telemetry: [`https://claimcheck-ruddy-nu.vercel.app/metrics`](https://claimcheck-ruddy-nu.vercel.app/metrics)
+
+**Windows 1-Click Launch (Recommended for Windows Local Development):**
 Simply double-click [`launch.bat`](launch.bat) or run:
 ```cmd
 launch.bat
@@ -375,7 +383,7 @@ Comprehensive technical documentation is maintained under `docs/` and `.brain/.w
   - [`docs/security/INCIDENT_RESPONSE_RUNBOOK.md`](docs/security/INCIDENT_RESPONSE_RUNBOOK.md): SEV-1 to SEV-3 operational incident runbooks.
   - [`docs/release/PERFORMANCE_AND_BENCHMARKS.md`](docs/release/PERFORMANCE_AND_BENCHMARKS.md): Latency percentiles, throughput, and memory scaling.
   - [`docs/release/PRODUCTION_ROLLBACK_CRITERIA.md`](docs/release/PRODUCTION_ROLLBACK_CRITERIA.md): Release gates and automated rollback checklist.
-- **Production Phase Reports:**
+- **Production Phase Reports (Engineering Stream):**
   - [Worker 01 Phase 01 Report](.brain/.work/.report/worker_01_p01_report.md) — Baseline Contracts & Schemas
   - [Worker 01 Phase 02 Report](.brain/.work/.report/worker_01_p02_report.md) — Evidence Freshness & Provenance
   - [Worker 01 Phase 03 Report](.brain/.work/.report/worker_01_p03_report.md) — Deterministic Policy Engine
@@ -392,6 +400,31 @@ Comprehensive technical documentation is maintained under `docs/` and `.brain/.w
   - [Worker 03 Phase 05 Report](.brain/.work/.report/worker_03_p05_report.md) — Demo Suite & Submission Package
   - [Worker 03 Phase 06 Report](.brain/.work/.report/worker_03_p06_report.md) — Integration Hardening & Release Handoff
   - [Worker 03 Phase 07 Report](.brain/.work/.report/worker_03_p07_report.md) — Ethical Community Distribution & Analytics
+
+---
+
+## 🛡️ Production Validation & Signoff Reports
+
+Both independent testing streams have completed all execution gates and granted **formal production signoff**:
+
+### Tester 01: Functional & System Validation Stream (PASSED)
+- **Status:** **SIGNED OFF (Production Ready)** — Verified commit `59dfcb1` on branch `main`
+- **Signoff Documents:** [Tester 01 Signoff](.brain/.work/testers/tester_01/signoff.md) | [Validation Log](.brain/.work/testers/tester_01/validation_log.md) | [Doc Updates](.brain/.work/testers/tester_01/doc_updates.md)
+- **Validation Cycles:**
+  - [Cycle V-01 Report](.brain/.work/.report/tester_01_v01_report.md) — Domain contracts, schema strictness, evidence freshness TTLs & universal synthesis (64/64 tests pass)
+  - [Cycle V-02 Report](.brain/.work/.report/tester_01_v02_report.md) — Deterministic policy engine, review queue SLAs, role authorization & AMD guardrails (41/41 tests pass)
+  - [Cycle V-03 Report](.brain/.work/.report/tester_01_v03_report.md) — Webapp REST API, security guardrails, WCAG 2.1 AA accessibility & retail regression (44/44 tests pass)
+  - [Cycle V-04 Report](.brain/.work/.report/tester_01_v04_report.md) — Release-candidate full suite regression (178/178 tests) & 52-campaign evaluation benchmark (100% accuracy)
+
+### Tester 02: Integration, Security, AMD & Release Gate Stream (PASSED)
+- **Status:** **SIGNED OFF (Production Ready)** — Verified commit `4ae0dfe` on branch `main`
+- **Signoff Documents:** [Tester 02 Signoff](.brain/.work/testers/tester_02/signoff.md) | [Validation Log](.brain/.work/testers/tester_02/validation_log.md) | [Doc Updates](.brain/.work/testers/tester_02/doc_updates.md)
+- **Validation Cycles:**
+  - [Cycle V-01 Report](.brain/.work/.report/tester_02_v01_report.md) — Cross-module integration workflows & Merkle forward-chained replay non-repudiation (5/5 journeys, 15/15 audit tests pass)
+  - [Cycle V-02 Report](.brain/.work/.report/tester_02_v02_report.md) — Security, privacy & WCAG 2.1 AA accessibility validation with zero memory or credential leaks (16/16 tests pass)
+  - [Cycle V-03 Report](.brain/.work/.report/tester_02_v03_report.md) — AMD workload proof, ROCm 6.2/vLLM live benchmarking & sub-millisecond local fallback adapter (p95 = 0.51 ms, 4,609 req/s)
+  - [Cycle V-04 Report](.brain/.work/.report/tester_02_v04_report.md) — Operations, Prometheus telemetry exposition, /api/health verification & fail-closed HTTP boundaries (11/11 tests pass, 18.9 µs p95)
+  - [Cycle V-05 Report](.brain/.work/.report/tester_02_v05_report.md) — Final submission package, live Vercel cloud reachability (200 OK) & ethical visibility integrity compliance
 
 ---
 
