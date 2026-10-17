@@ -7,12 +7,12 @@
 (function () {
   'use strict';
 
-  // Client State
+  // Client State (CC-05: default role is Junior Operator)
   const state = {
     presets: {},
     activePreset: null,
     currentCheck: null,
-    operatorRole: 'SENIOR_COMPLIANCE_OFFICER',
+    operatorRole: 'JUNIOR_OPERATOR',
     queueItems: [],
     auditEvents: [],
     timerIntervalId: null,
@@ -28,6 +28,11 @@
     checkForm: document.getElementById('checkForm'),
     btnRunCheck: document.getElementById('btnRunCheck'),
     btnReset: document.getElementById('btnReset'),
+    studioEmptyState: document.getElementById('studioEmptyState'),
+    studioLoadingState: document.getElementById('studioLoadingState'),
+    studioErrorState: document.getElementById('studioErrorState'),
+    studioErrorMessage: document.getElementById('studioErrorMessage'),
+    btnStudioRetry: document.getElementById('btnStudioRetry'),
     verdictBanner: document.getElementById('verdictBanner'),
     productFactCard: document.getElementById('productFactCard'),
     factProductCategory: document.getElementById('factProductCategory'),
@@ -97,6 +102,37 @@
   }
 
   /**
+   * Studio Evaluation 5-State Manager (CC-01 neutral empty state, loading, error, success)
+   */
+  function showStudioState(stateName, errorMsg = '') {
+    if (elements.studioEmptyState) elements.studioEmptyState.classList.add('hidden');
+    if (elements.studioLoadingState) elements.studioLoadingState.classList.add('hidden');
+    if (elements.studioErrorState) elements.studioErrorState.classList.add('hidden');
+    if (elements.verdictBanner) elements.verdictBanner.classList.add('hidden');
+    if (elements.productFactCard) elements.productFactCard.classList.add('hidden');
+    if (elements.highlightedCopyContainer) elements.highlightedCopyContainer.classList.add('hidden');
+    if (elements.claimsContainer) elements.claimsContainer.classList.add('hidden');
+
+    if (stateName === 'empty') {
+      if (elements.studioEmptyState) elements.studioEmptyState.classList.remove('hidden');
+    } else if (stateName === 'loading') {
+      if (elements.studioLoadingState) elements.studioLoadingState.classList.remove('hidden');
+    } else if (stateName === 'error') {
+      if (elements.studioErrorState) {
+        elements.studioErrorState.classList.remove('hidden');
+        if (elements.studioErrorMessage) {
+          elements.studioErrorMessage.textContent = errorMsg || 'Service unreachable or network connection dropped.';
+        }
+      }
+    } else if (stateName === 'success') {
+      if (elements.verdictBanner) elements.verdictBanner.classList.remove('hidden');
+      if (elements.productFactCard) elements.productFactCard.classList.remove('hidden');
+      if (elements.highlightedCopyContainer) elements.highlightedCopyContainer.classList.remove('hidden');
+      if (elements.claimsContainer) elements.claimsContainer.classList.remove('hidden');
+    }
+  }
+
+  /**
    * Client-side PII, credential, and secret sanitizer (Phase 03 WCAG & Security)
    */
   function sanitizeInputText(text) {
@@ -115,6 +151,17 @@
    * Initialize Application
    */
   async function init() {
+    // CC-01: Initialize Studio to neutral empty state immediately
+    showStudioState('empty');
+
+    // CC-08: Global offline / online connectivity listeners
+    window.addEventListener('offline', () => {
+      showNetworkErrorBanner('Network connection dropped. Attempting to reconnect...');
+    });
+    window.addEventListener('online', () => {
+      hideNetworkErrorBanner();
+    });
+
     setupEventListeners();
     setupFaqAccordion();
     await loadPresets();
@@ -203,21 +250,54 @@
     if (elements.btnRefreshQueue) elements.btnRefreshQueue.addEventListener('click', refreshQueue);
     if (elements.btnRefreshAudit) elements.btnRefreshAudit.addEventListener('click', refreshAuditStream);
 
-    // Mobile Navigation Menu Toggle
+    // Retry button on studio error state
+    if (elements.btnStudioRetry) {
+      elements.btnStudioRetry.addEventListener('click', async () => {
+        await runVerificationCheck();
+      });
+    }
+
+    // Deep-link Ops items via data-ops-tab (NV-02)
+    document.querySelectorAll('[data-ops-tab]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const tab = link.getAttribute('data-ops-tab');
+        if (tab) {
+          switchTab(tab);
+        }
+      });
+    });
+
+    // Mobile Navigation Menu Toggle (NV-01: focus trap, esc, inert)
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileNav = document.getElementById('mobileNav');
     if (mobileMenuBtn && mobileNav) {
+      function openMobileNav() {
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileNav.classList.remove('hidden');
+        mobileNav.removeAttribute('aria-hidden');
+        mobileNav.removeAttribute('inert');
+      }
+
+      function closeMobileNav() {
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.classList.add('hidden');
+        mobileNav.setAttribute('aria-hidden', 'true');
+        mobileNav.setAttribute('inert', '');
+      }
+
       mobileMenuBtn.addEventListener('click', () => {
         const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
-        mobileMenuBtn.setAttribute('aria-expanded', String(!isExpanded));
-        mobileNav.classList.toggle('hidden');
+        if (isExpanded) {
+          closeMobileNav();
+        } else {
+          openMobileNav();
+        }
       });
 
       // Close mobile drawer when link clicked
       mobileNav.querySelectorAll('.mobile-nav-item, a').forEach((link) => {
         link.addEventListener('click', () => {
-          mobileNav.classList.add('hidden');
-          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+          closeMobileNav();
         });
       });
 
@@ -225,10 +305,16 @@
       const btnCloseMobileNav = document.getElementById('btnCloseMobileNav');
       if (btnCloseMobileNav) {
         btnCloseMobileNav.addEventListener('click', () => {
-          mobileNav.classList.add('hidden');
-          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+          closeMobileNav();
         });
       }
+
+      // Escape key closes mobile nav
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !mobileNav.classList.contains('hidden')) {
+          closeMobileNav();
+        }
+      });
     }
 
     // Network Error Boundary Dismiss
@@ -249,12 +335,24 @@
 
     const sections = [
       { id: 'heroSection', el: document.getElementById('heroSection') },
-      { id: 'opsSection', el: document.getElementById('opsSection') },
-      { id: 'studioSection', el: document.getElementById('studioSection') },
       { id: 'problemSection', el: document.getElementById('problemSection') },
       { id: 'howItWorksSection', el: document.getElementById('howItWorksSection') },
+      { id: 'studioSection', el: document.getElementById('studioSection') },
+      { id: 'opsSection', el: document.getElementById('opsSection') },
       { id: 'faqSection', el: document.getElementById('faqSection') },
     ];
+
+    // Check URL hash on initial load for deep tab links (NV-02)
+    if (window.location.hash) {
+      const hash = window.location.hash.toLowerCase();
+      if (hash.includes('tab=audit') || hash === '#viewaudit') {
+        switchTab('audit');
+      } else if (hash.includes('tab=telemetry') || hash === '#viewtelemetry') {
+        switchTab('telemetry');
+      } else if (hash.includes('tab=review') || hash === '#viewreview') {
+        switchTab('review');
+      }
+    }
 
     allNavLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
@@ -279,6 +377,8 @@
             });
             if (mobileNav && !mobileNav.classList.contains('hidden')) {
               mobileNav.classList.add('hidden');
+              mobileNav.setAttribute('aria-hidden', 'true');
+              mobileNav.setAttribute('inert', '');
               if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
             }
           }
@@ -329,10 +429,10 @@
     if (!statTextEl) return;
 
     const facts = [
-      'AMD Instinct™ MI300X',
+      'Targets AMD Instinct™ MI300X with CPU fallback',
       '< 5ms deterministic policy SLA',
-      'SHA-256 Merkle chain',
-      'FTC 16 CFR § 233',
+      'SHA-256 Merkle audit chain',
+      'FTC 16 CFR § 233 compliance gate',
     ];
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -663,6 +763,8 @@
     const simulationMode = elements.simulationModeSelect ? elements.simulationModeSelect.value : 'COMPLIANT';
     const presetId = state.activePreset;
 
+    showStudioState('loading');
+
     if (elements.btnRunCheck) {
       elements.btnRunCheck.disabled = true;
       const btnText = elements.btnRunCheck.querySelector('.btn-text');
@@ -683,16 +785,18 @@
 
       const result = await response.json();
       if (!result.success) {
-        alert(`Verification Error: ${result.error}`);
+        showStudioState('error', `Verification Error: ${result.error}`);
         return;
       }
 
       state.currentCheck = result;
+      showStudioState('success');
       renderCheckResult(result);
       await refreshQueue();
       await refreshAuditStream();
       await refreshTelemetry();
     } catch (err) {
+      showStudioState('error', `Verification Check Failed: ${err.message}. Connection dropped or server unreachable.`);
       showNetworkErrorBanner(`Verification Check Failed: ${err.message}. Connection dropped or server unreachable.`);
     } finally {
       if (elements.btnRunCheck) {
@@ -724,11 +828,11 @@
 
     if (elements.verdictIcon) {
       if (status === 'ALLOW') {
-        elements.verdictIcon.textContent = '🛡️';
+        elements.verdictIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
       } else if (status === 'BLOCK') {
-        elements.verdictIcon.textContent = '⛔';
+        elements.verdictIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
       } else {
-        elements.verdictIcon.textContent = '⚠️';
+        elements.verdictIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
       }
     }
 
@@ -928,11 +1032,6 @@
    * Resolve an Item in the Review Queue
    */
   async function resolveQueueItem(queueId, action) {
-    if (action === 'APPROVED_OVERRIDE' && state.operatorRole === 'JUNIOR_OPERATOR') {
-      alert('Security Role Guard: Junior Operators cannot authorize overrides on factual BLOCKs (DEC-010). Escalation to Senior Compliance Officer required.');
-      return;
-    }
-
     try {
       const res = await fetch('/api/review', {
         method: 'POST',
@@ -946,8 +1045,8 @@
       });
 
       const data = await res.json();
-      if (!data.success) {
-        alert(`Authorization Blocked: ${data.error}`);
+      if (!res.ok || !data.success) {
+        alert(`Access Control Barrier: ${data.error || 'Authorization refused by compliance policy.'}`);
         return;
       }
 
@@ -1089,14 +1188,13 @@
       // Clear network drop warning if health check recovered
       hideNetworkErrorBanner();
 
-      if (health.amdInference && elements.amdStatusText && elements.amdStatusDot) {
-        const amd = health.amdInference;
-        const isHardware = amd.rocmAvailable && amd.deviceProof?.verified;
+      if (elements.amdStatusText && elements.amdStatusDot) {
+        const isHardware = Boolean(health.amdInference?.rocmAvailable && health.amdInference?.deviceProof?.verified && !health.fallbackActive);
         if (isHardware) {
-          elements.amdStatusText.textContent = 'ROCm 6.2 (Active)';
+          elements.amdStatusText.textContent = 'AMD Instinct™ MI300X connected';
           elements.amdStatusDot.className = 'status-dot pulse active';
         } else {
-          elements.amdStatusText.textContent = 'ROCm / Fallback Mode';
+          elements.amdStatusText.textContent = 'CPU fallback adapter active';
           elements.amdStatusDot.className = 'status-dot pulse fallback';
         }
       }
@@ -1126,6 +1224,9 @@
       console.warn('Telemetry refresh warning:', err);
       if (elements.amdStatusText) elements.amdStatusText.textContent = 'Disconnected (Offline)';
       if (elements.amdStatusDot) elements.amdStatusDot.className = 'status-dot offline';
+      if (elements.telemetryRawDisplay) {
+        elements.telemetryRawDisplay.textContent = 'Prometheus exposition metrics currently unavailable. Backend service unreachable.';
+      }
       showNetworkErrorBanner('Operational Telemetry Offline: Backend service unreachable. Background reconnection in progress...');
     }
   }
@@ -1144,6 +1245,7 @@
     if (elements.verdictBanner) elements.verdictBanner.classList.add('hidden');
     if (elements.highlightedCopyContainer) elements.highlightedCopyContainer.classList.add('hidden');
     if (elements.claimsContainer) elements.claimsContainer.classList.add('hidden');
+    showStudioState('empty');
   }
 
   /**
