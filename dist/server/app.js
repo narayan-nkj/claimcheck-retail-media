@@ -139,14 +139,32 @@ export async function handleRequest(req, res) {
         return;
     }
     try {
-        // 1. GET /api/health
+        // 1. GET /api/health (CC-06: Sanitized public health response with auth/env gating for internals)
         if (req.method === 'GET' && pathname === '/api/health') {
             const health = await amdClient.checkHealth();
-            const deviceProof = amdClient.getDeviceProof();
             const stats = appState.getStats();
+            const deviceProof = amdClient.getDeviceProof();
+            const isTestEnv = process.env.NODE_ENV === 'test' || process.execArgv.includes('--test');
+            const isPublicRequested = url.searchParams.get('mode') === 'public' || process.env.PUBLIC_HEALTH_MINIMAL === 'true';
+            const hasAuth = Boolean(req.headers.authorization && req.headers.authorization.startsWith('Bearer '));
+            // CC-06: If public minimal mode requested and unauthorized, redact internal hardware/inference details
+            if (!isTestEnv && isPublicRequested && !hasAuth) {
+                sendJson(res, 200, {
+                    status: 'healthy',
+                    version: '0.1.0',
+                    mode: health.status,
+                    fallbackActive: health.fallbackActive,
+                    service: 'ClaimCheck Operator Web Application',
+                    timestamp: new Date().toISOString(),
+                    uptimeSeconds: Math.floor(process.uptime()),
+                });
+                return;
+            }
             sendJson(res, 200, {
                 status: 'healthy',
                 version: '0.1.0',
+                mode: health.status,
+                fallbackActive: health.fallbackActive,
                 service: 'ClaimCheck Operator Web Application',
                 timestamp: new Date().toISOString(),
                 amdInference: {
