@@ -193,331 +193,274 @@
       </div>
     </section>
 
-    <!-- =====================================================================
-         SECTION 1B: ANIMATED CLAIMCHECK SOLUTION ARCHITECTURE DIAGRAM (SECTION 07)
+        <!-- =====================================================================
+         SECTION 1B: SOLUTION ARCHITECTURE DIAGRAM (LUCIEN REBUILD)
          ===================================================================== -->
-    <section class="section architecture-section" id="architectureSection" aria-labelledby="architectureTitle">
+    <section class="section architecture-section" id="howItWorksSection" aria-labelledby="architectureTitle">
+      <div id="architectureSection" style="position: absolute; top: -96px; left: 0;"></div>
       <div class="content-container">
-        <div class="section-header text-center">
-          <span class="section-label">Solution architecture</span>
-          <div class="section-heading-dash" aria-hidden="true"></div>
-          <h2 id="architectureTitle" class="section-title">
-            Evidence inputs to verified outcomes.
+        <!-- Section Header Stack (Section 5) -->
+        <div class="dg-header-stack">
+          <span class="dg-chip">How it works</span>
+          <div class="dg-rule" aria-hidden="true"></div>
+          <h2 id="architectureTitle" class="dg-headline">
+            Deterministic execution,<br>from copy to ledger.
           </h2>
-          <p class="section-subtitle">
+          <p class="dg-paragraph">
             A real-time deterministic verification gate connecting ad copy with master catalogs, pricing data,
             and warehouse inventory feeds to produce explainable, mathematically auditable outcomes.
           </p>
         </div>
 
-        <!-- 3-Column Diagram Canvas with Curved Connection Paths and Animated Particles -->
-        <div class="diagram-canvas" id="solutionDiagram" role="region" aria-label="Interactive ClaimCheck Architecture Diagram">
-          <div class="diagram-grid">
-            <!-- Left Column: 5 Evidence Input Nodes -->
-            <div class="diagram-column diagram-col-inputs">
-              <div class="diagram-col-header">
-                <span class="col-kicker">01 // EVIDENCE INPUTS</span>
-                <span class="col-count">5 Feeds</span>
-              </div>
-              <div class="nodes-list nodes-inputs">
-                <!-- Input Node 1 -->
-                <button type="button" class="diagram-node input-node active-node" data-node="copy" id="nodeInputCopy" aria-expanded="true" aria-controls="diagramDetailPanel">
-                  <div class="node-indicator" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <span class="node-tag">AD COPY</span>
-                    <strong class="node-title">Ad Copy Statements</strong>
-                    <span class="node-sub">Multi-claim promotional text &amp; SKUs</span>
-                  </div>
-                  <div class="node-port port-right" aria-hidden="true"></div>
-                </button>
+        <!-- 940u x 313u Interactive Stage (Section 6, 7, 8) -->
+        <div class="dg" id="solutionDiagram" role="region" aria-label="Interactive ClaimCheck Architecture Diagram">
+          <!-- Glowing Background behind center cluster (Section 8) -->
+          <div class="dg__glow" aria-hidden="true"></div>
 
-                <!-- Input Node 2 -->
-                <button type="button" class="diagram-node input-node" data-node="sku" id="nodeInputSku" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-indicator" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <span class="node-tag">CATALOG</span>
-                    <strong class="node-title">Product SKU / Catalog</strong>
-                    <span class="node-sub">Master price, specs &amp; regular baseline</span>
-                  </div>
-                  <div class="node-port port-right" aria-hidden="true"></div>
-                </button>
-
-                <!-- Input Node 3 -->
-                <button type="button" class="diagram-node input-node" data-node="pricing" id="nodeInputPricing" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-indicator" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <span class="node-tag">PRICING FEED</span>
-                    <strong class="node-title">Dynamic Pricing Data</strong>
-                    <span class="node-sub">Active discounts &amp; promotional windows</span>
-                  </div>
-                  <div class="node-port port-right" aria-hidden="true"></div>
-                </button>
-
-                <!-- Input Node 4 -->
-                <button type="button" class="diagram-node input-node" data-node="inventory" id="nodeInputInventory" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-indicator" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <span class="node-tag">INVENTORY</span>
-                    <strong class="node-title">Warehouse Inventory</strong>
-                    <span class="node-sub">Real-time stock across fulfillment nodes</span>
-                  </div>
-                  <div class="node-port port-right" aria-hidden="true"></div>
-                </button>
-
-                <!-- Input Node 5 -->
-                <button type="button" class="diagram-node input-node" data-node="carrier" id="nodeInputCarrier" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-indicator" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <span class="node-tag">LOGISTICS</span>
-                    <strong class="node-title">Carrier Transit SLA</strong>
-                    <span class="node-sub">Transit time guarantees &amp; postal zones</span>
-                  </div>
-                  <div class="node-port port-right" aria-hidden="true"></div>
-                </button>
-              </div>
-            </div>
-
-            <!-- Center Column: Core Processing Pipeline (Stages 01 - 05) -->
-            <div class="diagram-column diagram-col-pipeline">
-              <div class="diagram-col-header center-header">
-                <span class="col-kicker">02 // DETERMINISTIC PIPELINE</span>
-                <span class="col-count">&lt; 1.2ms SLA</span>
-              </div>
-              <div class="pipeline-engine-box">
-                <!-- Atmospheric Blue Glow Backdrop -->
-                <div class="pipeline-atmospheric-glow" aria-hidden="true"></div>
-
-                <!-- Stages List -->
-                <div class="nodes-list nodes-pipeline">
-                  <!-- Stage 01 -->
-                  <div class="pipeline-stage-item active-stage" data-stage="1" id="stageIngestion">
-                    <div class="stage-left-badge">
-                      <span class="stage-seq">01</span>
-                      <span class="stage-dot" aria-hidden="true"></span>
-                    </div>
-                    <div class="stage-body">
-                      <div class="stage-top">
-                        <strong class="stage-name">Ingestion &amp; Security Sanitization</strong>
-                        <span class="stage-pill">Sanitized</span>
-                      </div>
-                      <p class="stage-desc">Promotional copy ingested via auction stream; PII, payment cards, SSNs, and credentials redacted.</p>
-                    </div>
-                  </div>
-
-                  <!-- Stage 02 -->
-                  <div class="pipeline-stage-item" data-stage="2" id="stageModel">
-                    <div class="stage-left-badge">
-                      <span class="stage-seq">02</span>
-                      <span class="stage-dot" aria-hidden="true"></span>
-                    </div>
-                    <div class="stage-body">
-                      <div class="stage-top">
-                        <strong class="stage-name">Structured Claim Extraction</strong>
-                        <span class="stage-pill pill-amd">AMD ROCm™ 6.2</span>
-                      </div>
-                      <p class="stage-desc">Llama-3.1-8B-Instruct extracts exact character spans across pricing, stock, and shipping claims.</p>
-                    </div>
-                  </div>
-
-                  <!-- Stage 03 -->
-                  <div class="pipeline-stage-item" data-stage="3" id="stageCorroboration">
-                    <div class="stage-left-badge">
-                      <span class="stage-seq">03</span>
-                      <span class="stage-dot" aria-hidden="true"></span>
-                    </div>
-                    <div class="stage-body">
-                      <div class="stage-top">
-                        <strong class="stage-name">Multi-Source Ground Truth Corroboration</strong>
-                        <span class="stage-pill">Ground Truth</span>
-                      </div>
-                      <p class="stage-desc">Resolves SKU against master catalog, active price discounts, stock levels, and carrier transit models.</p>
-                    </div>
-                  </div>
-
-                  <!-- Stage 04 -->
-                  <div class="pipeline-stage-item" data-stage="4" id="stagePolicy">
-                    <div class="stage-left-badge">
-                      <span class="stage-seq">04</span>
-                      <span class="stage-dot" aria-hidden="true"></span>
-                    </div>
-                    <div class="stage-body">
-                      <div class="stage-top">
-                        <strong class="stage-name">Deterministic Policy Gate</strong>
-                        <span class="stage-pill">&lt; 1.2ms Gate</span>
-                      </div>
-                      <p class="stage-desc">Strict fail-closed rules evaluate pricing deception (FTC 16 CFR § 233), stockouts, and shipping drift.</p>
-                    </div>
-                  </div>
-
-                  <!-- Stage 05 -->
-                  <div class="pipeline-stage-item" data-stage="5" id="stageVerdict">
-                    <div class="stage-left-badge">
-                      <span class="stage-seq">05</span>
-                      <span class="stage-dot" aria-hidden="true"></span>
-                    </div>
-                    <div class="stage-body">
-                      <div class="stage-top">
-                        <strong class="stage-name">Cryptographic Tri-State Verdict</strong>
-                        <span class="stage-pill pill-sealed">SHA-256 Sealed</span>
-                      </div>
-                      <div class="stage-chips-wrap">
-                        <span class="chip-outcome allow">ALLOW</span>
-                        <span class="chip-outcome block">BLOCK</span>
-                        <span class="chip-outcome review">REVIEW</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Column: 4 Compliance Outcomes -->
-            <div class="diagram-column diagram-col-outputs">
-              <div class="diagram-col-header">
-                <span class="col-kicker">03 // COMPLIANCE OUTCOMES</span>
-                <span class="col-count">4 Targets</span>
-              </div>
-              <div class="nodes-list nodes-outputs">
-                <!-- Output Node 1: ALLOW -->
-                <button type="button" class="diagram-node output-node node-allow" data-node="out-allow" id="nodeOutAllow" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-port port-left" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <div class="node-badge-row">
-                      <span class="node-tag">DECISION</span>
-                      <span class="badge-outcome allow">ALLOW</span>
-                    </div>
-                    <strong class="node-title">Verified Claims</strong>
-                    <span class="node-sub">Instant clearance; corroborated by catalog truth</span>
-                  </div>
-                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
-                </button>
-
-                <!-- Output Node 2: BLOCK -->
-                <button type="button" class="diagram-node output-node node-block" data-node="out-block" id="nodeOutBlock" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-port port-left" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <div class="node-badge-row">
-                      <span class="node-tag">DECISION</span>
-                      <span class="badge-outcome block">BLOCK</span>
-                    </div>
-                    <strong class="node-title">Blocked Claims</strong>
-                    <span class="node-sub">Factual contradiction pre-pub rejection</span>
-                  </div>
-                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
-                </button>
-
-                <!-- Output Node 3: REVIEW -->
-                <button type="button" class="diagram-node output-node node-review" data-node="out-review" id="nodeOutReview" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-port port-left" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <div class="node-badge-row">
-                      <span class="node-tag">ESCALATION</span>
-                      <span class="badge-outcome review">REVIEW</span>
-                    </div>
-                    <strong class="node-title">Human Review Queue</strong>
-                    <span class="node-sub">Prioritized triage with countdown SLAs (DEC-010)</span>
-                  </div>
-                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
-                </button>
-
-                <!-- Output Node 4: AUDIT -->
-                <button type="button" class="diagram-node output-node node-audit" data-node="out-audit" id="nodeOutAudit" aria-expanded="false" aria-controls="diagramDetailPanel">
-                  <div class="node-port port-left" aria-hidden="true"></div>
-                  <div class="node-main">
-                    <div class="node-badge-row">
-                      <span class="node-tag">INTEGRITY</span>
-                      <span class="badge-outcome audit">SHA-256</span>
-                    </div>
-                    <strong class="node-title">Chained Merkle Ledger</strong>
-                    <span class="node-sub">1-click bit-for-bit historical replay verification</span>
-                  </div>
-                  <div class="node-arrow" aria-hidden="true">&rarr;</div>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- SVG Flow Connection Layer with Flowing Particles (Desktop Only) -->
-          <svg class="diagram-svg-bridge" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
+          <!-- SVG Overlay for curves, short links, and animated particles (Section 7 & 12) -->
+          <svg class="dg__svg" viewBox="0 0 940 313" preserveAspectRatio="none" aria-hidden="true">
             <defs>
-              <linearGradient id="curveGradientLeft" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#4F8FFF" stop-opacity="0.25" />
-                <stop offset="100%" stop-color="#70A7FF" stop-opacity="0.85" />
-              </linearGradient>
-              <linearGradient id="curveGradientRight" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#70A7FF" stop-opacity="0.85" />
-                <stop offset="100%" stop-color="#4F8FFF" stop-opacity="0.3" />
-              </linearGradient>
-              <filter id="particleGlow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
+              <filter id="dgDotGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
                 <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
             </defs>
 
-            <!-- Left to Center Paths (5 Paths) -->
-            <path id="pathIn1" class="diagram-path path-input" d="M 270 52 C 345 52, 345 52, 420 52" stroke="url(#curveGradientLeft)" />
-            <path id="pathIn2" class="diagram-path path-input" d="M 270 144 C 345 144, 345 144, 420 144" stroke="url(#curveGradientLeft)" />
-            <path id="pathIn3" class="diagram-path path-input" d="M 270 236 C 345 236, 345 236, 420 236" stroke="url(#curveGradientLeft)" />
-            <path id="pathIn4" class="diagram-path path-input" d="M 270 328 C 345 328, 345 328, 420 328" stroke="url(#curveGradientLeft)" />
-            <path id="pathIn5" class="diagram-path path-input" d="M 270 420 C 345 420, 345 420, 420 420" stroke="url(#curveGradientLeft)" />
+            <!-- Short links between containers at y = 157 -->
+            <path class="dg__link" d="M 352.5,157 H 382.5" />
+            <path class="dg__link" d="M 557.5,157 H 587.5" />
 
-            <!-- Center to Right Paths (4 Diverging Paths from Verdict Engine) -->
-            <path id="pathOut1" class="diagram-path path-output path-allow" d="M 780 440 C 840 440, 860 76, 930 76" stroke="url(#curveGradientRight)" />
-            <path id="pathOut2" class="diagram-path path-output path-block" d="M 780 440 C 840 440, 860 196, 930 196" stroke="url(#curveGradientRight)" />
-            <path id="pathOut3" class="diagram-path path-output path-review" d="M 780 440 C 840 440, 860 316, 930 316" stroke="url(#curveGradientRight)" />
-            <path id="pathOut4" class="diagram-path path-output path-audit" d="M 780 440 C 840 440, 860 436, 930 436" stroke="url(#curveGradientRight)" />
+            <!-- Left Curves (Pills -> Hub Left Edge at 283.5, 157) -->
+            <path id="pathIn1" class="dg__path" data-node="copy" d="M 130.5,17 C 222.3,17 222.3,157 283.5,157" />
+            <path id="pathIn2" class="dg__path" data-node="catalog-pricing" d="M 130.5,65.5 C 222.3,65.5 222.3,157 283.5,157" />
+            <path id="pathIn3" class="dg__path" data-node="inventory" d="M 130.5,248 C 222.3,248 222.3,157 283.5,157" />
+            <path id="pathIn4" class="dg__path" data-node="carrier" d="M 130.5,295.5 C 222.3,295.5 222.3,157 283.5,157" />
 
-            <!-- Flowing Luminous Particles Traveling Along Paths -->
-            <!-- Left Inputs Particles -->
-            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
-              <animateMotion dur="2.4s" repeatCount="indefinite" path="M 270 52 C 345 52, 345 52, 420 52" />
-            </circle>
-            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
-              <animateMotion dur="2.8s" begin="0.4s" repeatCount="indefinite" path="M 270 144 C 345 144, 345 144, 420 144" />
-            </circle>
-            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
-              <animateMotion dur="3.1s" begin="0.8s" repeatCount="indefinite" path="M 270 236 C 345 236, 345 236, 420 236" />
-            </circle>
-            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
-              <animateMotion dur="2.6s" begin="1.2s" repeatCount="indefinite" path="M 270 328 C 345 328, 345 328, 420 328" />
-            </circle>
-            <circle class="diagram-particle" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
-              <animateMotion dur="3.0s" begin="0.6s" repeatCount="indefinite" path="M 270 420 C 345 420, 345 420, 420 420" />
-            </circle>
+            <!-- Right Curves (Hub Right Edge at 656.5, 157 -> Pills) -->
+            <path id="pathOut1" class="dg__path" data-node="out-allow" d="M 656.5,157 C 717.7,157 717.7,17 809.5,17" />
+            <path id="pathOut2" class="dg__path" data-node="out-block" d="M 656.5,157 C 717.7,157 717.7,65.5 809.5,65.5" />
+            <path id="pathOut3" class="dg__path" data-node="out-review" d="M 656.5,157 C 717.7,157 717.7,248 809.5,248" />
+            <path id="pathOut4" class="dg__path" data-node="out-audit" d="M 656.5,157 C 717.7,157 717.7,295.5 809.5,295.5" />
 
-            <!-- Right Outputs Particles -->
-            <circle class="diagram-particle particle-allow" r="3.5" fill="#34D399" filter="url(#particleGlow)">
-              <animateMotion dur="2.2s" begin="0.2s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 76, 930 76" />
+            <!-- Traveling Dots along right curves (Section 12) -->
+            <circle class="dg__dot dot-allow" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
+              <animateMotion dur="3.4s" begin="0s" repeatCount="indefinite">
+                <mpath href="#pathOut1"/>
+              </animateMotion>
             </circle>
-            <circle class="diagram-particle particle-block" r="3.5" fill="#F87171" filter="url(#particleGlow)">
-              <animateMotion dur="2.6s" begin="0.7s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 196, 930 196" />
+            <circle class="dg__dot dot-block" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
+              <animateMotion dur="3.4s" begin="0.85s" repeatCount="indefinite">
+                <mpath href="#pathOut2"/>
+              </animateMotion>
             </circle>
-            <circle class="diagram-particle particle-review" r="3.5" fill="#FBBF24" filter="url(#particleGlow)">
-              <animateMotion dur="2.9s" begin="1.1s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 316, 930 316" />
+            <circle class="dg__dot dot-review" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
+              <animateMotion dur="3.4s" begin="1.70s" repeatCount="indefinite">
+                <mpath href="#pathOut3"/>
+              </animateMotion>
             </circle>
-            <circle class="diagram-particle particle-audit" r="3.5" fill="#70A7FF" filter="url(#particleGlow)">
-              <animateMotion dur="2.5s" begin="0.5s" repeatCount="indefinite" path="M 780 440 C 840 440, 860 436, 930 436" />
-            </circle>
-          </svg>
+            <circle class="dg__dot dot-audit" r="2.5" fill="#ffffff" filter="url(#dgDotGlow)">
+              <animateMotion dur="3.4s" begin="2.55s" repeatCount="indefinite">
+                <mpath href="#pathOut4"/>
+              </animateMotion>
+            </circle>          <!-- Interactive Nodes Stage Overlay (Section 6 & 13) -->
+          <div class="dg__stage">
+            <!-- Inputs Group (Desktop: display: contents; Mobile < 900px: 2x2 grid) -->
+            <div class="dg__group dg__group--inputs">
+              <button type="button" class="dg__pill is-left is-selected" data-node="copy" id="nodeInputCopy" style="--px: 0; --py: 0;" aria-expanded="true" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Ad Copy</span>
+              </button>
 
-          <!-- Interactive Node Detail Inspection Card (Reveals details on hover/click) -->
-          <div class="diagram-detail-panel" id="diagramDetailPanel" role="region" aria-live="polite">
-            <div class="panel-inner">
-              <div class="panel-header-line">
-                <span class="panel-status-dot active"></span>
-                <span class="panel-tag" id="diagramDetailTag">COMPONENT DETAIL</span>
-                <strong class="panel-name" id="diagramDetailTitle">Ad Copy Statements</strong>
+              <button type="button" class="dg__pill is-left" data-node="catalog-pricing" id="nodeInputCatalog" style="--px: 0; --py: 48.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Catalog &amp; Pricing</span>
+              </button>
+
+              <button type="button" class="dg__pill is-left" data-node="inventory" id="nodeInputInventory" style="--px: 0; --py: 231;" aria-expanded="false" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Inventory</span>
+              </button>
+
+              <button type="button" class="dg__pill is-left" data-node="carrier" id="nodeInputCarrier" style="--px: 0; --py: 278.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="1" y="3" width="15" height="13"/>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
+                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Carrier SLA</span>
+              </button>
+            </div>
+
+            <!-- Mobile Connector 1 (36px vertical line with traveling dot) -->
+            <div class="dg-mobile-connector" aria-hidden="true"></div>
+
+            <!-- Center Cluster (3 Containers, Desktop midline y=157, Mobile horizontal row) -->
+            <div class="dg__group dg__group--cluster">
+              <!-- Left Container: Sanitize (width=69) -->
+              <div class="dg__cluster-unit">
+                <div class="dg__container" style="--cx: 283.5; --cw: 69;">
+                  <button type="button" class="dg__tile" data-node="stage-sanitize" id="tileSanitize" aria-label="Sanitize: Ingestion &amp; Security Sanitization" aria-controls="diagramDetailPanel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      <polyline points="9 12 11 14 15 10"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="dg__container-label" style="--lx: 318;">Sanitize</span>
               </div>
-              <p class="panel-desc" id="diagramDetailDesc">
-                Multi-claim retail campaign promotions ingested directly from programmatic auction streams or merchant inputs. PII and private API tokens are automatically sanitized before model processing.
-              </p>
-              <div class="panel-actions">
-                <a href="#studioSection" class="btn btn-sm btn-primary" id="diagramDetailAction">Test in Studio &rarr;</a>
+
+              <!-- Mobile short link 1 -->
+              <div class="dg-mobile-cluster-link" aria-hidden="true"></div>
+
+              <!-- Middle Container: Evidence Gate (width=175) -->
+              <div class="dg__cluster-unit">
+                <div class="dg__container is-wide" style="--cx: 382.5; --cw: 175;">
+                  <button type="button" class="dg__tile" data-node="stage-extraction" id="tileExtraction" aria-label="Structured Claim Extraction, AMD ROCm™ 6.2" aria-controls="diagramDetailPanel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="4" y="4" width="16" height="16" rx="2"/>
+                      <rect x="9" y="9" width="6" height="6"/>
+                      <line x1="9" y1="1" x2="9" y2="4"/>
+                      <line x1="15" y1="1" x2="15" y2="4"/>
+                      <line x1="9" y1="20" x2="9" y2="23"/>
+                      <line x1="15" y1="20" x2="15" y2="23"/>
+                      <line x1="20" y1="9" x2="23" y2="9"/>
+                      <line x1="20" y1="14" x2="23" y2="14"/>
+                      <line x1="1" y1="9" x2="4" y2="9"/>
+                      <line x1="1" y1="14" x2="4" y2="14"/>
+                    </svg>
+                  </button>
+                  <button type="button" class="dg__tile" data-node="stage-corroboration" id="tileCorroboration" aria-label="Multi-Source Ground Truth Corroboration" aria-controls="diagramDetailPanel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                      <polyline points="8 12 10.5 14.5 16 9"/>
+                    </svg>
+                  </button>
+                  <button type="button" class="dg__tile" data-node="stage-policy" id="tilePolicy" aria-label="Deterministic Policy Gate" aria-controls="diagramDetailPanel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                      <polyline points="2 17 12 22 22 17"/>
+                      <polyline points="2 12 12 17 22 12"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="dg__container-label" style="--lx: 470;">Evidence Gate</span>
+              </div>
+
+              <!-- Mobile short link 2 -->
+              <div class="dg-mobile-cluster-link" aria-hidden="true"></div>
+
+              <!-- Right Container: Seal (width=69) -->
+              <div class="dg__cluster-unit">
+                <div class="dg__container" style="--cx: 587.5; --cw: 69;">
+                  <button type="button" class="dg__tile" data-node="stage-seal" id="tileSeal" aria-label="Seal: Cryptographic Tri-State Verdict" aria-controls="diagramDetailPanel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="4" y1="9" x2="20" y2="9"/>
+                      <line x1="4" y1="15" x2="20" y2="15"/>
+                      <line x1="10" y1="3" x2="8" y2="21"/>
+                      <line x1="16" y1="3" x2="14" y2="21"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="dg__container-label" style="--lx: 622;">Seal</span>
               </div>
             </div>
+
+            <!-- Mobile Connector 2 (36px vertical line with traveling dot) -->
+            <div class="dg-mobile-connector" aria-hidden="true"></div>
+
+            <!-- Outputs Group (Desktop: display: contents; Mobile < 900px: 2x2 grid) -->
+            <div class="dg__group dg__group--outputs">
+              <button type="button" class="dg__pill is-right" data-node="out-allow" id="nodeOutAllow" style="--px: 809.5; --py: 0;" aria-expanded="false" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-dot dot-allow" aria-hidden="true"></span>
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="9 12 12 15 16 9"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Verified Claims</span>
+              </button>
+
+              <button type="button" class="dg__pill is-right" data-node="out-block" id="nodeOutBlock" style="--px: 809.5; --py: 48.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-dot dot-block" aria-hidden="true"></span>
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Blocked Claims</span>
+              </button>
+
+              <button type="button" class="dg__pill is-right" data-node="out-review" id="nodeOutReview" style="--px: 809.5; --py: 231;" aria-expanded="false" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-dot dot-review" aria-hidden="true"></span>
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Review Queue</span>
+              </button>
+
+              <button type="button" class="dg__pill is-right" data-node="out-audit" id="nodeOutAudit" style="--px: 809.5; --py: 278.5;" aria-expanded="false" aria-controls="diagramDetailPanel">
+                <span class="dg__pill-dot dot-audit" aria-hidden="true"></span>
+                <span class="dg__pill-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="8" height="8" rx="1"/>
+                    <rect x="14" y="14" width="8" height="8" rx="1"/>
+                    <path d="M10 6h4a2 2 0 0 1 2 2v4"/>
+                    <path d="M14 18h-4a2 2 0 0 1-2-2v-4"/>
+                  </svg>
+                </span>
+                <span class="dg__pill-label">Audit Ledger</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Strip (Section 11) -->
+        <div class="dg-detail-strip" id="diagramDetailPanel" role="region" aria-live="polite">
+          <div class="dg-detail-header">
+            <span class="dg-detail-title" id="diagramDetailTitle">Ad Copy Statements</span>
+            <span class="dg-detail-tag" id="diagramDetailTag">EVIDENCE INPUT 01</span>
+          </div>
+          <p class="dg-detail-desc" id="diagramDetailDesc">
+            Promotional copy ingested directly from programmatic auction streams or merchant inputs. PII, payment cards, SSNs, and credentials redacted.
+          </p>
+          <div class="dg-detail-footer">
+            <a href="#studioSection" class="dg-detail-btn" id="diagramDetailAction">Test in Studio &rarr;</a>
+            <span class="dg-detail-caption">Simplified, schematic flow.</span>
           </div>
         </div>
       </div>
@@ -745,7 +688,7 @@
     <!-- =====================================================================
          SECTION 4: HOW IT WORKS (ENTERPRISE PIPELINE)
          ===================================================================== -->
-    <section class="section workflow-section" id="howItWorksSection" aria-labelledby="workflowTitle">
+    <section class="section workflow-section" id="workflowSection" aria-labelledby="workflowTitle">
       <div class="content-container">
         <!-- 2-Column Technical Storytelling Showcase (Section 09) -->
         <div class="how-it-works-hero-grid">

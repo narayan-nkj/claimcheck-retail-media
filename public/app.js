@@ -362,7 +362,7 @@
           const target = document.getElementById(href.slice(1));
           if (target) {
             e.preventDefault();
-            const headerOffset = 76;
+            const headerOffset = 96;
             const targetPos = target.getBoundingClientRect().top + window.scrollY - headerOffset;
             window.scrollTo({
               top: Math.max(0, targetPos),
@@ -396,21 +396,27 @@
         }
       }
 
-      // Scroll spy logic
-      const scrollPos = window.scrollY + 140;
-      let currentSectionId = 'heroSection';
+      // Scroll spy logic: dynamic sort by document Y position
+      const scrollPos = window.scrollY + 130;
+      const candidates = sections
+        .filter((s) => s.el)
+        .map((s) => ({
+          id: s.id,
+          top: s.el.getBoundingClientRect().top + window.scrollY
+        }))
+        .sort((a, b) => a.top - b.top);
 
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const s = sections[i];
-        if (s.el && s.el.offsetTop <= scrollPos) {
-          currentSectionId = s.id;
+      let currentSectionId = candidates[0]?.id || 'heroSection';
+      for (let i = candidates.length - 1; i >= 0; i--) {
+        if (candidates[i].top <= scrollPos) {
+          currentSectionId = candidates[i].id;
           break;
         }
       }
 
       navItems.forEach((link) => {
         const href = link.getAttribute('href');
-        if (href === `#${currentSectionId}`) {
+        if (href === `#${currentSectionId}` || (currentSectionId === 'architectureSection' && href === '#howItWorksSection')) {
           link.classList.add('active');
         } else {
           link.classList.remove('active');
@@ -636,158 +642,225 @@
   }
 
   /**
-   * Solution Architecture Diagram Interactive Inspector (Section 07B)
+   * Solution Architecture Diagram Interactive Inspector (Lucien Rebuild)
    */
   function setupSolutionDiagram() {
-    const nodeDetailData = {
+    const DIAGRAM_NODES = {
       'copy': {
-        tag: 'EVIDENCE INPUT 01',
+        tag: 'Sanitized',
         title: 'Ad Copy Promotional Statements',
-        desc: 'Multi-claim retail campaign copy ingested from programmatic auction streams or merchant inputs. PII, emails, credit cards, and private tokens are automatically sanitized prior to model inference.',
+        desc: 'Ad Copy Statements: multi-claim promotional text & SKUs ingested directly from programmatic auction streams or merchant inputs. PII and private API tokens are automatically sanitized before model processing.',
         actionText: 'Test in Studio →',
         actionHref: '#studioSection',
-        stageIndex: 1,
-        pathId: 'pathIn1'
+        pathIds: ['pathIn1']
       },
-      'sku': {
-        tag: 'EVIDENCE INPUT 02',
-        title: 'Product SKU & Master Catalog',
-        desc: 'Authoritative regular price, product title, and category specifications resolved from master merchant catalogs to anchor compliance baselines.',
-        actionText: 'Inspect in Studio →',
+      'catalog-pricing': {
+        tag: 'Ground Truth',
+        title: 'Catalog & Pricing Baseline',
+        desc: 'Master price, specs & regular baseline merged with active discounts and promotional windows. Evaluated against FTC 16 CFR § 233 deceptive strikethrough rules.',
+        actionText: 'Test in Studio →',
         actionHref: '#studioSection',
-        stageIndex: 3,
-        pathId: 'pathIn2'
-      },
-      'pricing': {
-        tag: 'EVIDENCE INPUT 03',
-        title: 'Dynamic Pricing & Promo Feeds',
-        desc: 'Active promotional discount schedules and flash-sale time windows. Evaluated against FTC 16 CFR § 233 deceptive strikethrough rules.',
-        actionText: 'Test Price Mismatch →',
-        actionHref: '#studioSection',
-        stageIndex: 3,
-        pathId: 'pathIn3'
+        pathIds: ['pathIn2']
       },
       'inventory': {
-        tag: 'EVIDENCE INPUT 04',
+        tag: 'Real-time Stock',
         title: 'Warehouse Real-Time Inventory',
-        desc: 'Live stock quantities aggregated across regional fulfillment nodes. Eliminates zero-inventory ad spend and consumer stockout complaints.',
-        actionText: 'Test Out of Stock →',
+        desc: 'Warehouse Inventory: real-time stock across fulfillment nodes. Eliminates zero-inventory ad spend and consumer stockout complaints.',
+        actionText: 'Test in Studio →',
         actionHref: '#studioSection',
-        stageIndex: 3,
-        pathId: 'pathIn4'
+        pathIds: ['pathIn3']
       },
       'carrier': {
-        tag: 'EVIDENCE INPUT 05',
+        tag: 'Transit Model',
         title: 'Carrier Transit SLAs & Delivery Models',
-        desc: 'Regional carrier transit models and delivery cutoff times. Claims asserting fast or next-day shipping are corroborated against carrier guarantees.',
-        actionText: 'Test Shipping SLA →',
+        desc: 'Carrier Transit SLA: transit time guarantees & postal zones. Claims asserting fast or next-day shipping are corroborated against carrier guarantees.',
+        actionText: 'Test in Studio →',
         actionHref: '#studioSection',
-        stageIndex: 3,
-        pathId: 'pathIn5'
+        pathIds: ['pathIn4']
+      },
+      'stage-sanitize': {
+        tag: 'Sanitized',
+        title: '01 Ingestion & Security Sanitization',
+        desc: 'Promotional copy ingested via auction stream; PII, payment cards, SSNs, and credentials redacted.',
+        actionText: 'Test in Studio →',
+        actionHref: '#studioSection',
+        pathIds: ['pathIn1', 'pathIn2', 'pathIn3', 'pathIn4']
+      },
+      'stage-extraction': {
+        tag: 'AMD ROCm™ 6.2',
+        title: '02 Structured Claim Extraction',
+        desc: 'Llama-3.1-8B-Instruct extracts exact character spans across pricing, stock, and shipping claims.',
+        actionText: 'Test in Studio →',
+        actionHref: '#studioSection',
+        pathIds: ['pathIn1', 'pathIn2', 'pathIn3', 'pathIn4']
+      },
+      'stage-corroboration': {
+        tag: 'Ground Truth',
+        title: '03 Multi-Source Ground Truth Corroboration',
+        desc: 'Resolves SKU against master catalog, active price discounts, stock levels, and carrier transit models.',
+        actionText: 'Test in Studio →',
+        actionHref: '#studioSection',
+        pathIds: ['pathIn2', 'pathIn3', 'pathIn4']
+      },
+      'stage-policy': {
+        tag: '< 1.2ms Gate',
+        title: '04 Deterministic Policy Gate',
+        desc: 'Strict fail-closed rules evaluate pricing deception (FTC 16 CFR § 233), stockouts, and shipping drift.',
+        actionText: 'Test in Studio →',
+        actionHref: '#studioSection',
+        pathIds: ['pathOut1', 'pathOut2', 'pathOut3', 'pathOut4']
+      },
+      'stage-seal': {
+        tag: 'SHA-256 Sealed',
+        title: '05 Cryptographic Tri-State Verdict',
+        desc: 'ALLOW, BLOCK or REVIEW, sealed with SHA-256.',
+        actionText: 'Test in Studio →',
+        actionHref: '#studioSection',
+        pathIds: ['pathOut1', 'pathOut2', 'pathOut3', 'pathOut4']
       },
       'out-allow': {
-        tag: 'COMPLIANCE OUTCOME 01',
-        title: 'Verified Claims (ALLOW Clearance)',
-        desc: 'Instant programmatic publication clearance. All pricing, discounts, stock, and delivery promises are strictly corroborated by fresh catalog truth.',
-        actionText: 'Run Golden Pass →',
+        tag: 'ALLOW Clearance',
+        title: 'Verified Claims',
+        desc: 'ALLOW: Instant programmatic clearance; corroborated by catalog truth.',
+        actionText: 'Test in Studio →',
         actionHref: '#studioSection',
-        stageIndex: 5,
-        pathId: 'pathOut1'
+        pathIds: ['pathOut1']
       },
       'out-block': {
-        tag: 'COMPLIANCE OUTCOME 02',
-        title: 'Blocked Claims (Factual Rejection)',
-        desc: 'Factual pre-publication rejection triggered by price contradictions, fake strikethroughs, or stockouts. Requires Senior Compliance Officer override.',
-        actionText: 'Test Block Scenario →',
+        tag: 'BLOCK Rejection',
+        title: 'Blocked Claims',
+        desc: 'BLOCK: Factual contradiction pre-pub rejection.',
+        actionText: 'Test in Studio →',
         actionHref: '#studioSection',
-        stageIndex: 5,
-        pathId: 'pathOut2'
+        pathIds: ['pathOut2']
       },
       'out-review': {
-        tag: 'COMPLIANCE OUTCOME 03',
-        title: 'Human Review Queue (Priority Escalation)',
-        desc: 'Priority queue with countdown SLAs for feed synchronization discrepancies and deal window expirations under role-based governance (DEC-010).',
+        tag: 'REVIEW Queue',
+        title: 'Review Queue',
+        desc: 'REVIEW: Prioritized triage with countdown SLAs (DEC-010).',
         actionText: 'Open Review Queue →',
         actionHref: '#opsSection',
         opsTab: 'review',
-        stageIndex: 5,
-        pathId: 'pathOut3'
+        pathIds: ['pathOut3']
       },
       'out-audit': {
-        tag: 'COMPLIANCE OUTCOME 04',
-        title: 'Chained Merkle Ledger (Audit Trail)',
-        desc: 'Forward-chained SHA-256 tamper-evident log linking each check to the previous block. Enables 1-click bit-for-bit historical replay verification.',
+        tag: 'SHA-256 Ledger',
+        title: 'Audit Ledger',
+        desc: 'Chained Merkle Ledger: 1-click bit-for-bit historical replay verification.',
         actionText: 'Explore Audit Ledger →',
         actionHref: '#opsSection',
         opsTab: 'audit',
-        stageIndex: 5,
-        pathId: 'pathOut4'
+        pathIds: ['pathOut4']
       }
     };
+    // Backward compatibility aliases
+    DIAGRAM_NODES['sku'] = DIAGRAM_NODES['catalog-pricing'];
+    DIAGRAM_NODES['pricing'] = DIAGRAM_NODES['catalog-pricing'];
 
     const detailTag = document.getElementById('diagramDetailTag');
     const detailTitle = document.getElementById('diagramDetailTitle');
     const detailDesc = document.getElementById('diagramDetailDesc');
     const detailAction = document.getElementById('diagramDetailAction');
-    const allNodes = document.querySelectorAll('.diagram-node');
-    const allPaths = document.querySelectorAll('.diagram-path');
-    const allStages = document.querySelectorAll('.pipeline-stage-item');
+    const allNodes = document.querySelectorAll('.dg__pill, .dg__tile, .diagram-node');
+    const allPaths = document.querySelectorAll('.dg__path, .diagram-path');
+
+    let currentSelectedKey = 'copy';
+
+    function highlightPaths(pathIds) {
+      allPaths.forEach((p) => p.classList.remove('path-highlighted'));
+      if (Array.isArray(pathIds)) {
+        pathIds.forEach((pid) => {
+          const el = document.getElementById(pid);
+          if (el) el.classList.add('path-highlighted');
+        });
+      }
+    }
 
     function selectNode(nodeKey) {
-      const data = nodeDetailData[nodeKey];
+      const data = DIAGRAM_NODES[nodeKey];
       if (!data) return;
+
+      currentSelectedKey = nodeKey;
 
       // Update detail card
       if (detailTag) detailTag.textContent = data.tag;
       if (detailTitle) detailTitle.textContent = data.title;
       if (detailDesc) detailDesc.textContent = data.desc;
       if (detailAction) {
-        detailAction.textContent = data.actionText;
-        detailAction.setAttribute('href', data.actionHref);
+        detailAction.textContent = data.actionText || 'Test in Studio →';
+        detailAction.setAttribute('href', data.actionHref || '#studioSection');
         if (data.opsTab) {
           detailAction.setAttribute('data-ops-tab', data.opsTab);
-          detailAction.onclick = () => switchTab(data.opsTab);
+          detailAction.onclick = (e) => {
+            e.preventDefault();
+            switchTab(data.opsTab);
+            const opsSec = document.getElementById('opsSection');
+            if (opsSec) {
+              const targetPos = opsSec.getBoundingClientRect().top + window.scrollY - 96;
+              window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
+            }
+          };
         } else {
           detailAction.removeAttribute('data-ops-tab');
-          detailAction.onclick = null;
+          detailAction.onclick = (e) => {
+            if (data.actionHref === '#studioSection') {
+              e.preventDefault();
+              const studioSec = document.getElementById('studioSection');
+              if (studioSec) {
+                const targetPos = studioSec.getBoundingClientRect().top + window.scrollY - 96;
+                window.scrollTo({ top: Math.max(0, targetPos), behavior: 'smooth' });
+              }
+            }
+          };
         }
       }
 
-      // Update node active class
+      // Update node selection
       allNodes.forEach((n) => {
         const isCurrent = n.getAttribute('data-node') === nodeKey;
+        n.classList.toggle('is-selected', isCurrent);
         n.classList.toggle('active-node', isCurrent);
         n.setAttribute('aria-expanded', isCurrent ? 'true' : 'false');
       });
 
-      // Highlight path
-      allPaths.forEach((p) => p.classList.remove('path-highlighted'));
-      if (data.pathId) {
-        const pEl = document.getElementById(data.pathId);
-        if (pEl) pEl.classList.add('path-highlighted');
-      }
-
-      // Highlight stage
-      if (data.stageIndex) {
-        allStages.forEach((s) => {
-          const sIdx = Number(s.getAttribute('data-stage'));
-          s.classList.toggle('active-stage', sIdx === data.stageIndex);
-        });
-      }
+      // Highlight active paths
+      highlightPaths(data.pathIds);
     }
 
+    // Attach listeners to nodes
     allNodes.forEach((node) => {
       const nodeKey = node.getAttribute('data-node');
-      node.addEventListener('mouseenter', () => selectNode(nodeKey));
-      node.addEventListener('focus', () => selectNode(nodeKey));
-      node.addEventListener('click', (e) => {
-        selectNode(nodeKey);
-        const data = nodeDetailData[nodeKey];
-        if (data && data.opsTab) {
-          switchTab(data.opsTab);
+      if (!nodeKey) return;
+
+      // Hover: highlight curves
+      node.addEventListener('mouseenter', () => {
+        const data = DIAGRAM_NODES[nodeKey];
+        if (data && data.pathIds) {
+          highlightPaths(data.pathIds);
         }
       });
+
+      node.addEventListener('mouseleave', () => {
+        const currentData = DIAGRAM_NODES[currentSelectedKey];
+        if (currentData && currentData.pathIds) {
+          highlightPaths(currentData.pathIds);
+        }
+      });
+
+      // Focus
+      node.addEventListener('focus', () => {
+        selectNode(nodeKey);
+      });
+
+      // Click
+      node.addEventListener('click', (e) => {
+        e.preventDefault();
+        selectNode(nodeKey);
+      });
     });
+
+    // Default selection on load: 'copy'
+    selectNode('copy');
   }
 
   /**
