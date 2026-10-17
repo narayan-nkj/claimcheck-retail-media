@@ -138,7 +138,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
-  scroll-padding-top: 76px;
+  scroll-padding-top: 96px;
+  overflow-x: hidden;
+  width: 100%;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(160, 180, 240, 0.28) #050c24;
 }
 
 body.site-body {
@@ -148,7 +153,34 @@ body.site-body {
   background-color: var(--bg-0);
   background-image: none; /* Smooth seamless continuation of navy */
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
   color: var(--text-0);
+}
+
+/* Custom Scrollbars for Windows Chromium (Edge, Chrome, Opera, Brave) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #050c24;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(160, 180, 240, 0.22);
+  border-radius: 999px;
+  border: 2px solid #050c24;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(160, 180, 240, 0.45);
+}
+::-webkit-scrollbar-corner {
+  background: #050c24;
+}
+
+/* Global SVG Crispness on Windows Fractional DPI (125%, 150%) */
+svg {
+  shape-rendering: geometricPrecision;
 }
 
 /* Universal Link Reset - Eliminates default blue & underlines */
