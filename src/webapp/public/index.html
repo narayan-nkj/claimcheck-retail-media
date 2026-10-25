@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="styles.css?v=3.1">
 </head>
 <body class="site-body">
+  <!-- Full-Page Continuous Ambient Background (OrbitScore Technical Design System) -->
+  <div class="site-background" aria-hidden="true"></div>
   <!-- Accessible Skip Navigation Link (WCAG 2.1 AA) -->
   <a href="#mainContent" class="skip-link">Skip to main content</a>
 
@@ -452,189 +454,206 @@
          ===================================================================== -->
     <section class="section workflow-section" id="workflowSection" aria-labelledby="workflowTitle">
       <div class="content-container">
-        <!-- 2-Column Technical Storytelling Showcase (Section 09) -->
-        <div class="how-it-works-hero-grid">
-          <!-- Left Column -->
-          <div class="how-hero-copy">
-            <span class="section-label">How it works</span>
-            <div class="section-heading-dash" aria-hidden="true"></div>
-            <h2 id="workflowTitle" class="section-title">
-              A verification gate for retail claims,<br>not just another content filter.
-            </h2>
-            <p class="section-subtitle">
-              ClaimCheck evaluates advertising claims against evidence and configured compliance policies
-              before publication, producing an explainable verdict and an auditable record.
-            </p>
-            <div class="how-hero-cta">
-              <a href="#studioSection" class="btn btn-primary">
-                <span class="btn-text">See how verification works</span>
-                <span class="btn-arrow">&rarr;</span>
-              </a>
+        <!-- Section Header Stack -->
+        <div class="section-header">
+          <span class="section-label">// 02 &mdash; SYSTEM CAPABILITIES</span>
+          <div class="section-heading-dash" aria-hidden="true"></div>
+          <h2 id="workflowTitle" class="section-title">
+            Deterministic execution across every retail claim.
+          </h2>
+          <p class="section-subtitle">
+            Six foundational verification safeguards defending retail media networks against deceptive pricing,
+            phantom inventory, and regulatory non-compliance before publication.
+          </p>
+        </div>
+
+        <!-- Technical Telemetry Ribbon (Horizontal Flow Strip) -->
+        <div class="flow-mini-card" role="region" aria-label="Illustrative verification workflow: Advertisement to Evidence Gate to Verdict">
+          <div class="flow-mini-header">
+            <span class="flow-mini-title">ILLUSTRATIVE VERIFICATION WORKFLOW</span>
+            <span class="flow-mini-badge">DETERMINISTIC GATE</span>
+          </div>
+          
+          <div class="flow-mini-track">
+            <!-- Step 1: Ad Input -->
+            <div class="flow-mini-node node-step-ad">
+              <div class="mini-node-box">
+                <span class="mini-node-seq">01</span>
+                <strong class="mini-node-text">Ad Copy</strong>
+              </div>
+              <span class="mini-node-caption">Promotional Claim</span>
+            </div>
+
+            <!-- Connector 1 -->
+            <div class="flow-mini-connector">
+              <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
+                <path class="flow-track-bg" d="M 0 12 L 36 12" />
+                <path class="flow-track-active" d="M 0 12 L 36 12" />
+                <circle class="flow-dot" r="3" fill="#0866FF">
+                  <animateMotion dur="2.4s" repeatCount="indefinite" path="M 0 12 L 36 12" />
+                </circle>
+              </svg>
+            </div>
+
+            <!-- Step 2: Evidence Gate -->
+            <div class="flow-mini-node node-step-gate">
+              <div class="mini-node-box gate-glow">
+                <span class="mini-node-seq">02</span>
+                <strong class="mini-node-text">Evidence Gate</strong>
+              </div>
+              <span class="mini-node-caption">Catalog &amp; Feeds</span>
+            </div>
+
+            <!-- Connector 2 -->
+            <div class="flow-mini-connector">
+              <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
+                <path class="flow-track-bg" d="M 0 12 L 36 12" />
+                <path class="flow-track-active" d="M 0 12 L 36 12" />
+                <circle class="flow-dot" r="3" fill="#0866FF">
+                  <animateMotion dur="2.4s" begin="0.8s" repeatCount="indefinite" path="M 0 12 L 36 12" />
+                </circle>
+              </svg>
+            </div>
+
+            <!-- Step 3: Tri-State Verdict -->
+            <div class="flow-mini-node node-step-verdict">
+              <div class="mini-node-box verdict-cycle-box">
+                <span class="mini-node-seq">03</span>
+                <strong class="mini-node-text verdict-cycle-text">Verdict</strong>
+              </div>
+              <span class="mini-node-caption">ALLOW / BLOCK / REVIEW</span>
+            </div>
+
+            <!-- Connector 3 -->
+            <div class="flow-mini-connector">
+              <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
+                <path class="flow-track-bg" d="M 0 12 L 36 12" />
+                <path class="flow-track-active" d="M 0 12 L 36 12" />
+                <circle class="flow-dot" r="3" fill="#0866FF">
+                  <animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite" path="M 0 12 L 36 12" />
+                </circle>
+              </svg>
+            </div>
+
+            <!-- Step 4: Outcome -->
+            <div class="flow-mini-node node-step-output">
+              <div class="mini-node-box">
+                <span class="mini-node-seq">04</span>
+                <strong class="mini-node-text">Ledger</strong>
+              </div>
+              <span class="mini-node-caption">Publish / Escalation</span>
             </div>
           </div>
 
-          <!-- Right Column: Minimal Animated Technical Illustration -->
-          <div class="how-hero-graphic" aria-label="Illustrative verification workflow: Advertisement to Evidence Gate to Verdict">
-            <div class="flow-mini-card">
-              <div class="flow-mini-header">
-                <span class="flow-mini-title">ILLUSTRATIVE VERIFICATION WORKFLOW</span>
-                <span class="flow-mini-badge">DETERMINISTIC GATE</span>
-              </div>
-              
-              <div class="flow-mini-track">
-                <!-- Step 1: Ad Input -->
-                <div class="flow-mini-node node-step-ad">
-                  <div class="mini-node-box">
-                    <span class="mini-node-seq">01</span>
-                    <strong class="mini-node-text">Ad Copy</strong>
-                  </div>
-                  <span class="mini-node-caption">Promotional Claim</span>
-                </div>
-
-                <!-- Connector 1 -->
-                <div class="flow-mini-connector">
-                  <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
-                    <path class="flow-track-bg" d="M 0 12 L 36 12" />
-                    <path class="flow-track-active" d="M 0 12 L 36 12" />
-                    <circle class="flow-dot" r="3" fill="#70A7FF">
-                      <animateMotion dur="2.4s" repeatCount="indefinite" path="M 0 12 L 36 12" />
-                    </circle>
-                  </svg>
-                </div>
-
-                <!-- Step 2: Evidence Gate -->
-                <div class="flow-mini-node node-step-gate">
-                  <div class="mini-node-box gate-glow">
-                    <span class="mini-node-seq">02</span>
-                    <strong class="mini-node-text">Evidence Gate</strong>
-                  </div>
-                  <span class="mini-node-caption">Catalog &amp; Feeds</span>
-                </div>
-
-                <!-- Connector 2 -->
-                <div class="flow-mini-connector">
-                  <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
-                    <path class="flow-track-bg" d="M 0 12 L 36 12" />
-                    <path class="flow-track-active" d="M 0 12 L 36 12" />
-                    <circle class="flow-dot" r="3" fill="#70A7FF">
-                      <animateMotion dur="2.4s" begin="0.8s" repeatCount="indefinite" path="M 0 12 L 36 12" />
-                    </circle>
-                  </svg>
-                </div>
-
-                <!-- Step 3: Tri-State Verdict -->
-                <div class="flow-mini-node node-step-verdict">
-                  <div class="mini-node-box verdict-cycle-box">
-                    <span class="mini-node-seq">03</span>
-                    <strong class="mini-node-text verdict-cycle-text">Verdict</strong>
-                  </div>
-                  <span class="mini-node-caption">ALLOW / BLOCK / REVIEW</span>
-                </div>
-
-                <!-- Connector 3 -->
-                <div class="flow-mini-connector">
-                  <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
-                    <path class="flow-track-bg" d="M 0 12 L 36 12" />
-                    <path class="flow-track-active" d="M 0 12 L 36 12" />
-                    <circle class="flow-dot" r="3" fill="#70A7FF">
-                      <animateMotion dur="2.4s" begin="1.6s" repeatCount="indefinite" path="M 0 12 L 36 12" />
-                    </circle>
-                  </svg>
-                </div>
-
-                <!-- Step 4: Outcome -->
-                <div class="flow-mini-node node-step-output">
-                  <div class="mini-node-box">
-                    <span class="mini-node-seq">04</span>
-                    <strong class="mini-node-text">Ledger</strong>
-                  </div>
-                  <span class="mini-node-caption">Publish / Escalation</span>
-                </div>
-              </div>
-
-              <!-- Live Outcome Status Strip -->
-              <div class="flow-mini-verdict-strip">
-                <span class="verdict-pill-mini allow">ALLOW: Clear</span>
-                <span class="verdict-pill-mini block">BLOCK: Contradiction</span>
-                <span class="verdict-pill-mini review">REVIEW: Escalation</span>
-              </div>
-            </div>
+          <!-- Live Outcome Status Strip -->
+          <div class="flow-mini-verdict-strip">
+            <span class="verdict-pill-mini allow">ALLOW: Clear</span>
+            <span class="verdict-pill-mini block">BLOCK: Contradiction</span>
+            <span class="verdict-pill-mini review">REVIEW: Escalation</span>
           </div>
         </div>
 
-        <div class="workflow-steps-list">
-          <div class="workflow-step-item" tabindex="0">
-            <div class="step-num-col">
-              <span class="step-num">01</span>
-              <span class="step-hover-hint">Hover &rarr;</span>
+        <!-- 3-Column Aligned Feature Cards Grid (Section 3 Requirement) -->
+        <div class="feature-grid" role="list" aria-label="ClaimCheck Core Feature Capabilities">
+          <!-- Card 1 -->
+          <div class="feature-card workflow-step-item" tabindex="0" role="listitem">
+            <div class="feature-card-header">
+              <h3 class="feature-card-title">01 // Ingestion &amp; Sanitization</h3>
+              <span class="feature-card-badge badge-green">ZERO-RETENTION</span>
             </div>
-            <div class="step-content">
-              <h3 class="step-title">Ingestion &amp; Security Sanitization</h3>
-              <p class="step-text">
-                Incoming ad copy text from programmatic campaigns, merchant dashboards, or API webhooks is immediately
-                sanitized. Customer emails, credit cards, SSNs, phone numbers, and private API credentials are redacted
-                before persistence or model inference.
-              </p>
-            </div>
-          </div>
-
-          <div class="workflow-step-item" tabindex="0">
-            <div class="step-num-col">
-              <span class="step-num">02</span>
-              <span class="step-hover-hint">Hover &rarr;</span>
-            </div>
-            <div class="step-content">
-              <h3 class="step-title">Structured Claim Extraction (ROCm™)</h3>
-              <p class="step-text">
-                The open-weights Llama-3.1-8B-Instruct model, accelerated by AMD ROCm 6.2 on AMD Instinct™ MI300X
-                hardware (with CPU fallback), extracts precise character spans and classifies claims into 4 distinct commerce categories:
-                PRICING, AVAILABILITY, SHIPPING_PROMISE, and PRODUCT_ATTRIBUTE.
-              </p>
+            <div class="feature-card-divider" aria-hidden="true"></div>
+            <p class="feature-card-desc">
+              Programmatic ad copy, merchant dashboard submissions, and API webhooks are immediately sanitized.
+              Bearer tokens, API keys, credentials, customer emails, credit cards, and SSNs are permanently redacted prior to model inference or storage.
+            </p>
+            <div class="feature-card-metrics">
+              <span class="feature-metric-label">PII Redaction:</span>
+              <span class="feature-metric-tag">Deterministic Regex &bull; &lt; 0.5ms</span>
             </div>
           </div>
 
-          <div class="workflow-step-item" tabindex="0">
-            <div class="step-num-col">
-              <span class="step-num">03</span>
-              <span class="step-hover-hint">Hover &rarr;</span>
+          <!-- Card 2 -->
+          <div class="feature-card workflow-step-item" tabindex="0" role="listitem">
+            <div class="feature-card-header">
+              <h3 class="feature-card-title">02 // ROCm™ Claim Span Extraction</h3>
+              <span class="feature-card-badge">AMD ROCm 6.2</span>
             </div>
-            <div class="step-content">
-              <h3 class="step-title">Ground Truth Corroboration</h3>
-              <p class="step-text">
-                The Target Product SKU is resolved against master merchant catalogs and real-time inventory feeds.
-                Freshness intervals ensure pricing baseline, stock quantities, and carrier transit SLAs reflect actual
-                warehouse reality rather than stale cached data.
-              </p>
-            </div>
-          </div>
-
-          <div class="workflow-step-item" tabindex="0">
-            <div class="step-num-col">
-              <span class="step-num">04</span>
-              <span class="step-hover-hint">Hover &rarr;</span>
-            </div>
-            <div class="step-content">
-              <h3 class="step-title">Fail-Closed Policy Gate</h3>
-              <p class="step-text">
-                Every extracted claim is evaluated in under 1.2ms by strict mathematical rules (FTC deceptive price checks,
-                stockout barriers, transit mismatch detection). If any mandatory claim fails or evidence is missing, the
-                system fails closed to protect the platform.
-              </p>
+            <div class="feature-card-divider" aria-hidden="true"></div>
+            <p class="feature-card-desc">
+              Open-weights Llama-3.1-8B-Instruct accelerated on AMD Instinct™ MI300X with CPU fallback.
+              Extracts exact character spans and classifies claims across Pricing, Availability, Shipping Promise, and Product Attribute categories.
+            </p>
+            <div class="feature-card-metrics">
+              <span class="feature-metric-label">Acceleration:</span>
+              <span class="feature-metric-tag">ROCm™ &bull; CPU Fallback Active</span>
             </div>
           </div>
 
-          <div class="workflow-step-item" tabindex="0">
-            <div class="step-num-col">
-              <span class="step-num">05</span>
-              <span class="step-hover-hint">Hover &rarr;</span>
+          <!-- Card 3 -->
+          <div class="feature-card workflow-step-item" tabindex="0" role="listitem">
+            <div class="feature-card-header">
+              <h3 class="feature-card-title">03 // Multi-Source Ground Truth</h3>
+              <span class="feature-card-badge badge-green">FRESHNESS SYNC</span>
             </div>
-            <div class="step-content">
-              <h3 class="step-title">Tamper-Evident Ledger</h3>
-              <p class="step-text">
-                Every check verdict, operator override, and re-evaluation is committed into a forward-chained Merkle
-                audit stream. Each block cryptographically seals the previous block's SHA-256 digest, providing mathematical
-                non-repudiation and 1-click bit-for-bit historical replay.
-              </p>
+            <div class="feature-card-divider" aria-hidden="true"></div>
+            <p class="feature-card-desc">
+              Resolves Target Product SKUs against master merchant catalogs and real-time inventory feeds.
+              Enforces strict freshness validity intervals so pricing baseline, stock quantities, and carrier transit SLAs reflect actual warehouse reality.
+            </p>
+            <div class="feature-card-metrics">
+              <span class="feature-metric-label">Corroboration:</span>
+              <span class="feature-metric-tag">Multi-Warehouse &bull; Precedence Engine</span>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="feature-card workflow-step-item" tabindex="0" role="listitem">
+            <div class="feature-card-header">
+              <h3 class="feature-card-title">04 // Deterministic Policy Gate</h3>
+              <span class="feature-card-badge badge-red">FTC 16 CFR § 233</span>
+            </div>
+            <div class="feature-card-divider" aria-hidden="true"></div>
+            <p class="feature-card-desc">
+              Sub-1.2ms mathematical evaluation guarding against false strikethroughs, phantom stockout barriers, and carrier transit mismatches.
+              If any mandatory claim fails or evidence is missing, the system fails closed.
+            </p>
+            <div class="feature-card-metrics">
+              <span class="feature-metric-label">Policy Latency:</span>
+              <span class="feature-metric-tag">&lt; 1.2ms &bull; Fail-Closed Security</span>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="feature-card workflow-step-item" tabindex="0" role="listitem">
+            <div class="feature-card-header">
+              <h3 class="feature-card-title">05 // Role-Based Human Review</h3>
+              <span class="feature-card-badge badge-amber">DUTY SEPARATION</span>
+            </div>
+            <div class="feature-card-divider" aria-hidden="true"></div>
+            <p class="feature-card-desc">
+              High-risk contradictions and feed discrepancies route to prioritized review queues.
+              Strict separation of duties prevents junior operators from overriding factual blocks while authorizing senior compliance officers.
+            </p>
+            <div class="feature-card-metrics">
+              <span class="feature-metric-label">Governance:</span>
+              <span class="feature-metric-tag">DEC-010 &bull; Priority 95 SLA</span>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="feature-card workflow-step-item" tabindex="0" role="listitem">
+            <div class="feature-card-header">
+              <h3 class="feature-card-title">06 // Tamper-Evident Merkle Ledger</h3>
+              <span class="feature-card-badge">SHA-256 CHAIN</span>
+            </div>
+            <div class="feature-card-divider" aria-hidden="true"></div>
+            <p class="feature-card-desc">
+              Every verification check, operator override, and re-evaluation is committed into a forward-chained Merkle audit stream.
+              Each block seals the previous block's SHA-256 digest, providing mathematical non-repudiation and 1-click historical replay.
+            </p>
+            <div class="feature-card-metrics">
+              <span class="feature-metric-label">Auditability:</span>
+              <span class="feature-metric-tag">Bit-for-Bit Replay &bull; Immutable</span>
             </div>
           </div>
         </div>

@@ -12,43 +12,75 @@
   --color-block: #ef4444;
   --color-review: #f59e0b;
 
-  /* Lucien Design Tokens (Prompt Section 2) */
-  --bg-0: #070a26;            /* page + hero base navy */
-  --bg-1: #0b1033;
-  --bg-2: #0f1540;
-  --bg-3: #151c4d;
-  --line-1: rgba(160, 180, 240, 0.12);
-  --line-2: rgba(160, 180, 240, 0.22);
+  /* ==========================================================================
+     OrbitScore Precision Engineering Design System Tokens
+     High-contrast, near-black, electric-blue technical palette
+     ========================================================================== */
+  --bg-0: #050505;                 /* Main background: near-black #050505 */
+  --bg-1: #0a0e17;                 /* Elevated card background: charcoal #0a0e17 */
+  --bg-2: #0f1422;                 /* Subtle elevation */
+  --bg-3: #141b2c;                 /* Modal & overlay elevation */
+  --bg-card: #0a0e17;
+  --bg-card-hover: #101624;
+  --bg-glass: rgba(10, 14, 23, 0.94);
 
-  --text-0: #f4f6ff;
-  --text-1: #b9c1de;
-  --text-2: #8590b3;          /* check >= 4.5:1 on --bg-0 */
+  --line-1: #1e2638;               /* Subtle dark gray border */
+  --line-2: #262626;               /* Secondary dark divider */
+  --border-subtle: #1e2638;        /* Subtle dark gray */
+  --border-medium: #2a344d;        /* Mid dark gray */
+  --border-bright: #3d4b6c;        /* Bright dark gray */
+  --border-hairline: #171d2b;      /* Hairline divider */
+  --border-card-hover: #0866FF;    /* Electric blue on card hover */
+  --border-accent-blue: #0866FF;   /* OrbitScore Electric Blue panel left border */
 
-  --glow-cobalt: #3f63c7;
-  --glow-pale:   #b3bddb;
-  --text-pale:   #c3cffb;
-  --text-blue:   #5f8cf5;
-  --accent:      #5f8cf5;
+  --text-0: #F2F2F2;               /* Primary text: crisp off-white */
+  --text-1: #cbd5e1;               /* Secondary text */
+  --text-2: #94a3b8;               /* Neutral gray #94a3b8 / #A0A0A0 */
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-dark: #050505;
 
-  --allow: #34d399; --block: #f87171; --review: #fbbf24;  /* verdicts only */
+  --glow-cobalt: #0866FF;
+  --glow-pale:   #2563eb;
+  --text-pale:   #93c5fd;
+  --text-blue:   #3b82f6;
+  --accent:      #0866FF;          /* Primary accent: electric blue approximately #0866FF */
+  --accent-hover: #0052cc;
+  --accent-blue: #0866FF;
+  --accent-blue-subtle: rgba(8, 102, 255, 0.12);
+  --accent-blue-border: rgba(8, 102, 255, 0.35);
 
-  /* Diagram Specific Tokens (Prompt v2 Section 5 - Sampled from Recording) */
-  --bg-0:        #050c24;                 /* page navy, sampled (5,12,36) */
-  --pill-fill:   #0b122c;                 /* sampled (11,18,44) */
-  --pill-border: #36446f;                 /* sampled (54,68,111), 1px css */
-  --pill-icon:   #4586f5;                 /* sampled (69,134,245) */
-  --box-border:  #4b7ce0;                 /* hub container border, bright cobalt */
-  --box-fill:    rgba(20,32,90,.20);      /* translucent: the glow shows through */
-  --tile-fill:   #121a3a;                 /* sampled (16..19, 25..27, 54..60) */
-  --tile-border: #3c68c8;                 /* a little dimmer than container border */
-  --link:        #4b7ce0;                 /* short lines + section rule */
-  --curve-dim:   rgba(110,135,215,.38);   /* resting curves */
-  --trace:       #ffffff;                 /* traveling trace + dot */
-  --text:        #ffffff;                 /* pure white */
-  --text-para:   #e6eaf8;                 /* paragraph */
-  --chip-text:   #6f8dec;
-  --chip-border: rgba(95,140,245,.45);
-  --dg-pill-border-hot: rgba(150, 172, 245, 0.85);
+  /* Semantic Status Colors */
+  --allow: #10b981;                /* Green: approved, verified */
+  --block: #ef4444;                /* Red: blocked, violated */
+  --review: #f59e0b;               /* Yellow: review, caution */
+  --active: #0866FF;               /* Blue: active, nav, info */
+
+  --color-allow-bg: rgba(16, 185, 129, 0.12);
+  --color-allow-border: rgba(16, 185, 129, 0.35);
+  --color-block-bg: rgba(239, 68, 68, 0.12);
+  --color-block-border: rgba(239, 68, 68, 0.35);
+  --color-review-bg: rgba(245, 158, 11, 0.12);
+  --color-review-border: rgba(245, 158, 11, 0.35);
+  --color-active-bg: rgba(8, 102, 255, 0.12);
+  --color-active-border: rgba(8, 102, 255, 0.35);
+
+  /* Architecture Diagram Specific Tokens (OrbitScore Palette) */
+  --pill-fill:   #0a0e17;
+  --pill-border: #1e2638;
+  --pill-icon:   #0866FF;
+  --box-border:  #1e2638;
+  --box-fill:    rgba(10, 14, 23, 0.95);
+  --tile-fill:   #060910;
+  --tile-border: #1a2233;
+  --link:        #0866FF;
+  --curve-dim:   #1e293b;
+  --trace:       #ffffff;
+  --text:        #F2F2F2;
+  --text-para:   #94a3b8;
+  --chip-text:   #60a5fa;
+  --chip-border: #1e2638;
+  --dg-pill-border-hot: #0866FF;
 
   /* Aliases for backwards compatibility */
   --dg-pill-border: var(--pill-border);
@@ -60,51 +92,31 @@
   --dg-line:        var(--curve-dim);
   --dg-link:        var(--link);
   --dg-icon:        var(--pill-icon);
-  --dg-label:       #ffffff;
+  --dg-label:       #F2F2F2;
   --dg-chip-text:   var(--chip-text);
   --dg-chip-border: var(--chip-border);
 
-  /* Radius scale (8 / 14 / 22 / pill per design system) */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 22px;
+  /* Radius scale (restrained, engineering precision) */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
   --radius-pill: 9999px;
 
-  --font-display: "Host Grotesk", "Hanken Grotesk", "Geist", "Inter Tight", "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, system-ui, sans-serif;
-  --font-body:    "Host Grotesk", "Hanken Grotesk", "Geist", "Inter", "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, system-ui, sans-serif;
-  --font-mono:    "IBM Plex Mono", "Geist Mono", "JetBrains Mono", "Cascadia Code", "Consolas", ui-monospace, monospace;
-  --font-brand:   "Michroma", "Unbounded", var(--font-display);
+  --font-display: "Host Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body:    "Inter", "Host Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:    "JetBrains Mono", "IBM Plex Mono", Menlo, Consolas, ui-monospace, monospace;
+  --font-brand:   "Michroma", var(--font-display);
 
   /* Legacy & Semantic Mappings for Backward Compatibility */
   --bg-surface: var(--bg-1);
   --bg-surface-elevated: var(--bg-2);
-  --bg-card: rgba(11, 16, 51, 0.85);
-  --bg-card-hover: rgba(15, 21, 64, 0.95);
-  --bg-glass: rgba(11, 16, 51, 0.7);
-
-  --border-hairline: rgba(160, 180, 240, 0.08);
-  --border-subtle: var(--line-1);
-  --border-medium: var(--line-2);
-  --border-bright: rgba(160, 180, 240, 0.35);
-  --border-card-hover: var(--accent);
-
-  --text-muted: var(--text-1);
-  --text-dim: var(--text-2);
-  --text-dark: #070a26;
-
-  --color-allow-bg: rgba(52, 211, 153, 0.12);
-  --color-allow-border: rgba(52, 211, 153, 0.35);
-  --color-review-bg: rgba(251, 191, 36, 0.12);
-  --color-review-border: rgba(251, 191, 36, 0.35);
-  --color-block-bg: rgba(248, 113, 113, 0.12);
-  --color-block-border: rgba(248, 113, 113, 0.35);
 
   --accent-cyan: var(--accent);
   --accent-cyan-bright: var(--accent);
-  --accent-cyan-glow: rgba(95, 140, 245, 0.25);
-  --accent-indigo: #6366f1;
+  --accent-cyan-glow: rgba(8, 102, 255, 0.25);
+  --accent-indigo: #0866FF;
   --accent-violet: #8b5cf6;
-  --accent-ruby: #f43f5e;
+  --accent-ruby: #ef4444;
   --accent-amd: #ed1c24;
 
   --font-sans: var(--font-body);
@@ -114,13 +126,12 @@
   --transition-fast: 150ms var(--ease-out);
   --transition-normal: 250ms var(--ease-smooth);
   --transition-slow: 400ms var(--ease-smooth);
-  --shadow-card: 0 16px 36px -12px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 35px -5px rgba(63, 99, 199, 0.3);
-  --shadow-glow-lg: 0 0 80px -10px rgba(63, 99, 199, 0.25);
+  --shadow-card: 0 16px 36px -12px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 25px -5px rgba(8, 102, 255, 0.25);
+  --shadow-glow-lg: 0 0 50px -10px rgba(8, 102, 255, 0.2);
 
   --container-max: 1320px;
 }
-
 /* ==========================================================================
    CSS Reset & Global Defaults (NO UNINTENDED LINK UNDERLINES)
    ========================================================================== */
@@ -153,12 +164,39 @@ body.site-body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-0);
-  background-image: none; /* Smooth seamless continuation of navy */
+  background-color: #050505;
+  background-image: url("/background.svg");
+  background-position: center 35%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
   overflow-x: hidden;
   width: 100%;
   max-width: 100%;
   color: var(--text-0);
+  position: relative;
+}
+
+/* One Continuous Global Ambient Background System */
+.site-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: #050505;
+  background-image: 
+    radial-gradient(ellipse 85% 60% at 50% 30%, rgba(3, 31, 167, 0.22) 0%, transparent 70%),
+    url("/background.svg");
+  background-position: center 35%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (max-width: 768px) {
+  body.site-body,
+  .site-background {
+    background-position: center 30%;
+  }
 }
 
 /* Custom Scrollbars for Windows Chromium (Edge, Chrome, Opera, Brave) */
@@ -4427,4 +4465,812 @@ textarea,
 .dg__pill,
 .preset-chip {
   touch-action: manipulation;
+}
+
+/* ==========================================================================
+   ORBITSCORE TECHNICAL DESIGN SYSTEM OVERRIDES (MASTER PROMPT SPECIFICATION)
+   ========================================================================== */
+
+/* Full-Page Continuous Ambient Gradient: transparent sections revealing global background */
+.app-root,
+.app-main,
+.hero,
+.hero-section,
+.intro-section,
+.architecture-section,
+.workflow-section,
+.studio-section,
+.ops-section,
+.closing-section,
+.app-footer {
+  background: transparent !important;
+  background-color: transparent !important;
+  position: relative;
+  z-index: 1;
+  color: #F2F2F2;
+}
+
+body.site-body {
+  background-color: #050505;
+  color: #F2F2F2;
+}
+
+/* Subtle dark gray dividers between sections */
+.intro-section,
+.architecture-section,
+.workflow-section,
+.studio-section,
+.ops-section {
+  border-top: 1px solid #1e2638 !important;
+}
+
+/* De-emphasize diffuse glow blob in hero & eliminate opaque bottom fade */
+.hero__glow {
+  display: none !important;
+}
+
+.hero::after,
+.hero-section::after {
+  display: none !important;
+}
+
+/* Refined, Minimal Sticky Header */
+.app-header {
+  background: rgba(5, 5, 5, 0.75) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid #1e2638 !important;
+}
+
+.header-nav-left .nav-item {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+
+.header-nav-left .nav-item:hover {
+  color: #F2F2F2;
+}
+
+.header-nav-left .nav-item.active {
+  color: #F2F2F2;
+}
+
+.header-nav-left .nav-item .nav-arrow {
+  color: #0866FF;
+}
+
+.btn-nav-contact {
+  background: #0a0e17 !important;
+  color: #F2F2F2 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 8px 18px !important;
+  transition: all 0.15s ease;
+}
+
+.btn-nav-contact:hover {
+  background: #111624 !important;
+  border-color: #0866FF !important;
+  color: #ffffff !important;
+}
+
+/* Compact Monospace Section Identifiers */
+.section-label,
+.dg-chip,
+.intro-category-label,
+.flow-mini-title {
+  font-family: var(--font-mono) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: #60a5fa !important;
+  text-transform: uppercase;
+}
+
+/* Section Headings */
+.section-title,
+.intro-heading,
+.dg-headline {
+  font-family: var(--font-display) !important;
+  color: #F2F2F2 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.section-subtitle,
+.intro-description,
+.dg-paragraph {
+  color: #94a3b8 !important;
+}
+
+/* Announcement Bar */
+.top-announcement-bar {
+  background: #0a0e17 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.announcement-pill {
+  background: rgba(8, 102, 255, 0.15) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(8, 102, 255, 0.35) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.6875rem !important;
+  letter-spacing: 0.06em !important;
+}
+
+.announcement-text {
+  color: #cbd5e1 !important;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.announcement-link {
+  color: #60a5fa !important;
+  font-family: var(--font-mono);
+}
+
+/* Trust Row with Thin Vertical Rules */
+.intro-trust-row {
+  border-top: 1px solid #1e2638 !important;
+  padding-top: 20px;
+}
+
+.trust-item .trust-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.trust-item .trust-val {
+  font-family: var(--font-mono);
+  color: #F2F2F2;
+  font-size: 0.875rem;
+}
+
+.trust-divider {
+  background: #1e2638 !important;
+}
+
+/* Primary and Secondary Action Buttons */
+.btn-primary {
+  background: #0866FF !important;
+  border-color: #0866FF !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: #0052cc !important;
+  border-color: #0052cc !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px -4px rgba(8, 102, 255, 0.45);
+}
+
+.btn-secondary {
+  background: #0a0e17 !important;
+  border: 1px solid #1e2638 !important;
+  color: #F2F2F2 !important;
+  border-radius: 4px !important;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: #101524 !important;
+  border-color: #2d3852 !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   OrbitScore 3-Column Feature Grid Layout (Prompt Requirement 3)
+   ========================================================================== */
+.feature-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  width: 100% !important;
+  margin: 32px auto 0 auto !important;
+}
+
+@media (max-width: 1024px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+.feature-card {
+  background: rgba(10, 14, 23, 0.75) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid #1e2638 !important;
+  border-left: 3px solid #0866FF !important;
+  border-radius: 6px !important;
+  padding: 22px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 230px !important;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.feature-card:hover,
+.feature-card:focus-visible {
+  background: rgba(14, 20, 34, 0.85) !important;
+  border-color: #2e3a54 !important;
+  border-left-color: #3b82f6 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.8), 0 0 20px -4px rgba(8, 102, 255, 0.25) !important;
+  outline: none !important;
+}
+
+.feature-card-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+.feature-card-title {
+  font-family: var(--font-display) !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #F2F2F2 !important;
+  line-height: 1.35 !important;
+  margin: 0 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.feature-card-badge {
+  font-family: var(--font-mono) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  background: rgba(8, 102, 255, 0.12) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(8, 102, 255, 0.35) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.feature-card-badge.badge-green {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #10b981 !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+.feature-card-badge.badge-red {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+}
+
+.feature-card-badge.badge-amber {
+  background: rgba(245, 158, 11, 0.12) !important;
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+.feature-card-divider {
+  height: 1px !important;
+  background: #1e2638 !important;
+  margin: 0 0 14px 0 !important;
+  width: 100% !important;
+}
+
+.feature-card-desc {
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
+  color: #94a3b8 !important;
+  margin: 0 0 16px 0 !important;
+  flex-grow: 1 !important;
+}
+
+.feature-card-metrics {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-top: 12px !important;
+  border-top: 1px dashed #1e2638 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.75rem !important;
+  color: #64748b !important;
+  margin-top: auto !important;
+}
+
+.feature-metric-label {
+  color: #64748b !important;
+}
+
+.feature-metric-tag {
+  color: #cbd5e1 !important;
+  font-weight: 600 !important;
+}
+
+/* Horizontal Flow Ribbon in Capabilities Section */
+.flow-mini-card {
+  background: #0a0e17 !important;
+  border: 1px solid #1e2638 !important;
+  border-left: 3px solid #0866FF !important;
+  border-radius: 6px !important;
+  padding: 18px 22px !important;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.7) !important;
+  margin-bottom: 24px !important;
+  width: 100% !important;
+}
+
+.flow-mini-header {
+  border-bottom: 1px solid #1e2638 !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.mini-node-box {
+  background: #060910 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.mini-node-box.gate-glow {
+  border-color: #0866FF !important;
+  box-shadow: 0 0 12px rgba(8, 102, 255, 0.3) !important;
+}
+
+.mini-node-seq {
+  color: #0866FF !important;
+}
+
+.mini-node-text {
+  color: #F2F2F2 !important;
+}
+
+.mini-node-caption {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   Verification Studio Workspace (Precision 2-Pane App Window)
+   ========================================================================== */
+.studio-window {
+  background: rgba(10, 14, 23, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid #1e2638 !important;
+  border-left: 3px solid #0866FF !important;
+  border-radius: 6px !important;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.8) !important;
+}
+
+.studio-window-titlebar {
+  background: rgba(6, 8, 16, 0.90) !important;
+  border-bottom: 1px solid #1e2638 !important;
+}
+
+.window-title {
+  color: #F2F2F2 !important;
+  font-family: var(--font-display) !important;
+}
+
+.window-subtitle {
+  color: #64748b !important;
+  font-family: var(--font-mono) !important;
+}
+
+.studio-window-body {
+  background: #0a0e17 !important;
+}
+
+.presets-container {
+  background: #060810 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.preset-btn {
+  background: #0a0e17 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+  color: #F2F2F2 !important;
+}
+
+.preset-btn:hover {
+  background: #111726 !important;
+  border-color: #2e3a54 !important;
+}
+
+.preset-btn.active-preset {
+  border-color: #0866FF !important;
+  background: rgba(8, 102, 255, 0.15) !important;
+}
+
+/* Form inputs & controls */
+.form-label {
+  color: #cbd5e1 !important;
+  font-family: var(--font-mono) !important;
+}
+
+.form-label .label-info {
+  color: #64748b !important;
+}
+
+.form-control,
+.copy-textarea,
+.form-select {
+  background: #060810 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+  color: #F2F2F2 !important;
+}
+
+.form-control:focus-visible,
+.copy-textarea:focus-visible,
+.form-select:focus-visible {
+  border-color: #0866FF !important;
+  box-shadow: 0 0 0 2px rgba(8, 102, 255, 0.35) !important;
+  outline: none !important;
+}
+
+.textarea-wrapper {
+  border-color: #1e2638 !important;
+}
+
+.textarea-footer {
+  color: #64748b !important;
+  font-family: var(--font-mono) !important;
+}
+
+.char-counter {
+  color: #94a3b8 !important;
+}
+
+.btn-run {
+  background: #0866FF !important;
+  border-color: #0866FF !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+}
+
+.btn-run:hover {
+  background: #0052cc !important;
+  border-color: #0052cc !important;
+  box-shadow: 0 6px 20px rgba(8, 102, 255, 0.45) !important;
+}
+
+/* Verification Output Pane */
+.studio-empty-state {
+  background: #060810 !important;
+  border: 1px dashed #1e2638 !important;
+  border-radius: 6px !important;
+}
+
+.empty-state-title {
+  color: #F2F2F2 !important;
+}
+
+.empty-state-text {
+  color: #94a3b8 !important;
+}
+
+.verdict-banner {
+  background: #070a12 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 6px !important;
+  color: #F2F2F2 !important;
+  font-family: var(--font-mono) !important;
+}
+
+.verdict-banner.verdict-allow {
+  border-left: 4px solid #10b981 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.verdict-banner.verdict-block {
+  border-left: 4px solid #ef4444 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+
+.verdict-banner.verdict-review {
+  border-left: 4px solid #f59e0b !important;
+  background: rgba(245, 158, 11, 0.08) !important;
+}
+
+.product-fact-card {
+  background: #0a0e17 !important;
+  border: 1px solid #1e2638 !important;
+  border-left: 3px solid #0866FF !important;
+  border-radius: 6px !important;
+}
+
+.fact-title {
+  color: #F2F2F2 !important;
+}
+
+.fact-row {
+  border-bottom: 1px solid #1e2638 !important;
+}
+
+.fact-label {
+  font-family: var(--font-mono) !important;
+  color: #64748b !important;
+}
+
+.fact-val {
+  font-family: var(--font-mono) !important;
+  color: #F2F2F2 !important;
+}
+
+.highlighted-copy-card {
+  background: #0a0e17 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 6px !important;
+}
+
+.claim-card {
+  background: #070a12 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.claim-card:hover {
+  border-color: #2e3a54 !important;
+}
+
+.claim-statement {
+  color: #F2F2F2 !important;
+}
+
+.claim-detail-text {
+  color: #94a3b8 !important;
+  font-family: var(--font-mono) !important;
+}
+
+/* ==========================================================================
+   Operations Command Deck (Tabs, Telemetry, Replay)
+   ========================================================================== */
+.ops-panel {
+  background: rgba(10, 14, 23, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid #1e2638 !important;
+  border-left: 3px solid #0866FF !important;
+  border-radius: 6px !important;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.8) !important;
+}
+
+.tabs-header {
+  background: rgba(6, 8, 16, 0.90) !important;
+  border-bottom: 1px solid #1e2638 !important;
+}
+
+.tab-btn {
+  font-family: var(--font-mono) !important;
+  color: #64748b !important;
+  border-bottom: 2px solid transparent !important;
+}
+
+.tab-btn:hover {
+  color: #F2F2F2 !important;
+}
+
+.tab-btn.active {
+  color: #F2F2F2 !important;
+  border-bottom-color: #0866FF !important;
+}
+
+.tab-badge {
+  background: rgba(8, 102, 255, 0.2) !important;
+  color: #60a5fa !important;
+  font-family: var(--font-mono) !important;
+}
+
+.metric-card {
+  background: #070a12 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.metric-title {
+  color: #64748b !important;
+  font-family: var(--font-mono) !important;
+}
+
+.metric-val {
+  font-family: var(--font-mono) !important;
+  color: #F2F2F2 !important;
+}
+
+.terminal-card {
+  background: #05070c !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.terminal-card .card-title {
+  color: #60a5fa !important;
+  font-family: var(--font-mono) !important;
+}
+
+.telemetry-raw {
+  background: #030408 !important;
+  color: #94a3b8 !important;
+  font-family: var(--font-mono) !important;
+}
+
+.audit-entry-card {
+  background: #070a12 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.audit-hash-snippet {
+  font-family: var(--font-mono) !important;
+  color: #94a3b8 !important;
+}
+
+.replay-result-banner {
+  background: rgba(16, 185, 129, 0.08) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  border-radius: 4px !important;
+  color: #10b981 !important;
+}
+
+/* ==========================================================================
+   Footer (Precision Engineering Style)
+   ========================================================================== */
+.app-footer {
+  background: transparent !important;
+  border-top: 1px solid #1e2638 !important;
+}
+
+.footer-nav-links a {
+  font-family: var(--font-mono) !important;
+  font-size: 0.8125rem !important;
+  color: #94a3b8 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.footer-nav-links a:hover {
+  color: #F2F2F2 !important;
+}
+
+.footer-copyright {
+  font-family: var(--font-mono) !important;
+  color: #64748b !important;
+}
+
+
+/* ==========================================================================
+   Refined OrbitScore Dialog & Mobile Nav & Closing Section Enhancements
+   ========================================================================== */
+.closing-glow-horizon,
+.closing-light-trace,
+.footer-bg-wrap,
+.footer-bg-img,
+.footer-bg-transition {
+  display: none !important;
+}
+
+.closing-section {
+  background: transparent !important;
+  border-top: 1px solid #1e2638 !important;
+}
+
+.closing-eyebrow {
+  background: rgba(8, 102, 255, 0.1) !important;
+  border: 1px solid rgba(8, 102, 255, 0.3) !important;
+  color: #60a5fa !important;
+  border-radius: 4px !important;
+}
+
+.closing-headline {
+  color: #F2F2F2 !important;
+}
+
+.closing-desc {
+  color: #94a3b8 !important;
+}
+
+.contact-dialog-panel {
+  background: #0a0e17 !important;
+  border: 1px solid #1e2638 !important;
+  border-left: 3px solid #0866FF !important;
+  border-radius: 6px !important;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85) !important;
+}
+
+.contact-dialog::backdrop {
+  background: rgba(5, 5, 5, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.dialog-context-row {
+  background: #060910 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.member-row {
+  background: #070a12 !important;
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+}
+
+.member-row:hover {
+  border-color: #2e3a54 !important;
+}
+
+.btn-dialog-mail {
+  background: #0866FF !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+}
+
+.btn-dialog-mail:hover {
+  background: #0052cc !important;
+}
+
+.btn-dialog-repo {
+  border: 1px solid #1e2638 !important;
+  border-radius: 4px !important;
+  color: #F2F2F2 !important;
+}
+
+.btn-dialog-repo:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: #2e3a54 !important;
+}
+
+.mobile-nav-drawer {
+  background: rgba(5, 5, 5, 0.98) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-left: 1px solid #1e2638 !important;
+}
+
+.mobile-nav-header {
+  border-bottom: 1px solid #1e2638 !important;
+}
+
+.mobile-nav-links .mobile-nav-item {
+  border-bottom: 1px solid #1e2638 !important;
+  color: #94a3b8 !important;
+}
+
+.mobile-nav-links .mobile-nav-item:hover,
+.mobile-nav-links .mobile-nav-item.active {
+  color: #F2F2F2 !important;
+}
+
+.mobile-nav-links .mobile-nav-item .nav-arrow {
+  color: #0866FF !important;
 }
